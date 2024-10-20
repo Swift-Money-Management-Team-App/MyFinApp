@@ -1,7 +1,3 @@
-//
-//  Untitled.swift
-//  MoneyManagement App
-//
-//  Created by Rafael Riki Ogawa Osiro on 20/10/24.
-//
+import Foundation
 
+protocol PropertyObjectsValue: Decodable, Encodable {}

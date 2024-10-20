@@ -80,8 +80,9 @@ struct OnboardingView: View {
         }
         .frame(maxHeight: .infinity)
     }
+    
 }
 
 #Preview {
-    OnboardingView()
+    OnboardingView(isFirstLaunch: Binding.constant(true))
 }

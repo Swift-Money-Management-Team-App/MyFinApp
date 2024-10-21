@@ -34,3 +34,17 @@ This iOS app helps users manage their finances efficiently and effectively. Buil
 - **Giovanni Favorin de Melo**
 - **Rafael Riki Ogawa Osiro**
 - **Raquel dos Santos Rezende**
+
+## Commit
+| Type | Commit style | Objective
+| -------- | -------- | -------- |
+| feature | feat(filename): message | To add a feature |
+| fix | fix(filename): message` | To fix a bug |
+| refactor | refactore(filename): message | To rewrite the code but not updating system's business logic or rule |
+| style | style(filename): message | To code formmater. Eg: update code to follow lint convention |
+| documentation | doc(filename): message | To indicate documentation updates. Eg: Readme, API documentation |
+| chore | chore(filename): message | To update changes in the system that doesn't affect the system or test files. Eg: Add Swift Lint, Add Prettier, Add .gitignore |
+
+Eg: feat(onboarding-view): add começar button
+
+Eg: style(user-view-model): Update method createUser to follow swift lint

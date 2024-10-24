@@ -1,20 +1,18 @@
-//
-//  MoneyManagement_AppApp.swift
-//  MoneyManagement App
-//
-//  Created by Raquel on 10/10/24.
-//
-
 import SwiftUI
 
 @main
 struct MoneyManagement_AppApp: App {
     let persistenceController = PersistenceController.shared
-
+    @AppStorage("firstLaunchApplication") var  firstLaunchApplication: Bool = Storage.share.firstLaunchApplication
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+            if firstLaunchApplication {
+                OnboardingView(isFirstLaunch: $firstLaunchApplication)
+            } else {
+                ContentView()
+                    .environment(\.managedObjectContext, persistenceController.container.viewContext)
+            }
         }
     }
 }

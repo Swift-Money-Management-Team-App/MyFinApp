@@ -6,13 +6,13 @@
 //
 
 import Foundation
-
 import SwiftUI
 import Lottie
 
 struct SplashView: View {
     @State private var isActive = false
     @State private var animationOpacity = 0.0
+    @State private var isFirstLaunch = true
 
     var body: some View {
         ZStack {
@@ -38,21 +38,11 @@ struct SplashView: View {
                 }
         }
         .fullScreenCover(isPresented: $isActive) {
-            MainView()
+            OnboardingView(isFirstLaunch: $isFirstLaunch)
         }
-    }
-}
-
-struct MainView: View {
-    var body: some View {
-        Text("Main Screen")
-            .font(.largeTitle)
-            .fontWeight(.bold)
-            .foregroundColor(.black)
     }
 }
 
 #Preview {
     SplashView()
 }
-

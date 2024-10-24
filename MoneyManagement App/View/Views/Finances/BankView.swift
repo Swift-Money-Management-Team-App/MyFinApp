@@ -75,8 +75,8 @@ struct BankView: View {
                 .padding(.horizontal)
                 
                 // Cartão de Crédito
-                VStack(alignment: .leading) {
-                    HStack {
+                VStack() {
+                    HStack(spacing: 10) {
                         Text("Cartão de Crédito")
                             .font(.headline)
                             .foregroundColor(.purple)
@@ -87,11 +87,15 @@ struct BankView: View {
                             Image(systemName: "plus")
                         }
                     }
-                    HStack(spacing: 20) {
-                        AccountCardView(title: "Cartão de Crédito", value: "R$ 500,00")
-                        AccountCardView(title: "Poupança", value: "R$ 1.000,00")
-                        AccountCardView(title: "Caixinha", value: "R$ 1.500,00")
+                    ScrollView(.horizontal) {
+                        HStack {
+                            AccountCardView(title: "Cartão de Crédito", value: "R$ 500,00")
+                            AccountCardView(title: "Poupança", value: "R$ 1.000,00")
+                            AccountCardView(title: "Caixinha", value: "R$ 1.500,00")
+                        }
                     }
+                    .scrollIndicators(.hidden)
+                    .scrollClipDisabled()
                 }
                 .padding(.horizontal)
                 

@@ -7,7 +7,7 @@ final class User {
     var id: UUID = UUID()
     var name: String
     
-    @Relationship(deleteRule: .cascade, inverse: \BankAccount.user)
+    @Relationship(deleteRule: .cascade)
     var bankAccounts: [BankAccount] = []
     
     init(name: String) {
@@ -20,13 +20,15 @@ final class BankAccount {
     
     var id: UUID = UUID()
     var name: String
+    var total: Decimal
     
-    @Relationship(deleteRule: .cascade, inverse: \Account.bankAccount)
+    @Relationship(deleteRule: .cascade)
     var accounts: [Account] = []
     var user: User?
     
-    init(name: String) {
+    init(name: String, totalValue: Decimal) {
         self.name = name
+        self.total = totalValue
     }
 }
 
@@ -35,18 +37,21 @@ final class Account {
     
     var id: UUID = UUID()
     var name: String
-    var totalValue: Decimal
+    var total: Decimal
     var isCreditCard: Bool
     var closeDay: Int?
     
+    @Relationship(deleteRule: .nullify)
     var transactionsAsOrigin: [Transaction] = []
+    
+    @Relationship(deleteRule: .nullify)
     var transactionsAsDestiny: [Transaction] = []
     
     var bankAccount: BankAccount?
     
     init(name: String, totalValue: Decimal, isCreditCard: Bool, closeDay: Int?, bankAccount: BankAccount? = nil) {
         self.name = name
-        self.totalValue = totalValue
+        self.total = totalValue
         self.isCreditCard = isCreditCard
         self.closeDay = closeDay
         self.bankAccount = bankAccount
@@ -58,28 +63,26 @@ final class Transaction: Identifiable {
     
     var id: UUID = UUID()
     var transactionDescription: String?
+    var total: Decimal
     var date: Date
     
-    @Relationship(deleteRule: .nullify, inverse: \Account.transactionsAsOrigin)
-    var origin: Account?
-    
-    @Relationship(deleteRule: .nullify, inverse: \Account.transactionsAsDestiny)
+    @Relationship(deleteRule: .nullify)
     var destiny: Account?
     
-    @Relationship(deleteRule: .cascade, inverse: \Payment.transaction)
+    @Relationship(deleteRule: .nullify)
+    var origin: Account?
+    
+    @Relationship(deleteRule: .cascade)
     var payments: [Payment] = []
     
-    @Relationship(deleteRule: .nullify, inverse: \EarningCategory.transaction)
-    var earningCategory: EarningCategory?
+    var category: Category?
     
-    @Relationship(deleteRule: .nullify, inverse: \ExpenseCategory.transaction)
-    var expenseCategory: ExpenseCategory?
-    
-    init(transactionDescription: String?, date: Date, origin: Account?, destiny: Account?) {
+    init(transactionDescription: String?, date: Date, totalValue: Decimal, destiny: Account?, origin: Account?) {
         self.transactionDescription = transactionDescription
         self.date = date
-        self.origin = origin
+        self.total = totalValue
         self.destiny = destiny
+        self.origin = origin
     }
 }
 
@@ -87,48 +90,60 @@ final class Transaction: Identifiable {
 final class Payment {
     
     var id: UUID = UUID()
-    var method: String
     var value: Decimal
     var competence: Date?
+    var origin: Account
+    
+    @Relationship(deleteRule: .nullify)
+    var paymentMethod: Method?
     
     var transaction: Transaction?
     
-    init(method: String, value: Decimal, competence: Date?, transaction: Transaction? = nil) {
-        self.method = method
+    init(value: Decimal, competence: Date?, origin: Account, paymentMethod: Method? = nil, transaction: Transaction? = nil) {
         self.value = value
         self.competence = competence
+        self.origin = origin
+        self.paymentMethod = paymentMethod
         self.transaction = transaction
     }
 }
 
 @Model
-final class EarningCategory {
+final class Method {
     
     var id: UUID = UUID()
+    var emoji: String
     var name: String
-    var emoji: String?
+    var visible: Bool
     
-    var transaction: Transaction?
+    @Relationship(deleteRule: .nullify)
+    var payments: [Payment] = []
     
-    init(name: String, emoji: String?, transaction: Transaction? = nil) {
-        self.name = name
+    init(emoji: String, name: String, visible: Bool) {
         self.emoji = emoji
-        self.transaction = transaction
+        self.name = name
+        self.visible = visible
     }
 }
 
 @Model
-final class ExpenseCategory {
+final class Category {
     
     var id: UUID = UUID()
     var name: String
     var emoji: String?
+    var visible: Bool
+    var type: CategoryType
     
-    var transaction: Transaction?
-    
-    init(name: String, emoji: String?, transaction: Transaction? = nil) {
+    init(name: String, emoji: String?, visible: Bool, type: CategoryType) {
         self.name = name
         self.emoji = emoji
-        self.transaction = transaction
+        self.visible = visible
+        self.type = type
     }
+}
+
+enum CategoryType: String, Codable {
+    case earning
+    case expense
 }

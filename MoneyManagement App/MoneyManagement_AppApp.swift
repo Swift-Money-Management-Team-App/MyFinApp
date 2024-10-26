@@ -2,6 +2,9 @@ import SwiftUI
 
 @main
 struct MoneyManagement_AppApp: App {
+    
+    let settingsVM = SettingsViewModel()
+    
     let persistenceController = PersistenceController.shared
     @AppStorage("firstLaunchApplication") var  firstLaunchApplication: Bool = Storage.share.firstLaunchApplication
     
@@ -12,6 +15,7 @@ struct MoneyManagement_AppApp: App {
             } else {
                 ContentView()
                     .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                    .environmentObject(self.settingsVM)
             }
         }
     }

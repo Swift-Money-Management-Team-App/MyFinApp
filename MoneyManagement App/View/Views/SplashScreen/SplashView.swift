@@ -1,9 +1,3 @@
-//
-//  SplashViewController.swift
-//  MoneyManagement App
-//
-//  Created by Raquel on 19/10/24.
-//
 
 import Foundation
 import SwiftUI
@@ -35,9 +29,6 @@ struct SplashView: View {
                         }
                     }
                 }
-        }
-        .fullScreenCover(isPresented: $isActive) {
-            OnboardingView(isFirstLaunch: $isFirstLaunch)
         }
     }
 }

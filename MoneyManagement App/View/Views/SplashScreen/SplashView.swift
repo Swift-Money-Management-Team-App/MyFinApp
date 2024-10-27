@@ -19,8 +19,7 @@ struct SplashView: View {
             Color.clear
                 .edgesIgnoringSafeArea(.all)
 
-            LottieView(animation: .named("SplashScreenAnimation.json"))
-                .playbackMode(.playing(.toProgress(1, loopMode: .playOnce)))
+            LottieView(animation: LottieAnimation.named("SplashScreenAnimation"), loopMode: .playOnce, width: 350, height: 350) // Ajuste o tamanho aqui
                 .opacity(animationOpacity)
                 .onAppear {
                     withAnimation(.easeInOut(duration: 3.0)) {
@@ -43,6 +42,6 @@ struct SplashView: View {
     }
 }
 
-#Preview {
-    SplashView()
-}
+
+
+

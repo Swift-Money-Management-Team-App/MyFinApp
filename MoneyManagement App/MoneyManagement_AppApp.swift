@@ -6,16 +6,34 @@ struct MoneyManagement_AppApp: App {
     let settingsVM = SettingsViewModel()
     
     let persistenceController = PersistenceController.shared
-    @AppStorage("firstLaunchApplication") var  firstLaunchApplication: Bool = Storage.share.firstLaunchApplication
-    
+
+    @AppStorage("hasLaunchedBefore") private var firstLaunchApplication: Bool = true
+    @State private var showSplash = true
+
     var body: some Scene {
         WindowGroup {
-            if firstLaunchApplication {
-                OnboardingView(isFirstLaunch: $firstLaunchApplication)
-            } else {
-                ContentView()
-                    .environment(\.managedObjectContext, persistenceController.container.viewContext)
-                    .environmentObject(self.settingsVM)
+            ZStack {
+                if showSplash {
+                    SplashView()
+                        .onAppear {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 6) {
+                                withAnimation {
+                                    showSplash = false
+                                }
+                            }
+                        }
+                        .transition(.opacity)
+                } else {
+                    if firstLaunchApplication {
+                        OnboardingView(isFirstLaunch: $firstLaunchApplication)
+                            .transition(.opacity)
+                    } else {
+                        ContentView()
+                            .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                            .environmentObject(self.settingsVM)
+                            .transition(.opacity)
+                    }
+                }
             }
         }
     }

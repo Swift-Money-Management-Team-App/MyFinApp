@@ -5,7 +5,7 @@ struct Others: View {
     @Binding var isShowOnboarding: Bool
     
     var body: some View {
-        ToggleRow(toogleValue: self.$isShowOnboarding, image: "square.text.square", label: "Tela de boas vindas")
+        ToggleRow(toogleValue: self.$isShowOnboarding, image: "square.text.square", label: "Tela de boas vindas", imageForegroundStyle: .accent)
     }
 }
 

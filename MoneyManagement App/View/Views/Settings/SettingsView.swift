@@ -6,6 +6,8 @@ struct SettingsView: View {
     @ObservedObject var settingsVM: SettingsViewModel
     @Environment(\.requestReview) var requestReview
     
+    private let sharedLinkRow = SharedLinkRow()
+    
     var body: some View {
         NavigationView {
                 VStack(spacing: 0) {
@@ -16,7 +18,27 @@ struct SettingsView: View {
                 Form {
                     List {
                         Section(LocalizedStringKey(stringLiteral: "Configuração de Perfil")) {
-                            Text("a")
+                            
+                            Button {
+                            // TODO: Colocar para aparecer a tela de Usuário
+                            } label: {
+                                HStack(spacing: 20) {
+                                    Label {
+                                        HStack {
+                                            Text(LocalizedStringResource(stringLiteral: "Alterar o nome"))
+                                                .foregroundStyle(.black)
+                                            
+                                            Spacer()
+                                            Image(systemName: "chevron.right")
+                                                .font(.system(size: 14, weight: .bold))
+                                                .foregroundStyle(.disclosure)
+                                        }
+                                    } icon: {
+                                        Image(systemName: "person")
+                                            .foregroundStyle(.accent)
+                                    }
+                                }
+                            }
                         }
                         
                         Section(LocalizedStringKey(stringLiteral: "Outros")) {
@@ -25,41 +47,49 @@ struct SettingsView: View {
                         
                         Section(LocalizedStringKey(stringLiteral: "Termos e Privacidade")) {
                             
-                            //
-                            ShareLink(item: self.settingsVM.getSharedLink()) {
-                                Label(LocalizedStringKey(stringLiteral: "Politica de Privacidade"), systemImage: "document")
-                                    .foregroundStyle(.black)
-                            }
+                            sharedLinkRow.createSharedLinkRow(url: self.settingsVM.getSharedLink(), label: "Política de Privacidade",  labelForegroundStyle: .black, isShowDisclosureIcon: true, iconSystemName: "document", iconForegroundStyle: .accent)
                             
-                            //
-                            ShareLink(item: self.settingsVM.getSharedLink()) {
-                                Label(LocalizedStringKey(stringLiteral: "Termos de Uso"), systemImage: "text.page")
-                                    .foregroundStyle(.black)
-                            }
+                            sharedLinkRow.createSharedLinkRow(url: self.settingsVM.getSharedLink(), label: "Termos de Uso", labelForegroundStyle: .black, isShowDisclosureIcon: true, iconSystemName: "text.page", iconForegroundStyle: .accent)
                         }
                         
                         Section(LocalizedStringKey(stringLiteral: "Sobre o Aplicativo")) {
                             // Share App
-                            ShareLink(item: self.settingsVM.getSharedLink()) {
-                                Label(LocalizedStringKey(stringLiteral: "Compartilhe o Aplicativo"), systemImage: "square.and.arrow.up")
-                                    .foregroundStyle(.black)
-                            }
+                            
+                            sharedLinkRow.createSharedLinkRow(url: self.settingsVM.getSharedLink(), label: "Compartilhe o Aplicativo", labelForegroundStyle: .black, isShowDisclosureIcon: true, iconSystemName: "square.and.arrow.up", iconForegroundStyle: .accent)
                             
                             // Review App in Store
                             Button {
                                 self.requestReview()
                             } label: {
-                                Label(LocalizedStringKey(stringLiteral: "Avalie o Aplicativo"), systemImage: "storefront")
-                                    .foregroundStyle(.black)
+                                Label {
+                                    HStack {
+                                        Text(LocalizedStringResource(stringLiteral: "Avalie o Aplicativo"))
+                                            .foregroundStyle(.black)
+                                        
+                                        Spacer()
+                                        Image(systemName: "chevron.right")
+                                            .font(.system(size: 14, weight: .bold))
+                                            .foregroundStyle(.disclosure)
+                                    }
+                                } icon: {
+                                    Image(systemName: "storefront")
+                                        .foregroundStyle(.accent)
+                                }
                             }
                             
                             // About Us
                             NavigationLink {
                                 Profile()
                             } label: {
-                                Label(LocalizedStringKey(stringLiteral: "Sobre Nós"), systemImage: "person.3")
-                                    .foregroundStyle(.black)
+                                Label {
+                                    Text(LocalizedStringKey(stringLiteral: "Sobre Nós"))
+                                        .foregroundStyle(.black)
+                                } icon: {
+                                    Image(systemName: "person.3")
+                                        .foregroundStyle(.accent)
+                                }
                             }
+                            .foregroundStyle(.accent)
                         }
                     }
                 }

@@ -1,10 +1,3 @@
-//
-//  LottieView.swift
-//  MoneyManagement App
-//
-//  Created by Raquel on 25/10/24.
-//
-
 import Foundation
 import SwiftUI
 import Lottie
@@ -38,5 +31,3 @@ struct LottieView: UIViewRepresentable {
 
     func updateUIView(_ uiView: UIView, context: Context) {}
 }
-
-

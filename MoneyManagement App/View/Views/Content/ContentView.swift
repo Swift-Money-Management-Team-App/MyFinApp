@@ -1,10 +1,3 @@
-//
-//  ContentView.swift
-//  MoneyManagement App
-//
-//  Created by Raquel on 10/10/24.
-//
-
 import SwiftUI
 import CoreData
 

@@ -1,10 +1,3 @@
-//
-//  TermsView.swift
-//  MoneyManagement App
-//
-//  Created by Rafael Riki Ogawa Osiro on 25/10/24.
-//
-
 import SwiftUI
 
 struct TermsView: View {

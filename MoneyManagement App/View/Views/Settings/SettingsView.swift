@@ -47,9 +47,31 @@ struct SettingsView: View {
                         
                         Section(LocalizedStringKey(stringLiteral: "Termos e Privacidade")) {
                             
-                            sharedLinkRow.createSharedLinkRow(url: self.settingsVM.getSharedLink(), label: "Política de Privacidade",  labelForegroundStyle: .black, isShowDisclosureIcon: true, iconSystemName: "document", iconForegroundStyle: .accent)
+                            NavigationLink {
+                                PrivacyPolicy()
+                            } label: {
+                                Label {
+                                    Text(LocalizedStringKey(stringLiteral: "Política de Privacidade"))
+                                        .foregroundStyle(.black)
+                                } icon: {
+                                    Image(systemName: "document")
+                                        .foregroundStyle(.accent)
+                                }
+                            }
+                            .foregroundStyle(.accent)
                             
-                            sharedLinkRow.createSharedLinkRow(url: self.settingsVM.getSharedLink(), label: "Termos de Uso", labelForegroundStyle: .black, isShowDisclosureIcon: true, iconSystemName: "text.page", iconForegroundStyle: .accent)
+                            NavigationLink {
+                                TermsView()
+                            } label: {
+                                Label {
+                                    Text(LocalizedStringKey(stringLiteral: "Termos de Uso"))
+                                        .foregroundStyle(.black)
+                                } icon: {
+                                    Image(systemName: "text.page")
+                                        .foregroundStyle(.accent)
+                                }
+                            }
+                            .foregroundStyle(.accent)
                         }
                         
                         Section(LocalizedStringKey(stringLiteral: "Sobre o Aplicativo")) {

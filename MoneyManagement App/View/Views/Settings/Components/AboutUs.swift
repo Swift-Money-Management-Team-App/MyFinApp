@@ -16,7 +16,7 @@ struct Profile: View {
                         .frame(maxHeight: 175)
                     List {
                         ForEach(aboutUsVM.getMembers()) { member in
-                            createUserTeam(name: member.getName, role: member.getRole, linkedinUrl:  member.getLinkedinUrl)
+                            createUserTeam(name: member.name, role: member.role, linkedinUrl:  member.linkedinUrl)
                         }
                     }
                 }

@@ -2,14 +2,14 @@ import SwiftUI
 
 struct ToggleRow: View {
     
-    @Binding var toogleValue: Bool
+    @Binding var toggleValue: Bool
     var image: String
     var label: String
     var labelForegroundStyle: Color?
     var imageForegroundStyle: Color?
     
     var body: some View {
-        Toggle(isOn: self.$toogleValue) {
+        Toggle(isOn: self.$toggleValue) {
             Label {
                 Text(LocalizedStringResource(stringLiteral: self.label))
                     .foregroundStyle(self.labelForegroundStyle ?? .black)
@@ -24,5 +24,5 @@ struct ToggleRow: View {
 #Preview {
     
     @Previewable @State var toggleValue = false
-    ToggleRow(toogleValue: $toggleValue, image: "square.text.square", label: "Hello World")
+    ToggleRow(toggleValue: $toggleValue, image: "square.text.square", label: "Hello World")
 }

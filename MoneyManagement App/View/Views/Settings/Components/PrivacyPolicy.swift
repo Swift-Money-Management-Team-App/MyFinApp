@@ -75,7 +75,7 @@ If you have any questions regarding privacy while using the Application, or have
             }
             .ignoresSafeArea()
         }
-        .navigationTitle(LocalizedStringKey(stringLiteral: "Poítica de Privacidade"))
+        .navigationTitle(LocalizedStringKey(stringLiteral: "Política de Privacidade"))
         .navigationBarTitleDisplayMode(.large)
     }
 }

@@ -29,10 +29,16 @@ struct ContentView: View {
                 sectionTitle("Saldos")
                 
                 
-                List {
-                    buildListCell("Conta Corrente", 1000)
-                    buildListCell("Cartão de Crédito", 1000)
-                }
+                RoundedRectangle(cornerRadius: 10)
+                    .foregroundStyle(.white)
+                    .overlay {
+                        VStack {
+                            buildListCell("Conta Corrente", 1000)
+                            Divider()
+                            buildListCell("Cartão de Crédito", 1000)
+                        }
+                    }
+                
                 .listStyle(.inset)
                 .padding(.horizontal)
                 .frame(height: 60 * 2)
@@ -104,11 +110,16 @@ struct ContentView: View {
         NavigationLink {
             Text("Exemplo")
         } label: {
-            VStack (alignment: .leading){
-                Text(account)
-                Text("R$ \(String(format: "%.2f", money))")
+            HStack {
+                VStack (alignment: .leading){
+                    Text(account)
+                    Text("R$ \(String(format: "%.2f", money))")
+                }
+                .padding(.horizontal)
+                Spacer()
             }
         }
+        .accentColor(.primary)
     }
     
     @ViewBuilder

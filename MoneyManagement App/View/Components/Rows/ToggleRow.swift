@@ -11,7 +11,7 @@ struct ToggleRow: View {
     var body: some View {
         Toggle(isOn: self.$toggleValue) {
             Label {
-                Text(LocalizedStringResource(stringLiteral: self.label))
+                Text(LocalizedStringKey(stringLiteral: self.label))
                     .foregroundStyle(self.labelForegroundStyle ?? .black)
             } icon: {
                 Image(systemName:self.image)

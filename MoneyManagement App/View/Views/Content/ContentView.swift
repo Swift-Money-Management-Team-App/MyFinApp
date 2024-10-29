@@ -1,14 +1,10 @@
-//
-//  ContentView.swift
-//  MoneyManagement App
-//
-//  Created by Raquel on 10/10/24.
-//
-
 import SwiftUI
 import CoreData
 
 struct ContentView: View {
+    
+    @EnvironmentObject var settingsVM: SettingsViewModel
+    
     private let vm : ContentViewModel = ContentViewModel()
     
     var body: some View {
@@ -86,11 +82,11 @@ struct ContentView: View {
                         Label("Add Item", systemImage: "eye")
                     }
                     
-                    Button {
-                        
-                    } label: {
+                    NavigationLink(destination: {
+                        SettingsView(settingsVM: settingsVM)
+                    }, label: {
                         Image(systemName: "gearshape")
-                    }
+                    })
                 }
                 
             }
@@ -163,5 +159,9 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+    let settingsVM = SettingsViewModel()
+    
+    ContentView()
+        .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+        .environmentObject(settingsVM)
 }

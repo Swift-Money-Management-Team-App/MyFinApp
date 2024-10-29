@@ -1,10 +1,3 @@
-//
-//  BankView.swift
-//  MoneyManagement App
-//
-//  Created by Giovanni Favorin de Melo on 24/10/24.
-//
-
 import SwiftUI
 
 struct BankView: View {

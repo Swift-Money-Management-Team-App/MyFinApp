@@ -1,4 +1,3 @@
-
 import Foundation
 import SwiftUI
 import Lottie
@@ -32,7 +31,3 @@ struct SplashView: View {
         }
     }
 }
-
-
-
-

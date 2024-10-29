@@ -33,10 +33,10 @@ struct ContentView: View {
                 
                 ScrollView{
                     VStack (alignment: .leading) {
-                        sectionTitle("Saldos")
+                        sectionTitle("Total Acumulado")
                         
                         
-                        RoundedRectangle(cornerRadius: 10)
+                        Rectangle()
                             .foregroundStyle(.white)
                             .overlay {
                                 VStack {
@@ -47,7 +47,6 @@ struct ContentView: View {
                             }
                         
                         .listStyle(.inset)
-                        .padding(.horizontal)
                         .frame(height: 60 * 2)
                         
                         sectionTitle("O que deseja fazer?")

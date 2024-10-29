@@ -10,6 +10,11 @@ import SwiftUI
 struct UsernameView: View {
     @Binding var isOpen : Bool
     @AppStorage("username") var name : String = ""
+    let characterLimit : Int = 12
+    
+    var nameCharacterCount : Int {
+        name.count
+    }
     
     var body: some View {
         NavigationStack {
@@ -29,6 +34,11 @@ struct UsernameView: View {
                             Text("Nome")
                                 .padding(.trailing, 30)
                             TextField("Filipe", text: $name)
+                                .onChange(of: name) { oldValue, newValue in
+                                    if newValue.count > characterLimit {
+                                        name = oldValue
+                                    }
+                                }
                             
                             if !name.isEmpty {
                                 Button {
@@ -42,6 +52,16 @@ struct UsernameView: View {
                         }
                         .padding(.horizontal)
                     }
+                
+                HStack {
+                    Spacer()
+                    Text("\(self.nameCharacterCount)/\(characterLimit)")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .padding(.horizontal)
+
+                }
+                
                 Spacer()
                 Spacer()
             }

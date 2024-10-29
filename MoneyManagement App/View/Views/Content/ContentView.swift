@@ -9,7 +9,9 @@ import SwiftUI
 import CoreData
 
 struct ContentView: View {
-    private let vm : ContentViewModel = ContentViewModel()
+    @StateObject private var vm : ContentViewModel = ContentViewModel()
+    @State var openName : Bool = false
+    @AppStorage("username") var username : String = ""
     
     var body: some View {
         NavigationStack {
@@ -19,54 +21,62 @@ struct ContentView: View {
                 RoundedRectangle(cornerRadius: 20)
                     .foregroundStyle(.brightGold)
                     .overlay (alignment: .bottomLeading){
-                        Text("Bem-vindo!")
+                        Text(username == "" ? "Bem-vindo!" : "Bem-vindo \(username)!")
                             .font(.largeTitle)
                             .bold()
                             .padding()
+                            .onTapGesture {
+                                openName = true
+                            }
                     }
                     .frame(height: 175)
                 
-                sectionTitle("Saldos")
-                
-                
-                RoundedRectangle(cornerRadius: 10)
-                    .foregroundStyle(.white)
-                    .overlay {
-                        VStack {
-                            buildListCell("Conta Corrente", 1000)
-                            Divider()
-                            buildListCell("Cartão de Crédito", 1000)
-                        }
-                    }
-                
-                .listStyle(.inset)
-                .padding(.horizontal)
-                .frame(height: 60 * 2)
-                
-                sectionTitle("O que deseja fazer?")
+                ScrollView{
+                    VStack (alignment: .leading) {
+                        sectionTitle("Saldos")
+                        
+                        
+                        RoundedRectangle(cornerRadius: 10)
+                            .foregroundStyle(.white)
+                            .overlay {
+                                VStack {
+                                    buildListCell("Conta Corrente", 1000)
+                                    Divider()
+                                    buildListCell("Cartão de Crédito", 1000)
+                                }
+                            }
+                        
+                        .listStyle(.inset)
+                        .padding(.horizontal)
+                        .frame(height: 60 * 2)
+                        
+                        sectionTitle("O que deseja fazer?")
 
-                
-                
-                LazyVGrid(columns: [GridItem(), GridItem(), GridItem()]) {
-                    operationCard("note.text.badge.plus", "Adicionar movimentação")
-                    operationCard("square.stack.3d.down.right", "Categoria de transação")
-                    operationCard("banknote", "Método de pagamento")
-                    operationCard("chart.xyaxis.line", "Histórico")
+                        
+                        
+                        LazyVGrid(columns: [GridItem(), GridItem(), GridItem()]) {
+                            operationCard("note.text.badge.plus", "Adicionar movimentação")
+                            operationCard("square.stack.3d.down.right", "Categoria de transação")
+                            operationCard("banknote", "Método de pagamento")
+                            operationCard("chart.xyaxis.line", "Histórico")
+                                .padding()
+                            
+                        }
+                        .padding(.horizontal)
+                        
+                        sectionTitle("Conta bancária")
+                        
+                        
+                        LazyVGrid(columns: [GridItem(), GridItem(), GridItem()]) {
+                            bankaryAccount("Banco do Brasil", 500.00)
+                            bankaryAccount("Itaú", 1000)
+                            bankaryAccount("C6 Bank", 2500)
+                            
+                        }
                         .padding()
+                    }
                     
                 }
-                .padding(.horizontal)
-                
-                sectionTitle("Conta bancária")
-                
-                
-                LazyVGrid(columns: [GridItem(), GridItem(), GridItem()]) {
-                    bankaryAccount("Banco do Brasil", 500.00)
-                    bankaryAccount("Itaú", 1000)
-                    bankaryAccount("C6 Bank", 2500)
-                    
-                }
-                .padding()
                 
                 Spacer()
                 
@@ -74,33 +84,35 @@ struct ContentView: View {
             }
             .background(Color.background)
             .ignoresSafeArea()
-            /*
-             List {
-             ForEach(vm.items) { item in
-             NavigationLink {
-             Text("Item at \(item.timestamp!, formatter: itemFormatter)")
-             } label: {
-             Text(item.timestamp!, formatter: itemFormatter)
-             }
-             }
-             .onDelete(perform: vm.deleteItems)
-             }*/
             .toolbar {
                 
                 HStack {
-                    Button(action: vm.addItem) {
-                        Label("Add Item", systemImage: "eye")
+                    Button {
+                        vm.isShowingValues.toggle()
+                    } label: {
+                        
+                        if vm.isShowingValues {
+                            Image(systemName: "eye")
+                        } else {
+                            Image(systemName: "eye.slash")
+                        }
+                         
                     }
                     
-                    Button {
-                        
+                    NavigationLink {
+                        ConfigurationView()
                     } label: {
                         Image(systemName: "gearshape")
                     }
                 }
-                
             }
-            
+            .sheet(isPresented: $openName) {
+                UsernameView(isOpen: $openName)
+                    .presentationDetents([.fraction(0.33)])
+            }
+        }
+        .onAppear {
+            self.openUserName()
         }
     }
     
@@ -113,10 +125,19 @@ struct ContentView: View {
             HStack {
                 VStack (alignment: .leading){
                     Text(account)
-                    Text("R$ \(String(format: "%.2f", money))")
+                    if vm.isShowingValues {
+                        Text("R$ \(String(format: "%.2f", money))")
+                    } else {
+                        Text("*****")
+                    }
+                    
                 }
                 .padding(.horizontal)
                 Spacer()
+                
+                Image(systemName: "chevron.right")
+                    .foregroundStyle(.accent)
+                    .padding(.horizontal)
             }
         }
         .accentColor(.primary)
@@ -154,8 +175,14 @@ struct ContentView: View {
                     
                     Spacer()
                     
-                    Text("R$ \(String(format: "%.2f", moneyAmount))")
-                        .font(.caption)
+                    if vm.isShowingValues {
+                        Text("R$ \(String(format: "%.2f", moneyAmount))")
+                            .font(.caption)
+                    } else {
+                        Text("*****")
+                            .font(.caption)
+                    }
+                    
                 }
                 .padding()
             }
@@ -170,6 +197,12 @@ struct ContentView: View {
             .padding(.top)
             .padding(.horizontal)
             .padding(.horizontal)
+    }
+    
+    func openUserName () {
+        Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false) { timer in
+            self.openName = self.username == ""
+        }
     }
 }
 

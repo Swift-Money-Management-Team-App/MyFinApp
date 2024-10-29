@@ -11,6 +11,7 @@ import SwiftUI
 extension ContentView {
     class ContentViewModel : ObservableObject {
         @Environment(\.managedObjectContext) private var viewContext
+        @Published var isShowingValues : Bool = true
 
         @FetchRequest(
             sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],

@@ -15,7 +15,7 @@ struct MoneyManagement_AppApp: App {
         do {
             container = try ModelContainer(for: User.self, BankAccount.self)
         } catch {
-            fatalError("Failed to create ModelContainer for Movie.")
+            fatalError("Failed to create ModelContainer.")
         }
     }
     

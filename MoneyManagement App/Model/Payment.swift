@@ -1,10 +1,3 @@
-//
-//  User.swift
-//  MoneyManagement App
-//
-//  Created by Rafael Riki Ogawa Osiro on 24/10/24.
-//
-
 import Foundation
 import SwiftData
 
@@ -16,10 +9,10 @@ final class Payment {
     var id: UUID
     var idTransaction: UUID
     var idMethod: UUID
-    var value: Decimal
+    var value: Double
     var competence: Date?
     
-    init(idTransaction: UUID, idMethod: UUID, origin: UUID, value: Decimal, competence: Date? = nil) {
+    init(idTransaction: UUID, idMethod: UUID, origin: UUID, value: Double, competence: Date? = nil) {
         self.id = UUID()
         self.idTransaction = idTransaction
         self.idMethod = idMethod

@@ -1,10 +1,3 @@
-//
-//  User.swift
-//  MoneyManagement App
-//
-//  Created by Rafael Riki Ogawa Osiro on 24/10/24.
-//
-
 import Foundation
 import SwiftData
 

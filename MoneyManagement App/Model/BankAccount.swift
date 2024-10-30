@@ -1,10 +1,3 @@
-//
-//  BankAccount.swift
-//  MoneyManagement App
-//
-//  Created by Rafael Riki Ogawa Osiro on 24/10/24.
-//
-
 import Foundation
 import SwiftData
 
@@ -16,7 +9,7 @@ final class BankAccount {
     var id: UUID
     var idUser: UUID
     var name: String
-    var total: Decimal
+    var total: Double
     
     init(idUser: UUID, name: String) {
         self.id = UUID()

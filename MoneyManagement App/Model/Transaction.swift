@@ -1,10 +1,3 @@
-//
-//  User.swift
-//  MoneyManagement App
-//
-//  Created by Rafael Riki Ogawa Osiro on 24/10/24.
-//
-
 import Foundation
 import SwiftData
 
@@ -20,7 +13,7 @@ final class Transaction {
     var earningCategory: UUID?
     var expenseCategory: UUID?
     var transactionDescription: String?
-    var total: Decimal
+    var total: Double
     var date: Date
     
     init(id: UUID, idAccount: UUID, destiny: UUID? = nil, earningCategory: UUID? = nil, expenseCategory: UUID? = nil, description: String? = nil, total: Decimal, date: Date) {

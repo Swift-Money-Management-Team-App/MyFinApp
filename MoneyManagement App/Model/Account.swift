@@ -1,10 +1,3 @@
-//
-//  Account.swift
-//  MoneyManagement App
-//
-//  Created by Rafael Riki Ogawa Osiro on 24/10/24.
-//
-
 import Foundation
 import SwiftData
 
@@ -16,7 +9,7 @@ final class Account {
     var id: UUID
     var idBankAccount: UUID
     var name: String
-    var total: Decimal
+    var total: Double
     var isCreditCard: Bool
     var closeDay: Int?
     

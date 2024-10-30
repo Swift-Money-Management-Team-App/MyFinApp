@@ -1,12 +1,21 @@
 import SwiftUI
+import SwiftData
 
 @main
 struct MoneyManagement_AppApp: App {
-    let persistenceController = PersistenceController.shared
-
-    @AppStorage("hasLaunchedBefore") private var firstLaunchApplication: Bool = true
+    
+    @State var firstLaunchApplication: Bool = Storage.share.firstLaunchApplication
     @State private var showSplash = true
-
+    let container: ModelContainer
+    
+    init() {
+        do {
+            container = try ModelContainer(for: User.self, BankAccount.self)
+        } catch {
+            fatalError("Failed to create ModelContainer for Movie.")
+        }
+    }
+    
     var body: some Scene {
         WindowGroup {
             ZStack {
@@ -25,8 +34,8 @@ struct MoneyManagement_AppApp: App {
                         OnboardingView(isFirstLaunch: $firstLaunchApplication)
                             .transition(.opacity)
                     } else {
-                        ContentView()
-                            .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                        HomeView(modelContext: container.mainContext)
+                            .modelContainer(container)
                             .transition(.opacity)
                     }
                 }

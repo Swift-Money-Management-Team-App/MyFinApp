@@ -6,10 +6,12 @@ class Storage {
     let userDefault: UserDefaults
     
     @UserDefault var firstLaunchApplication: Bool
+    @UserDefault var hiddenValues: Bool
     
     init(userDefault: UserDefaults  = .standard) {
         self.userDefault = userDefault
         self._firstLaunchApplication = .init(keys: .firstLaunchApplication, default: true, userDefault)
+        self._hiddenValues = .init(keys: .hiddenValues, default: true, userDefault)
     }
 }
 

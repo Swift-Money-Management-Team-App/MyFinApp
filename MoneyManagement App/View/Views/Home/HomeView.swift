@@ -5,6 +5,7 @@ import CoreData
 struct HomeView: View {
     
     @ObservedObject var viewModel : HomeViewModel
+    @EnvironmentObject var settingsVM: SettingsViewModel
     
     init(modelContext: ModelContext) {
         self.viewModel = HomeViewModel(modelContenxt: modelContext)
@@ -96,8 +97,8 @@ struct HomeView: View {
                             Label("Esconder", systemImage: "eye")
                         }
                     }
-                    Button {
-                        // TODO: navigate to Settings
+                    NavigationLink {
+                        SettingsView(settingsVM: settingsVM)
                     } label: {
                         Image(systemName: "gearshape")
                     }

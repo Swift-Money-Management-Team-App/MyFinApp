@@ -1,17 +1,19 @@
 import SwiftUI
 
 struct AccountDetailView: View {
+    @State var showEditFinancialInstitution : Bool = false
+    
     var body: some View {
         VStack {
-            rectangleTop("Itaú")
+            rectangleTop("itaú")
             
             ScrollView {
                 VStack (alignment: .leading){
-                    sectiongTitle("Saldo total")
+                    SectionTitle(text: "Saldo total")
                     
                     balance
                     
-                    sectiongTitle("O que deseja fazer?")
+                    SectionTitle(text: "O que deseja fazer?")
                     
                     HStack {
                         HomeViewOperationCard(type: .addMovement)
@@ -21,7 +23,7 @@ struct AccountDetailView: View {
                     .padding(.horizontal)
                     
                     HStack {
-                        sectiongTitle("Cartão de Crédito")
+                        SectionTitle(text: "Cartão de Crédito")
                         Spacer()
                         Button {
                             
@@ -41,7 +43,7 @@ struct AccountDetailView: View {
                     
                     
                     HStack {
-                        sectiongTitle("Contas")
+                        SectionTitle(text: "Contas")
                         Spacer()
                         Button {
                             
@@ -68,20 +70,22 @@ struct AccountDetailView: View {
                     Spacer()
                 }
             }
-            
-            
-            
-            
         }
         .background(Color.background)
         .ignoresSafeArea()
         .toolbar {
             ToolbarItem {
                 Button {
-                    
+                    showEditFinancialInstitution = true
                 } label: {
                     Image(systemName: "pencil")
                 }
+            }
+        }
+        .sheet(isPresented: $showEditFinancialInstitution) {
+            NavigationStack {
+                EditFinancialInstitution()
+                    .presentationDetents([.fraction(0.4)])
             }
         }
     }
@@ -104,15 +108,6 @@ struct AccountDetailView: View {
                 .frame(height: 170)
                 .offset(y: -30)
         }
-    }
-    
-    @ViewBuilder
-    func sectiongTitle (_ text : String) -> some View {
-        Text(text)
-            .padding(.horizontal)
-            .fontWeight(.bold)
-            .foregroundStyle(.darkPink)
-            .padding(.vertical)
     }
     
     var balance : some View {

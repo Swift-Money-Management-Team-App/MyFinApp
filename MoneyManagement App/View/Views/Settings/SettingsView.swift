@@ -3,7 +3,7 @@ import SwiftUI
 
 struct SettingsView: View {
     
-    @ObservedObject var settingsVM: SettingsViewModel
+    @ObservedObject var settingsVM: SettingsViewModel = SettingsViewModel()
     @Environment(\.requestReview) var requestReview
     
     private let sharedLinkRow = SharedLinkRow()

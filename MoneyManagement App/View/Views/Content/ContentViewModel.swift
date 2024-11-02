@@ -13,17 +13,18 @@ extension ContentView {
         @Environment(\.managedObjectContext) private var viewContext
         @Published var isShowingValues : Bool = true
 
-        @FetchRequest(
-            sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
-            animation: .default)
-        internal var items : FetchedResults<Item>
+        //@FetchRequest(
+          //  sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
+            //animation: .default)
+        //internal var items : FetchedResults<Item>
         
         
         
         internal func addItem () {
+            /*
             withAnimation {
-                let newItem = Item(context: viewContext)
-                newItem.timestamp = Date()
+                //let newItem = Item(context: viewContext)
+                //newItem.timestamp = Date()
 
                 do {
                     try viewContext.save()
@@ -34,9 +35,11 @@ extension ContentView {
                     fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
                 }
             }
+             */
         }
         
         internal func deleteItems(offsets: IndexSet) {
+            /*
             withAnimation {
                 offsets.map { items[$0] }.forEach(viewContext.delete)
 
@@ -49,6 +52,7 @@ extension ContentView {
                     fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
                 }
             }
+             */
         }
         
     }

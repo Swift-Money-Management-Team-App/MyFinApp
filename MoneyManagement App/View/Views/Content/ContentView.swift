@@ -99,7 +99,7 @@ struct ContentView: View {
                     }
                     
                     NavigationLink {
-                        ConfigurationView()
+                        SettingsView()
                     } label: {
                         Image(systemName: "gearshape")
                     }
@@ -206,5 +206,5 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+    //ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
 }

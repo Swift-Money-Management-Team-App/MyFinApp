@@ -67,7 +67,10 @@ struct OnboardingView: View {
                 .frame(maxHeight: .infinity)
                 .padding([.leading, .trailing], bounds.size.width * 0.1)
             }
-            Button(action: { isFirstLaunch = false }, label: {
+            Button(action: {
+                isFirstLaunch = false
+                Storage.share.firstLaunchApplication = false
+            }, label: {
                 Text("Começar")
                     .font(.title3)
                     .foregroundStyle(.white)

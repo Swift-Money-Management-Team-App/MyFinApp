@@ -11,14 +11,15 @@ class HomeViewModel : ObservableObject {
     var bankAccounts: [BankAccount] = []
     var valueAllCurrentAccounts: Double = 0
     var valueAllCreditCards: Double = 0
-    var isShowingScreenName: Bool = false
+    var isShowingScreenNameUser: Bool = false
+    var isShowingScreenNameBankAccount: Bool = false
     var hiddenValues: Bool = Storage.share.hiddenValues
     
     init(modelContenxt: ModelContext) {
         self.modelContenxt = modelContenxt
         self.fetchUser()
         self.fetchBankAccounts()
-        self.isShowingScreenName = self.user.isEmpty ? true : false
+        self.isShowingScreenNameUser = self.user.isEmpty ? true : false
     }
     
     func fetchUser() {
@@ -45,17 +46,18 @@ class HomeViewModel : ObservableObject {
             print("Deu ruim 2")
         }
         self.fetchUser()
-        self.isShowingScreenName = false
+        self.isShowingScreenNameUser = false
     }
     
     func appendBankAccount() {
-        self.modelContenxt.insert(BankAccount(idUser: self.user.first!.id, name: self.personName))
+        self.modelContenxt.insert(BankAccount(idUser: self.user.first!.id, name: self.bankAccountName))
         do {
             try modelContenxt.save()
         } catch {
             print("Deu ruim 2")
         }
         self.fetchBankAccounts()
+        self.isShowingScreenNameBankAccount = false
     }
     
     func toggleHiddenValues() {

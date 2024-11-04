@@ -7,33 +7,7 @@ struct AddNameView: View {
     let action: () -> Void
     
     var body: some View {
-        VStack {
-            HStack {
-                if (type == .bankAccount) {
-                    Button(action: {
-                        dismiss()
-                    }) {
-                        Text("Cancelar")
-                            .padding(10)
-                    }
-                    Spacer()
-                    Text("""
-                        Adicionar
-                        Instituição
-                        Financeira
-                        """)
-                    .multilineTextAlignment(.center)
-                }
-                Spacer()
-                Button(action: {
-                    action()
-                }) {
-                    Text("Confirmar")
-                        .padding(10)
-                }
-            }
-            .frame(maxWidth: .infinity)
-            .padding([.top, .trailing], 10)
+        NavigationStack {
             VStack {
                 Text((type == .user ? "Como gostaria de ser chamado?": "Qual o nome da Instituição Financeira?"))
                     .fontWeight(.semibold)
@@ -63,10 +37,34 @@ struct AddNameView: View {
                     }
                 }
             }
-            .frame(maxHeight: .infinity)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color.background)
+            .toolbar {
+                if (type == .bankAccount) {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button(action: {
+                            dismiss()
+                        }) {
+                            Text("Cancelar")
+                                .padding(10)
+                        }
+                    }
+                    ToolbarItem(placement: .principal) {
+                        Text("Adicionar Instituição Financeira")
+                            .multilineTextAlignment(.center)
+                    }
+                }
+                ToolbarItem {
+                    Button(action: {
+                        action()
+                    }) {
+                        Text("Confirmar")
+                            .padding(10)
+                    }
+                }
+            }
         }
-        .background(Color.background)
-        .presentationDetents([.height(200)])
+        .presentationDetents([(type == .user ? .height(200): .height(250))])
         .interactiveDismissDisabled(true)
     }
 }

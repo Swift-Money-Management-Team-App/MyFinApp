@@ -4,8 +4,8 @@ This section is optional. Use it if this PR has dependencies.
 > [!WARNING]  
 > This PR depends on [PR #<number>](https://github.com/Swift-Money-Management-Team-App/MoneyManagementApp/pull/number) getting merged first.
 
-### Project
-https://github.com/orgs/Swift-Money-Management-Team-App/projects/2?pane=issue&itemId=<number>
+### Issue
+closes [#<number>](https://github.com/orgs/Swift-Money-Management-Team-App/projects/2?pane=issue&itemId=<number>)
 
 ### Overview
 <!-- Briefly describe the purpose of this PR. -->

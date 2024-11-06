@@ -1,10 +1,3 @@
-//
-//  SectionTitle.swift
-//  MoneyManagement App
-//
-//  Created by Caio Marques on 02/11/24.
-//
-
 import SwiftUI
 
 struct SectionTitle: View {

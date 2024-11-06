@@ -49,10 +49,11 @@ struct AddNameView: View {
                                 .padding(10)
                         }
                     }
-                    ToolbarItem(placement: .principal) {
-                        Text("Adicionar Instituição Financeira")
-                            .multilineTextAlignment(.center)
-                    }
+                }
+                ToolbarItem(placement: .principal) {
+                    Text(type == .user ? "Adicionar Usuário" : "Adicionar Instituição Financeira")
+                        .multilineTextAlignment(.center)
+                    
                 }
                 ToolbarItem {
                     Button(action: {

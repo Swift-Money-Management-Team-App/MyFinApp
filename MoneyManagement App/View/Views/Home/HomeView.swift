@@ -4,11 +4,11 @@ import CoreData
 
 struct HomeView: View {
     
-    @ObservedObject var viewModel : HomeViewModel
+    @ObservedObject var homeVM : HomeViewModel
     @EnvironmentObject var settingsVM: SettingsViewModel
     
     init(modelContext: ModelContext) {
-        self.viewModel = HomeViewModel(modelContenxt: modelContext)
+        self.homeVM = HomeViewModel(modelContenxt: modelContext)
     }
     
     var body: some View {
@@ -22,13 +22,13 @@ struct HomeView: View {
                             .fontWeight(.semibold)
                             .padding([.top, .leading])
                         VStack(spacing: 3) {
-                            HomeViewConditionCell(type: .current, valueAllAccounts: $viewModel.valueAllCurrentAccounts, hiddenValues: $viewModel.hiddenValues)
+                            HomeViewConditionCell(type: .current, valueAllAccounts: self.$homeVM.valueAllCurrentAccounts, hiddenValues: self.$homeVM.hiddenValues)
                             Rectangle()
                                 .frame(maxWidth: .infinity, maxHeight: 1)
                                 .padding(.leading, 10)
                                 .foregroundStyle(.gray)
                                 .opacity(0.6)
-                            HomeViewConditionCell(type: .credit, valueAllAccounts: $viewModel.valueAllCreditCards, hiddenValues: $viewModel.hiddenValues)
+                            HomeViewConditionCell(type: .credit, valueAllAccounts: self.$homeVM.valueAllCreditCards, hiddenValues: self.$homeVM.hiddenValues)
                         }
                         .frame(height: 60 * 2)
                         .background(Color("backgroundColorRow"))
@@ -52,12 +52,12 @@ struct HomeView: View {
                                 .fontWeight(.semibold)
                                 .padding([.top, .leading])
                             Spacer()
-                            Button(action: { viewModel.isShowingScreenNameBankAccount.toggle() }) {
+                            Button(action: { self.homeVM.isShowingScreenNameBankAccount.toggle() }) {
                                 Image(systemName: "plus")
                             }
                             .padding([.top, .trailing])
                         }
-                        if(viewModel.bankAccounts.isEmpty){
+                        if(self.homeVM.bankAccounts.isEmpty){
                             HStack (alignment: .center) {
                                 Text("Não possui contas bancária")
                                     .font(.title3)
@@ -68,7 +68,7 @@ struct HomeView: View {
                             .frame(maxWidth: .infinity, minHeight: 130)
                         } else {
                             LazyVGrid(columns: [GridItem(), GridItem(), GridItem()], spacing: 20) {
-                                ForEach(viewModel.bankAccounts) { bankAccount in
+                                ForEach(self.homeVM.bankAccounts) { bankAccount in
                                     HomeViewBankAccount(bankAccount: bankAccount)
                                 }
                             }
@@ -79,8 +79,8 @@ struct HomeView: View {
                 RoundedRectangle(cornerRadius: 20)
                     .foregroundStyle(.brightGold)
                     .overlay (alignment: .bottomLeading){
-                        if (!viewModel.isShowingScreenNameUser) {
-                            Text("Olá, \(String(describing: viewModel.user.first!.name))!")
+                        if (!self.homeVM.isShowingScreenNameUser) {
+                            Text("Olá, \(String(describing: self.homeVM.user.first!.name))!")
                                 .font(.largeTitle)
                                 .bold()
                                 .padding()
@@ -94,17 +94,19 @@ struct HomeView: View {
                     .frame(height: 175)
             }
             .ignoresSafeArea()
-            .toolbar {
-                HStack {
-                    Button(action: { viewModel.toggleHiddenValues() }) {
-                        if viewModel.hiddenValues {
+            .toolbar{
+                ToolbarItem(placement: .confirmationAction) {
+                    Button(action: { self.homeVM.toggleHiddenValues() }) {
+                        if self.homeVM.hiddenValues {
                             Label("Mostrar", systemImage: "eye.slash")
                         } else {
                             Label("Esconder", systemImage: "eye")
                         }
                     }
+                }
+                ToolbarItem(placement: .confirmationAction) {
                     NavigationLink {
-                        SettingsView(settingsVM: settingsVM)
+                        SettingsView(homeVM: self.homeVM, settingsVM: self.settingsVM)
                     } label: {
                         Image(systemName: "gearshape")
                     }
@@ -112,11 +114,11 @@ struct HomeView: View {
             }
             .toolbarBackground(.hidden)
         }
-        .sheet(isPresented: $viewModel.isShowingScreenNameUser, content: {
-            AddNameView(type: .user, name: $viewModel.personName, action: viewModel.appendUser)
+        .sheet(isPresented: self.$homeVM.isShowingScreenNameUser, content: {
+            UserForm(name: self.$homeVM.personName, formState: .create, action: self.homeVM.appendUser)
         })
-        .sheet(isPresented: $viewModel.isShowingScreenNameBankAccount, content: {
-            AddNameView(type: .bankAccount, name: $viewModel.bankAccountName, action: viewModel.appendBankAccount)
+        .sheet(isPresented: self.$homeVM.isShowingScreenNameBankAccount, content: {
+            FinancialInstitueForm(name: self.$homeVM.bankAccountName, formState: .create, action: self.homeVM.appendBankAccount)
         })
     }
 }

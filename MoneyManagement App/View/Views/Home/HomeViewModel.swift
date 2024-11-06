@@ -38,6 +38,7 @@ class HomeViewModel : ObservableObject {
         }
     }
     
+//    TODO: AQUI ESTÁ DANDO PROBLEMAS POIS ESTÁ SÓ APPEND USUÁRIO E NÃO ADICIONANDO SOMENTE UM USUÁRUIO
     func appendUser() {
         self.modelContenxt.insert(User(name: self.personName))
         do {
@@ -46,6 +47,9 @@ class HomeViewModel : ObservableObject {
             print("Deu ruim 2")
         }
         self.fetchUser()
+        for user in user {
+            print(user.name)
+        }
         self.isShowingScreenNameUser = false
     }
     

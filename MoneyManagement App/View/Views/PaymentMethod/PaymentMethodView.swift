@@ -6,6 +6,8 @@ struct PaymentMethodView: View {
     @Environment(\.modelContext) private var modelContext
     
     @State private var isPresentingEditView = false
+    @State private var methodToEdit: Method?
+    
     @Environment(\.dismiss) var dismiss
 
     var body: some View {
@@ -18,10 +20,13 @@ struct PaymentMethodView: View {
             List {
                 ForEach(paymentMethods) { method in
                     HStack {
-                        
                         Image(systemName: method.emoji)
                             .foregroundColor(.primary)
                         Text(method.name)
+                    }
+                    .onTapGesture {
+                        methodToEdit = method
+                        isPresentingEditView = true
                     }
                 }
                 .onDelete(perform: deleteItem)
@@ -45,6 +50,7 @@ struct PaymentMethodView: View {
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: {
+                    methodToEdit = nil 
                     isPresentingEditView = true
                 }) {
                     Image(systemName: "plus")
@@ -52,9 +58,15 @@ struct PaymentMethodView: View {
             }
         }
         .sheet(isPresented: $isPresentingEditView) {
-            EditPaymentMethodView { newMethod in
-                
-                modelContext.insert(newMethod)
+            EditPaymentMethodView(method: methodToEdit) { newOrUpdatedMethod in
+                if let existingMethod = methodToEdit {
+                    
+                    existingMethod.emoji = newOrUpdatedMethod.emoji
+                    existingMethod.name = newOrUpdatedMethod.name
+                } else {
+                    
+                    modelContext.insert(newOrUpdatedMethod)
+                }
                 isPresentingEditView = false
             }
         }

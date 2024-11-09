@@ -4,15 +4,15 @@ import UIKit
 struct EditPaymentMethodView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) private var modelContext
-
+    
     @State private var name: String
     @State private var emoji: String
     @State private var showCancelAlert = false
     @State private var currentPage = 0
-
+    
     var method: Method?
     var onSave: (Method) -> Void
-
+    
     init(method: Method? = nil, onSave: @escaping (Method) -> Void) {
         self.method = method
         self._name = State(initialValue: method?.name ?? "")
@@ -21,7 +21,7 @@ struct EditPaymentMethodView: View {
         UIPageControl.appearance().currentPageIndicatorTintColor = .orange
         UIPageControl.appearance().pageIndicatorTintColor = .gray
     }
-
+    
     private let emojis = [
         "pencil", "gamecontroller", "car", "bicycle", "wallet.pass", "bed.double", "cart", "creditcard",
         "drop", "bus", "popcorn", "bolt", "fork.knife", "book", "bag", "airplane",
@@ -32,7 +32,7 @@ struct EditPaymentMethodView: View {
     private var emojiPages: [[String]] {
         stride(from: 0, to: emojis.count, by: 8).map { Array(emojis[$0..<min($0 + 8, emojis.count)]) }
     }
-
+    
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
@@ -69,7 +69,7 @@ struct EditPaymentMethodView: View {
                     .disabled(name.isEmpty || emoji.isEmpty)
                 }
                 .padding()
-
+                
                 VStack(alignment: .leading, spacing: 16) {
                     TextField("Nome", text: $name)
                         .padding(.horizontal)
@@ -109,7 +109,7 @@ struct EditPaymentMethodView: View {
                 .cornerRadius(8)
                 .shadow(radius: 4)
                 .padding(.horizontal)
-
+                
                 
                 HStack(spacing: 4) {
                     ForEach(emojiPages.indices, id: \.self) { index in
@@ -119,7 +119,7 @@ struct EditPaymentMethodView: View {
                     }
                 }
                 .padding(.top, 12)
-
+                
                 Spacer()
             }
             .background(Color(UIColor.systemGray6).ignoresSafeArea())

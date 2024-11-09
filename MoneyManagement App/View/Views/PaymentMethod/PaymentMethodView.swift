@@ -9,10 +9,10 @@ struct PaymentMethodView: View {
     @State private var methodToEdit: Method?
     @State private var methodToDelete: Method?
     @State private var showDeleteAlert = false
-    @State private var selectedMethod: Method? 
+    @State private var selectedMethod: Method?
     
     @Environment(\.dismiss) var dismiss
-
+    
     var body: some View {
         VStack(spacing: 0) {
             RoundedRectangle(cornerRadius: 20)

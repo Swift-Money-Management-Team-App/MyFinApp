@@ -56,7 +56,7 @@ struct DetailPaymentMethodView: View {
                 .cornerRadius(8)
                 .shadow(radius: 4)
                 .padding(.horizontal)
-
+                
                 
                 Button(action: {
                     showDeleteAlert = true
@@ -91,7 +91,7 @@ struct DetailPaymentMethodView: View {
     
     private func deleteMethod() {
         modelContext.delete(method)
-        dismiss() 
+        dismiss()
     }
 }
 

@@ -3,28 +3,29 @@ import SwiftUI
 struct EmojiPickerView: View {
     @Binding var selectedEmoji: String
     @Environment(\.dismiss) var dismiss
-    
+
     let emojis = [
         "💵", "💰", "💳", "🏦", "💸", "📈", "📉", "💹", "🪙", "💷", "💶", "💴", "💎", "🧾", "💱", "💲", "🔖", "🛒", "📊", "📋", "💼", "🏷️", "📥", "📤", "🔐",
         "🗂", "🗃️", "📂", "📑", "🧮", "🗄️", "🗞️", "📰", "💻", "🖥️", "💼", "🏢"
     ]
-    
+
     let columns = [
         GridItem(.flexible()),
         GridItem(.flexible()),
         GridItem(.flexible()),
         GridItem(.flexible())
     ]
-    
+
     var body: some View {
         VStack {
             Text("Escolha um Emoji")
                 .font(.headline)
                 .padding()
-            
+
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 20) {
-                    ForEach(emojis, id: \.self) { emoji in
+                    ForEach(emojis.indices, id: \.self) { index in
+                        let emoji = emojis[index]
                         Text(emoji)
                             .font(.largeTitle)
                             .padding()
@@ -36,7 +37,7 @@ struct EmojiPickerView: View {
                 }
                 .padding()
             }
-            
+
             Button("Fechar") {
                 dismiss()
             }

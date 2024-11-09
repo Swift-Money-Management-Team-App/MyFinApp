@@ -7,7 +7,7 @@ struct EditPaymentMethodView: View {
     @State private var name: String
     @State private var emoji: String
     @State private var showEmojiPicker = false
-    @State private var showCancelAlert = false 
+    @State private var showCancelAlert = false
 
     var method: Method?
     
@@ -19,19 +19,27 @@ struct EditPaymentMethodView: View {
         self._emoji = State(initialValue: method?.emoji ?? "")
         self.onSave = onSave
     }
+
+    private let emojis = [
+        "pencil", "gamecontroller", "car", "bicycle", "wallet.pass", "bed.double", "cart", "creditcard",
+        "drop", "bus", "popcorn", "bolt", "fork.knife", "book", "bag", "airplane"
+    ]
+    
+    private let columns = [
+        GridItem(.flexible()),
+        GridItem(.flexible()),
+        GridItem(.flexible()),
+        GridItem(.flexible())
+    ]
     
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
                 HStack {
                     Button("Cancelar") {
-                        if method != nil {
-                            showCancelAlert = true
-                        } else {
-                            dismiss()
-                        }
+                        showCancelAlert = true 
                     }
-                    .alert("Cancelar Edição?", isPresented: $showCancelAlert) {
+                    .alert("Cancelar \(method == nil ? "adição do novo método de pagamento" : "edição do novo método de pagamento")?", isPresented: $showCancelAlert) {
                         Button("Sim", role: .destructive) {
                             dismiss()
                         }
@@ -48,12 +56,10 @@ struct EditPaymentMethodView: View {
                     
                     Button(method == nil ? "Adicionar" : "Salvar") {
                         if let existingMethod = method {
-                            
                             existingMethod.name = name
                             existingMethod.emoji = emoji
                             onSave(existingMethod)
                         } else {
-                            
                             let newMethod = Method(idUser: UUID(), emoji: emoji, name: name)
                             onSave(newMethod)
                         }
@@ -67,26 +73,29 @@ struct EditPaymentMethodView: View {
                     Section(header: Text("Detalhes do Método de Pagamento")) {
                         TextField("Tipo de Pagamento", text: $name)
                         
-                        HStack {
-                            Text("Emoji")
-                            Spacer()
-                            if !emoji.isEmpty {
-                                Image(systemName: emoji)
-                                    .foregroundColor(.primary)
-                            } else {
-                                Text("Selecione um emoji")
-                                    .foregroundColor(.gray)
+                        VStack(alignment: .leading) {
+                            Text("Selecione um emoji")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+
+                            LazyVGrid(columns: columns, spacing: 20) {
+                                ForEach(emojis, id: \.self) { emojiItem in
+                                    Image(systemName: emojiItem)
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(width: 40, height: 40)
+                                        .padding(8)
+                                        .background(self.emoji == emojiItem ? Color.orange.opacity(0.3) : Color.clear)
+                                        .clipShape(Circle())
+                                        .onTapGesture {
+                                            self.emoji = emojiItem
+                                        }
+                                }
                             }
-                        }
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            showEmojiPicker = true
+                            .padding()
                         }
                     }
                 }
-            }
-            .sheet(isPresented: $showEmojiPicker) {
-                EmojiPickerView(selectedEmoji: $emoji)
             }
         }
     }

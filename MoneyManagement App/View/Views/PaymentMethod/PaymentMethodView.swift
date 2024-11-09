@@ -7,7 +7,9 @@ struct PaymentMethodView: View {
     
     @State private var isPresentingEditView = false
     @State private var methodToEdit: Method?
-    
+    @State private var methodToDelete: Method?
+    @State private var showDeleteAlert = false 
+
     @Environment(\.dismiss) var dismiss
 
     var body: some View {
@@ -28,10 +30,25 @@ struct PaymentMethodView: View {
                         methodToEdit = method
                         isPresentingEditView = true
                     }
+                    .swipeActions {
+                        Button(role: .destructive) {
+                            methodToDelete = method
+                            showDeleteAlert = true
+                        } label: {
+                            Label("Delete", systemImage: "trash")
+                        }
+                    }
                 }
-                .onDelete(perform: deleteItem)
             }
             .listStyle(PlainListStyle())
+            .alert("Excluir Método de Pagamento?", isPresented: $showDeleteAlert, presenting: methodToDelete) { method in
+                Button("Excluir", role: .destructive) {
+                    delete(method)
+                }
+                Button("Cancelar", role: .cancel) {}
+            } message: { method in
+                Text("Tem certeza de que deseja excluir o método de pagamento \"\(method.name)\"?")
+            }
         }
         .navigationTitle("Métodos de Pagamento")
         .navigationBarTitleDisplayMode(.large)
@@ -50,7 +67,7 @@ struct PaymentMethodView: View {
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: {
-                    methodToEdit = nil 
+                    methodToEdit = nil
                     isPresentingEditView = true
                 }) {
                     Image(systemName: "plus")
@@ -60,11 +77,9 @@ struct PaymentMethodView: View {
         .sheet(isPresented: $isPresentingEditView) {
             EditPaymentMethodView(method: methodToEdit) { newOrUpdatedMethod in
                 if let existingMethod = methodToEdit {
-                    
                     existingMethod.emoji = newOrUpdatedMethod.emoji
                     existingMethod.name = newOrUpdatedMethod.name
                 } else {
-                    
                     modelContext.insert(newOrUpdatedMethod)
                 }
                 isPresentingEditView = false
@@ -72,11 +87,8 @@ struct PaymentMethodView: View {
         }
     }
     
-    private func deleteItem(at offsets: IndexSet) {
-        for index in offsets {
-            let method = paymentMethods[index]
-            modelContext.delete(method)
-        }
+    private func delete(_ method: Method) {
+        modelContext.delete(method)
     }
 }
 

@@ -7,6 +7,7 @@ struct EditPaymentMethodView: View {
     @State private var name: String
     @State private var emoji: String
     @State private var showEmojiPicker = false
+    @State private var showCancelAlert = false 
 
     var method: Method?
     
@@ -24,7 +25,17 @@ struct EditPaymentMethodView: View {
             VStack(spacing: 0) {
                 HStack {
                     Button("Cancelar") {
-                        dismiss()
+                        if method != nil {
+                            showCancelAlert = true
+                        } else {
+                            dismiss()
+                        }
+                    }
+                    .alert("Cancelar Edição?", isPresented: $showCancelAlert) {
+                        Button("Sim", role: .destructive) {
+                            dismiss()
+                        }
+                        Button("Não", role: .cancel) {}
                     }
                     
                     Spacer()
@@ -42,7 +53,7 @@ struct EditPaymentMethodView: View {
                             existingMethod.emoji = emoji
                             onSave(existingMethod)
                         } else {
-                            // Create a new method
+                            
                             let newMethod = Method(idUser: UUID(), emoji: emoji, name: name)
                             onSave(newMethod)
                         }

@@ -9,10 +9,6 @@ struct EditPaymentMethodView: View {
     @State private var showEmojiPicker = false
     
     var onSave: (Method) -> Void
-
-    let financialEmojis = [
-        "💵", "💰", "💳", "🏦", "💸", "📈", "📉", "💹", "🪙", "💷", "💶", "💴", "💎", "🧾", "💱", "💲", "🔖", "🛒", "📊", "📋", "💼", "🏷️", "📥", "📤", "🔐"
-    ]
     
     var body: some View {
         NavigationView {
@@ -46,8 +42,13 @@ struct EditPaymentMethodView: View {
                         HStack {
                             Text("Emoji")
                             Spacer()
-                            Text(emoji.isEmpty ? "Selecione um emoji" : emoji)
-                                .foregroundColor(emoji.isEmpty ? .gray : .primary)
+                            if !emoji.isEmpty {
+                                Image(systemName: emoji) 
+                                    .foregroundColor(.primary)
+                            } else {
+                                Text("Selecione um emoji")
+                                    .foregroundColor(.gray)
+                            }
                         }
                         .contentShape(Rectangle())
                         .onTapGesture {

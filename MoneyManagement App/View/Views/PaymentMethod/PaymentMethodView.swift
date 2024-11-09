@@ -18,7 +18,9 @@ struct PaymentMethodView: View {
             List {
                 ForEach(paymentMethods) { method in
                     HStack {
-                        Text(method.emoji)
+                        
+                        Image(systemName: method.emoji)
+                            .foregroundColor(.primary)
                         Text(method.name)
                     }
                 }
@@ -51,7 +53,7 @@ struct PaymentMethodView: View {
         }
         .sheet(isPresented: $isPresentingEditView) {
             EditPaymentMethodView { newMethod in
-                // Insere o novo método no contexto do modelo
+                
                 modelContext.insert(newMethod)
                 isPresentingEditView = false
             }

@@ -2,13 +2,14 @@ import SwiftUI
 
 struct EditPaymentMethodView: View {
     @Environment(\.dismiss) var dismiss
-    
+    @Environment(\.modelContext) private var modelContext
+
     @State private var name: String = ""
     @State private var emoji: String = ""
-    @State private var showEmojiPicker = false 
+    @State private var showEmojiPicker = false
     
-    var onSave: (PaymentMethod) -> Void
-    
+    var onSave: (Method) -> Void
+
     let financialEmojis = [
         "💵", "💰", "💳", "🏦", "💸", "📈", "📉", "💹", "🪙", "💷", "💶", "💴", "💎", "🧾", "💱", "💲", "🔖", "🛒", "📊", "📋", "💼", "🏷️", "📥", "📤", "🔐"
     ]
@@ -30,7 +31,7 @@ struct EditPaymentMethodView: View {
                     Spacer()
                     
                     Button("Adicionar") {
-                        let newMethod = PaymentMethod(name: name, emoji: emoji)
+                        let newMethod = Method(idUser: UUID(), emoji: emoji, name: name)
                         onSave(newMethod)
                         dismiss()
                     }
@@ -41,7 +42,6 @@ struct EditPaymentMethodView: View {
                 Form {
                     Section(header: Text("Detalhes do Método de Pagamento")) {
                         TextField("Tipo de Pagamento", text: $name)
-                        
                         
                         HStack {
                             Text("Emoji")
@@ -56,7 +56,6 @@ struct EditPaymentMethodView: View {
                     }
                 }
             }
-            
             .sheet(isPresented: $showEmojiPicker) {
                 EmojiPickerView(selectedEmoji: $emoji)
             }

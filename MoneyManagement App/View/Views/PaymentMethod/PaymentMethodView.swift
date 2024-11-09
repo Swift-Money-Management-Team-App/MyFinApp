@@ -1,14 +1,10 @@
 import SwiftUI
-
-// Modelo simplificado para método de pagamento
-struct PaymentMethod: Identifiable {
-    let id = UUID()
-    var name: String
-    var emoji: String
-}
+import SwiftData
 
 struct PaymentMethodView: View {
-    @State private var paymentMethods: [PaymentMethod] = []
+    @Query private var paymentMethods: [Method]
+    @Environment(\.modelContext) private var modelContext
+    
     @State private var isPresentingEditView = false
     @Environment(\.dismiss) var dismiss
 
@@ -55,19 +51,23 @@ struct PaymentMethodView: View {
         }
         .sheet(isPresented: $isPresentingEditView) {
             EditPaymentMethodView { newMethod in
-                paymentMethods.append(newMethod)
+                // Insere o novo método no contexto do modelo
+                modelContext.insert(newMethod)
                 isPresentingEditView = false
             }
         }
     }
     
     private func deleteItem(at offsets: IndexSet) {
-        paymentMethods.remove(atOffsets: offsets)
+        for index in offsets {
+            let method = paymentMethods[index]
+            modelContext.delete(method)
+        }
     }
 }
 
 #Preview {
-    NavigationStack { 
+    NavigationStack {
         PaymentMethodView()
     }
 }

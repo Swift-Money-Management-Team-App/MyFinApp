@@ -8,8 +8,9 @@ struct PaymentMethodView: View {
     @State private var isPresentingEditView = false
     @State private var methodToEdit: Method?
     @State private var methodToDelete: Method?
-    @State private var showDeleteAlert = false 
-
+    @State private var showDeleteAlert = false
+    @State private var selectedMethod: Method? 
+    
     @Environment(\.dismiss) var dismiss
 
     var body: some View {
@@ -27,8 +28,7 @@ struct PaymentMethodView: View {
                         Text(method.name)
                     }
                     .onTapGesture {
-                        methodToEdit = method
-                        isPresentingEditView = true
+                        selectedMethod = method
                     }
                     .swipeActions {
                         Button(role: .destructive) {
@@ -48,6 +48,9 @@ struct PaymentMethodView: View {
                 Button("Cancelar", role: .cancel) {}
             } message: { method in
                 Text("Tem certeza de que deseja excluir o método de pagamento \"\(method.name)\"?")
+            }
+            .sheet(item: $selectedMethod) { method in
+                DetailPaymentMethodView(method: method)
             }
         }
         .navigationTitle("Métodos de Pagamento")

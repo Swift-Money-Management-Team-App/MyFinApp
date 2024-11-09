@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 struct EditPaymentMethodView: View {
     @Environment(\.dismiss) var dismiss
@@ -6,11 +7,9 @@ struct EditPaymentMethodView: View {
 
     @State private var name: String
     @State private var emoji: String
-    @State private var showEmojiPicker = false
     @State private var showCancelAlert = false
 
     var method: Method?
-    
     var onSave: (Method) -> Void
 
     init(method: Method? = nil, onSave: @escaping (Method) -> Void) {
@@ -18,26 +17,27 @@ struct EditPaymentMethodView: View {
         self._name = State(initialValue: method?.name ?? "")
         self._emoji = State(initialValue: method?.emoji ?? "")
         self.onSave = onSave
+        UIPageControl.appearance().currentPageIndicatorTintColor = .orange
+        UIPageControl.appearance().pageIndicatorTintColor = .gray
     }
 
     private let emojis = [
         "pencil", "gamecontroller", "car", "bicycle", "wallet.pass", "bed.double", "cart", "creditcard",
-        "drop", "bus", "popcorn", "bolt", "fork.knife", "book", "bag", "airplane"
+        "drop", "bus", "popcorn", "bolt", "fork.knife", "book", "bag", "airplane",
+        "dollarsign.circle", "chart.bar", "banknote", "bitcoinsign.circle", "creditcard.and.123", "cart.fill",
+        "bag.fill", "chart.pie", "gift", "globe", "star", "sparkles", "building.columns", "scroll", "briefcase"
     ]
     
-    private let columns = [
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-        GridItem(.flexible())
-    ]
-    
+    private var emojiPages: [[String]] {
+        stride(from: 0, to: emojis.count, by: 8).map { Array(emojis[$0..<min($0 + 8, emojis.count)]) }
+    }
+
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
                 HStack {
                     Button("Cancelar") {
-                        showCancelAlert = true 
+                        showCancelAlert = true
                     }
                     .alert("Cancelar \(method == nil ? "adição do novo método de pagamento" : "edição do novo método de pagamento")?", isPresented: $showCancelAlert) {
                         Button("Sim", role: .destructive) {
@@ -71,28 +71,34 @@ struct EditPaymentMethodView: View {
                 
                 Form {
                     Section(header: Text("Detalhes do Método de Pagamento")) {
-                        TextField("Tipo de Pagamento", text: $name)
+                        TextField("Nome", text: $name)
                         
                         VStack(alignment: .leading) {
                             Text("Selecione um emoji")
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
-
-                            LazyVGrid(columns: columns, spacing: 20) {
-                                ForEach(emojis, id: \.self) { emojiItem in
-                                    Image(systemName: emojiItem)
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fit)
-                                        .frame(width: 40, height: 40)
-                                        .padding(8)
-                                        .background(self.emoji == emojiItem ? Color.orange.opacity(0.3) : Color.clear)
-                                        .clipShape(Circle())
-                                        .onTapGesture {
-                                            self.emoji = emojiItem
+                            
+                            TabView {
+                                ForEach(emojiPages, id: \.self) { page in
+                                    LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 4), spacing: 20) {
+                                        ForEach(page, id: \.self) { emojiItem in
+                                            Image(systemName: emojiItem)
+                                                .resizable()
+                                                .aspectRatio(contentMode: .fit)
+                                                .frame(width: 40, height: 40)
+                                                .padding(8)
+                                                .background(self.emoji == emojiItem ? Color.orange.opacity(0.3) : Color.clear)
+                                                .clipShape(Circle())
+                                                .onTapGesture {
+                                                    self.emoji = emojiItem
+                                                }
                                         }
+                                    }
+                                    .padding()
                                 }
                             }
-                            .padding()
+                            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .always)) 
+                            .frame(height: 150)
                         }
                     }
                 }

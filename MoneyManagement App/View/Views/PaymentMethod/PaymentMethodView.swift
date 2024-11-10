@@ -53,6 +53,7 @@ struct PaymentMethodView: View {
                 DetailPaymentMethodView(method: method)
             }
         }
+        .background(Color(UIColor.systemGray6).ignoresSafeArea())
         .navigationTitle("Métodos de Pagamento")
         .navigationBarTitleDisplayMode(.large)
         .navigationBarBackButtonHidden(true)

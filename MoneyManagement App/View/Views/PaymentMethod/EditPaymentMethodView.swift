@@ -70,6 +70,7 @@ struct EditPaymentMethodView: View {
                 }
                 .padding()
                 
+                // Container branco alcançando as bordas
                 VStack(alignment: .leading, spacing: 16) {
                     TextField("Nome", text: $name)
                         .padding(.horizontal)
@@ -106,10 +107,6 @@ struct EditPaymentMethodView: View {
                 }
                 .padding(.vertical)
                 .background(Color.white)
-                .cornerRadius(8)
-                .shadow(radius: 4)
-                .padding(.horizontal)
-                
                 
                 HStack(spacing: 4) {
                     ForEach(emojiPages.indices, id: \.self) { index in

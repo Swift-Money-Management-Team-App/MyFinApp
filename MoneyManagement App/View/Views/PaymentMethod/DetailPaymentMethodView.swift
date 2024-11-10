@@ -33,29 +33,34 @@ struct DetailPaymentMethodView: View {
                 
                 VStack(alignment: .leading, spacing: 16) {
                     
-                    Text(method.name)
-                        .font(.title2)
+                    Text("Nome")
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
                         .padding(.horizontal)
+                    
+                    Text(method.name)
+                        .font(.title3)
+                        .padding(.horizontal)
+                        .foregroundColor(.primary)
                     
                     Divider()
                         .padding(.horizontal)
-                    
                     
                     VStack {
                         Image(systemName: method.emoji)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
-                            .frame(width: 100, height: 100)
+                            .frame(width: 60, height: 60)
                             .padding()
-                            .foregroundColor(.primary)
+                            .foregroundColor(.gray)
                     }
                     .frame(maxWidth: .infinity, alignment: .center)
                 }
-                .padding(.vertical)
+                .padding(.vertical, 8)
                 .background(Color.white)
-                .cornerRadius(8)
-                .shadow(radius: 4)
-                .padding(.horizontal)
+                
+                
+                Divider()
                 
                 
                 Button(action: {
@@ -63,14 +68,12 @@ struct DetailPaymentMethodView: View {
                 }) {
                     Text("Apagar Método de Pagamento")
                         .foregroundColor(.red)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.white)
-                        .cornerRadius(8)
-                        .shadow(radius: 4)
+                        .font(.system(size: 16, weight: .semibold))
+                        .padding(.vertical, 12)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.leading, 16)
                 }
-                .padding(.horizontal)
-                .padding(.top, 8)
+                .background(Color.white)
                 .alert("Excluir Método de Pagamento?", isPresented: $showDeleteAlert) {
                     Button("Excluir", role: .destructive) {
                         deleteMethod()
@@ -96,5 +99,5 @@ struct DetailPaymentMethodView: View {
 }
 
 #Preview {
-    DetailPaymentMethodView(method: Method(idUser: UUID(), emoji: "cart", name: "Cartão de Débito"))
+    DetailPaymentMethodView(method: Method(idUser: UUID(), emoji: "fork.knife", name: "Cartão de Débito"))
 }

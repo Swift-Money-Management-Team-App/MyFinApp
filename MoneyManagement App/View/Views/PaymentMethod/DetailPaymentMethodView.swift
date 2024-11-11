@@ -6,14 +6,20 @@ struct DetailPaymentMethodView: View {
     @Environment(\.modelContext) private var modelContext
     @State private var isEditing = false
     @State private var showDeleteAlert = false
+    @State private var showCancelEditAlert = false
     
     @State private var name: String
     @State private var emoji: String
+    
+    private let initialName: String
+    private let initialEmoji: String
     
     init(method: Method) {
         self.method = method
         _name = State(initialValue: method.name)
         _emoji = State(initialValue: method.emoji)
+        initialName = method.name
+        initialEmoji = method.emoji
     }
     
     var body: some View {
@@ -23,10 +29,17 @@ struct DetailPaymentMethodView: View {
                 HStack {
                     Button("Voltar") {
                         if isEditing {
-                            isEditing = false
+                            checkForChangesBeforeDismiss()
                         } else {
                             dismiss()
                         }
+                    }
+                    .alert("Descartar alterações?", isPresented: $showCancelEditAlert) {
+                        Button("Sim", role: .destructive) {
+                            isEditing = false
+                            resetChanges()
+                        }
+                        Button("Não", role: .cancel) {}
                     }
                     
                     Spacer()
@@ -116,6 +129,21 @@ struct DetailPaymentMethodView: View {
             }
             .background(Color(UIColor.systemGray6).ignoresSafeArea())
         }
+    }
+    
+    private func checkForChangesBeforeDismiss() {
+        if name != initialName || emoji != initialEmoji {
+            showCancelEditAlert = true
+        } else {
+            isEditing = false
+            dismiss()
+        }
+    }
+    
+    private func resetChanges() {
+        name = initialName
+        emoji = initialEmoji
+        dismiss()
     }
     
     private func saveChanges() {

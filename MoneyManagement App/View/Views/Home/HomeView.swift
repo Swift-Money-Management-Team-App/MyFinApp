@@ -12,15 +12,16 @@ struct HomeView: View {
     }
     
     var body: some View {
-        NavigationStack{
-            ZStack (alignment: .top) {
+        NavigationStack {
+            ZStack(alignment: .top) {
                 ScrollView {
-                    VStack (alignment: .leading) {
+                    VStack(alignment: .leading) {
                         Spacer(minLength: 175)
                         Text("Saldos")
                             .foregroundStyle(.darkPink)
                             .fontWeight(.semibold)
                             .padding([.top, .horizontal])
+                        
                         VStack(spacing: 3) {
                             HomeViewConditionCell(type: .current, valueAllAccounts: $viewModel.valueAllCurrentAccounts, hiddenValues: $viewModel.hiddenValues)
                             Rectangle()
@@ -39,19 +40,24 @@ struct HomeView: View {
                             .foregroundStyle(.darkPink)
                             .fontWeight(.semibold)
                             .padding([.top, .horizontal])
+                        
                         LazyVGrid(columns: [GridItem(), GridItem(), GridItem()], spacing: 20) {
                             HomeViewOperationCard(type: .addMovement)
                             HomeViewOperationCard(type: .movementCategory)
-                            HomeViewOperationCard(type: .paymentMethod)
+                            NavigationLink(destination: PaymentMethodView()) { // Navegação para PaymentMethodView
+                                HomeViewOperationCard(type: .paymentMethod)
+                            }
                             HomeViewOperationCard(type: .generalHistory)
                         }
                         .padding(.horizontal)
+                        
                         Text("Instituições Financeiras")
                             .foregroundStyle(.darkPink)
                             .fontWeight(.semibold)
                             .padding([.top, .horizontal])
-                        if(viewModel.bankAccounts.isEmpty){
-                            HStack (alignment: .center) {
+                        
+                        if viewModel.bankAccounts.isEmpty {
+                            HStack(alignment: .center) {
                                 Text("Não possui contas bancária")
                                     .font(.title3)
                                     .bold()
@@ -66,14 +72,14 @@ struct HomeView: View {
                                 }
                             }
                         }
-                        
                     }
                 }
                 .background(Color.background)
+                
                 RoundedRectangle(cornerRadius: 20)
                     .foregroundStyle(.brightGold)
-                    .overlay (alignment: .bottomLeading){
-                        if (!viewModel.isShowingScreenName) {
+                    .overlay(alignment: .bottomLeading) {
+                        if !viewModel.isShowingScreenName {
                             Text("Olá, \(String(describing: viewModel.user.first!.name))!")
                                 .font(.largeTitle)
                                 .bold()
@@ -97,16 +103,14 @@ struct HomeView: View {
                             Label("Esconder", systemImage: "eye")
                         }
                     }
-                    NavigationLink {
-                        SettingsView(settingsVM: settingsVM)
-                    } label: {
+                    NavigationLink(destination: SettingsView(settingsVM: settingsVM)) {
                         Image(systemName: "gearshape")
                     }
                 }
             }
             .toolbarBackground(.hidden)
         }
-        .sheet(isPresented: $viewModel.isShowingScreenName, onDismiss: {}, content: {
+        .sheet(isPresented: $viewModel.isShowingScreenName) {
             VStack {
                 HStack {
                     Button(action: {
@@ -118,14 +122,15 @@ struct HomeView: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .trailing)
                 .padding([.top, .trailing], 10)
+                
                 VStack {
                     Text("Como gostaria de ser chamado?")
                         .fontWeight(.semibold)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    TextField(text: $viewModel.personName, label: {
-                        Text("Nome")
-                    })
-                    .frame(maxWidth: .infinity)
+                    
+                    TextField("Nome", text: $viewModel.personName)
+                        .frame(maxWidth: .infinity)
+                    
                     Rectangle()
                         .frame(maxWidth: .infinity, maxHeight: 1)
                         .foregroundStyle(Color("Home/ModalLine"))
@@ -135,7 +140,7 @@ struct HomeView: View {
             }
             .presentationDetents([.height(200)])
             .interactiveDismissDisabled(true)
-        })
+        }
     }
 }
 

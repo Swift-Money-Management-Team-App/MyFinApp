@@ -10,6 +10,9 @@ struct EditPaymentMethodView: View {
     @State private var showCancelAlert = false
     @State private var currentPage = 0
     
+    private let initialName: String
+    private let initialEmoji: String
+    
     var method: Method?
     var onSave: (Method) -> Void
     
@@ -17,6 +20,8 @@ struct EditPaymentMethodView: View {
         self.method = method
         self._name = State(initialValue: method?.name ?? "")
         self._emoji = State(initialValue: method?.emoji ?? "")
+        self.initialName = method?.name ?? ""
+        self.initialEmoji = method?.emoji ?? ""
         self.onSave = onSave
         UIPageControl.appearance().currentPageIndicatorTintColor = .orange
         UIPageControl.appearance().pageIndicatorTintColor = .gray
@@ -38,7 +43,11 @@ struct EditPaymentMethodView: View {
             VStack(spacing: 0) {
                 HStack {
                     Button("Cancelar") {
-                        showCancelAlert = true
+                        if name == initialName && emoji == initialEmoji {
+                            dismiss()
+                        } else {
+                            showCancelAlert = true
+                        }
                     }
                     .alert("Cancelar \(method == nil ? "adição do novo método de pagamento" : "edição do novo método de pagamento")?", isPresented: $showCancelAlert) {
                         Button("Sim", role: .destructive) {
@@ -70,7 +79,6 @@ struct EditPaymentMethodView: View {
                 }
                 .padding()
                 
-                // Container branco alcançando as bordas
                 VStack(alignment: .leading, spacing: 16) {
                     TextField("Nome", text: $name)
                         .padding(.horizontal)

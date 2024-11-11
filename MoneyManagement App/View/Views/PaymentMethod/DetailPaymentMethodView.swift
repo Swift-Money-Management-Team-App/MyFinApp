@@ -30,7 +30,6 @@ struct DetailPaymentMethodView: View {
                 }
                 .padding()
                 
-                
                 VStack(alignment: .leading, spacing: 16) {
                     
                     Text("Nome")
@@ -59,9 +58,7 @@ struct DetailPaymentMethodView: View {
                 .padding(.vertical, 8)
                 .background(Color.white)
                 
-                
                 Divider()
-                
                 
                 Button(action: {
                     showDeleteAlert = true
@@ -74,7 +71,7 @@ struct DetailPaymentMethodView: View {
                         .padding(.leading, 16)
                 }
                 .background(Color.white)
-                .alert("Excluir Método de Pagamento?", isPresented: $showDeleteAlert) {
+                .alert("Excluir Método de Pagamento \"\(method.name)\"?", isPresented: $showDeleteAlert) {
                     Button("Excluir", role: .destructive) {
                         deleteMethod()
                     }
@@ -85,7 +82,6 @@ struct DetailPaymentMethodView: View {
             }
             .sheet(isPresented: $isPresentingEditView) {
                 EditPaymentMethodView(method: method) { updatedMethod in
-                    
                 }
             }
             .background(Color(UIColor.systemGray6).ignoresSafeArea())

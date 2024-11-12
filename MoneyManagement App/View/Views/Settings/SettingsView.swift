@@ -4,8 +4,6 @@ import SwiftUI
 
 struct SettingsView: View {
     
-    // WRAPPERS
-    @ObservedObject var homeVM : HomeViewModel
     @ObservedObject var settingsVM: SettingsViewModel
     @Environment(\.requestReview) var requestReview
     
@@ -17,13 +15,12 @@ struct SettingsView: View {
                 RoundedRectangle(cornerRadius: 20)
                     .foregroundStyle(.brightGold)
                     .frame(maxHeight: 175)
-                
                 Form {
                     List {
                         Section(LocalizedStringKey(stringLiteral: "Configuração de Perfil")) {
                             
                             Button {
-                                self.homeVM.isShowingScreenNameUser = true
+                                self.settingsVM.isShowingScreenNameUser = true
                             } label: {
                                 HStack(spacing: 20) {
                                     Label {
@@ -123,11 +120,11 @@ struct SettingsView: View {
         }
         .navigationTitle(LocalizedStringKey(stringLiteral: "Configurações"))
         .navigationBarTitleDisplayMode(.large)
-        .sheet(isPresented: self.$homeVM.isShowingScreenNameUser, content: {
+        .sheet(isPresented: $settingsVM.isShowingScreenNameUser, content: {
             UserForm(
-                name: self.$homeVM.personName,
+                name: $settingsVM.personName,
                 formState: .read,
-                action: self.homeVM.appendUser)
+                action: settingsVM.setNameUser)
         })
     }
 }

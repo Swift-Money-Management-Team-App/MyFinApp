@@ -1,26 +1,24 @@
 import SwiftUI
 
-struct HomeViewOperationCard: View {
-    let type: OperationCard
+struct OperationCard: View {
+    
+    let type: OperationCardType
     let icon: String
     let text: String
     
-    init(type: OperationCard) {
+    init(type: OperationCardType, text: String) {
         self.type = type
         switch(type) {
         case .addMovement:
             self.icon = "note.text.badge.plus"
-            self.text = "Adicionar movimentação"
         case .movementCategory:
             self.icon = "square.stack.3d.down.right"
-            self.text = "Categoria de transação"
         case .paymentMethod:
             self.icon = "banknote"
-            self.text = "Método de pagamento"
         case .generalHistory:
             self.icon = "chart.xyaxis.line"
-            self.text = "Histórico Geral"
         }
+        self.text = text
     }
     
     var body: some View {
@@ -36,12 +34,13 @@ struct HomeViewOperationCard: View {
                     Text(text)
                         .foregroundStyle(.darkGold)
                         .font(.caption)
+                        .multilineTextAlignment(.center)
                 }
             }
     }
 }
 
-enum OperationCard {
+enum OperationCardType {
     case addMovement
     case movementCategory
     case paymentMethod
@@ -49,5 +48,5 @@ enum OperationCard {
 }
 
 #Preview {
-    HomeViewOperationCard(type: .addMovement)
+    OperationCard(type: .addMovement, text: "Adicionar movimentação")
 }

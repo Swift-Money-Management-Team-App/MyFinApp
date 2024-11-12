@@ -4,19 +4,24 @@ import SwiftData
 @Observable
 class HomeViewModel : ObservableObject {
     
-    let modelContenxt: ModelContext
-    var personName: String = ""
+    // SwiftData
+    let modelContext: ModelContext
     var user: [User] = []
-    var bankAccountName: String = ""
     var bankAccounts: [BankAccount] = []
+    // Entrada de Dados
+    var personName: String = ""
+    var bankAccountName: String = ""
+    // Dados para visualização
+    var hiddenValues: Bool = Storage.share.hiddenValues
     var valueAllCurrentAccounts: Double = 0
     var valueAllCreditCards: Double = 0
+    // Booleans para visualização
     var isShowingScreenNameUser: Bool = false
     var isShowingScreenNameBankAccount: Bool = false
-    var hiddenValues: Bool = Storage.share.hiddenValues
+    var isShowingBankCancellationAlert: Bool = false
     
-    init(modelContenxt: ModelContext) {
-        self.modelContenxt = modelContenxt
+    init(modelContext: ModelContext) {
+        self.modelContext = modelContext
         self.fetchUser()
         self.fetchBankAccounts()
         self.isShowingScreenNameUser = self.user.isEmpty ? true : false
@@ -24,7 +29,7 @@ class HomeViewModel : ObservableObject {
     
     func fetchUser() {
         do {
-            self.user = try modelContenxt.fetch(FetchDescriptor<User>(sortBy: [.init(\.name)]))
+            self.user = try modelContext.fetch(FetchDescriptor<User>(sortBy: [.init(\.name)]))
         } catch {
             print("Deu ruim 1")
         }
@@ -32,31 +37,28 @@ class HomeViewModel : ObservableObject {
     
     func fetchBankAccounts() {
         do {
-            self.bankAccounts = try modelContenxt.fetch(FetchDescriptor<BankAccount>(sortBy: [.init(\.name)]))
+            self.bankAccounts = try modelContext.fetch(FetchDescriptor<BankAccount>(sortBy: [.init(\.name)]))
         } catch {
             print("Deu ruim 1")
         }
     }
     
-//    TODO: AQUI ESTÁ DANDO PROBLEMAS POIS ESTÁ SÓ APPEND USUÁRIO E NÃO ADICIONANDO SOMENTE UM USUÁRUIO
+    //    TODO: AQUI ESTÁ DANDO PROBLEMAS POIS ESTÁ SÓ APPEND USUÁRIO E NÃO ADICIONANDO SOMENTE UM USUÁRUIO
     func appendUser() {
-        self.modelContenxt.insert(User(name: self.personName))
+        self.modelContext.insert(User(name: self.personName))
         do {
-            try modelContenxt.save()
+            try modelContext.save()
         } catch {
             print("Deu ruim 2")
         }
         self.fetchUser()
-        for user in user {
-            print(user.name)
-        }
         self.isShowingScreenNameUser = false
     }
     
     func appendBankAccount() {
-        self.modelContenxt.insert(BankAccount(idUser: self.user.first!.id, name: self.bankAccountName))
+        self.modelContext.insert(BankAccount(idUser: self.user.first!.id, name: self.bankAccountName))
         do {
-            try modelContenxt.save()
+            try modelContext.save()
         } catch {
             print("Deu ruim 2")
         }

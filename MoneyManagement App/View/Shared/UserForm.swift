@@ -31,7 +31,7 @@ struct UserForm: View {
                         .foregroundStyle(Color("backgroundColorRow"))
                         .frame(height: 50)
                     TextField(text: $name, label: {
-                        Text(LocalizedStringKey(stringLiteral: "Filipe"))
+                        Text(self.name)
                     })
                     .foregroundStyle(formState == .read ? .gray : .black)
                     .disabled(formState == .read ? true : false)
@@ -111,9 +111,11 @@ extension UserForm {
     }
     
     private func handleCancelButton() {
-        if (formState == .update && !checkIfNameUpdate()) {
+        if (formState != .read && !checkIfNameUpdate()) {
             self.isShowDiscardChangeAlert = true
-        } else {
+        } else if (formState == .update) {
+            self.formState = .read
+        }else {
             self.dismiss()
         }
     }
@@ -132,8 +134,9 @@ extension UserForm {
     }
     
     private func discardAllChanges() {
+        self.formState = .read
         self.clearAllVariables()
-        self.dismiss()
+        self.name = self.originalName
     }
 }
 

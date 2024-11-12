@@ -6,9 +6,10 @@ struct HomeView: View {
     
     @ObservedObject var homeVM : HomeViewModel
     @EnvironmentObject var settingsVM: SettingsViewModel
+    @Query var bankAccounts: [BankAccount]
     
     init(modelContext: ModelContext) {
-        self.homeVM = HomeViewModel(modelContenxt: modelContext)
+        self.homeVM = HomeViewModel(modelContext: modelContext)
     }
     
     var body: some View {
@@ -21,29 +22,23 @@ struct HomeView: View {
                             .foregroundStyle(.darkPink)
                             .fontWeight(.semibold)
                             .padding([.top, .leading])
-                        VStack(spacing: 3) {
-                            HomeViewConditionCell(type: .current, valueAllAccounts: self.$homeVM.valueAllCurrentAccounts, hiddenValues: self.$homeVM.hiddenValues)
-                            Rectangle()
-                                .frame(maxWidth: .infinity, maxHeight: 1)
-                                .padding(.leading, 10)
-                                .foregroundStyle(.gray)
-                                .opacity(0.6)
-                            HomeViewConditionCell(type: .credit, valueAllAccounts: self.$homeVM.valueAllCreditCards, hiddenValues: self.$homeVM.hiddenValues)
+                        List {
+                            ConditionCell(cellName: "Conta Corrente", valueAllAccounts: $homeVM.valueAllCurrentAccounts, hiddenValues: $homeVM.hiddenValues)
+                            ConditionCell(cellName: "Cartão de Crédito", valueAllAccounts: $homeVM.valueAllCreditCards, hiddenValues: $homeVM.hiddenValues)
                         }
-                        .frame(height: 60 * 2)
-                        .background(Color("backgroundColorRow"))
+                        .frame(height: 64 * 2)
+                        .scrollDisabled(true)
                         .listStyle(.inset)
-                        .padding(0)
                         
                         Text("O que deseja fazer?")
                             .foregroundStyle(.darkPink)
                             .fontWeight(.semibold)
                             .padding([.top, .leading])
                         LazyVGrid(columns: [GridItem(), GridItem(), GridItem()], spacing: 20) {
-                            HomeViewOperationCard(type: .addMovement)
-                            HomeViewOperationCard(type: .movementCategory)
-                            HomeViewOperationCard(type: .paymentMethod)
-                            HomeViewOperationCard(type: .generalHistory)
+                            OperationCard(type: .addMovement, text: "Adicionar movimentação")
+                            OperationCard(type: .movementCategory, text: "Categoria de transação")
+                            OperationCard(type: .paymentMethod, text: "Método de pagamento")
+                            OperationCard(type: .generalHistory, text: "Histórico Geral")
                         }
                         .padding(.horizontal)
                         HStack{
@@ -68,10 +63,14 @@ struct HomeView: View {
                             .frame(maxWidth: .infinity, minHeight: 130)
                         } else {
                             LazyVGrid(columns: [GridItem(), GridItem(), GridItem()], spacing: 20) {
-                                ForEach(self.homeVM.bankAccounts) { bankAccount in
-                                    HomeViewBankAccount(bankAccount: bankAccount)
+                                ForEach(self.bankAccounts) { bankAccount in
+                                    NavigationLink(
+                                        destination: { BankAccountView(modelContext: homeVM.modelContext, bankAccount: bankAccount) }) {
+                                            HomeViewBankAccount(bankAccount: bankAccount)
+                                        }
                                 }
                             }
+                            .padding(.bottom, 20)
                         }
                     }
                 }
@@ -106,7 +105,7 @@ struct HomeView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     NavigationLink {
-                        SettingsView(homeVM: self.homeVM, settingsVM: self.settingsVM)
+                        SettingsView(settingsVM: self.settingsVM)
                     } label: {
                         Image(systemName: "gearshape")
                     }
@@ -118,8 +117,13 @@ struct HomeView: View {
             UserForm(name: self.$homeVM.personName, formState: .create, action: self.homeVM.appendUser)
         })
         .sheet(isPresented: self.$homeVM.isShowingScreenNameBankAccount, content: {
-            FinancialInstitueForm(name: self.$homeVM.bankAccountName, formState: .create, action: self.homeVM.appendBankAccount)
+            FinancialInstitueForm(bankName: self.$homeVM.bankAccountName, originalName: self.homeVM.bankAccountName, formState: .create, action: self.homeVM.appendBankAccount)
         })
+        .alert("Tem certeza de que deseja descartar esta nova Instituição Financeira?", isPresented: $homeVM.isShowingBankCancellationAlert) {
+            Button("Descartar Alterações", role: .cancel) {  }
+            Button("Continuar Editando", role: .destructive) {  }
+                .tint(.blue)
+        }
     }
 }
 

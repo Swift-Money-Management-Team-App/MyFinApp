@@ -4,11 +4,12 @@ import CoreData
 
 struct HomeView: View {
     
-    @ObservedObject var viewModel : HomeViewModel
+    @ObservedObject var homeVM : HomeViewModel
     @EnvironmentObject var settingsVM: SettingsViewModel
+    @Query var bankAccounts: [BankAccount]
     
     init(modelContext: ModelContext) {
-        self.viewModel = HomeViewModel(modelContenxt: modelContext)
+        self.homeVM = HomeViewModel(modelContext: modelContext)
     }
     
     var body: some View {
@@ -20,44 +21,39 @@ struct HomeView: View {
                         Text("Saldos")
                             .foregroundStyle(.darkPink)
                             .fontWeight(.semibold)
-                            .padding([.top, .horizontal])
-                        
-                        VStack(spacing: 3) {
-                            HomeViewConditionCell(type: .current, valueAllAccounts: $viewModel.valueAllCurrentAccounts, hiddenValues: $viewModel.hiddenValues)
-                            Rectangle()
-                                .frame(maxWidth: .infinity, maxHeight: 1)
-                                .padding(.leading, 10)
-                                .foregroundStyle(.gray)
-                                .opacity(0.6)
-                            HomeViewConditionCell(type: .credit, valueAllAccounts: $viewModel.valueAllCreditCards, hiddenValues: $viewModel.hiddenValues)
+                            .padding([.top, .leading])
+                        List {
+                            ConditionCell(cellName: "Conta Corrente", valueAllAccounts: $homeVM.valueAllCurrentAccounts, hiddenValues: $homeVM.hiddenValues)
+                            ConditionCell(cellName: "Cartão de Crédito", valueAllAccounts: $homeVM.valueAllCreditCards, hiddenValues: $homeVM.hiddenValues)
                         }
-                        .frame(height: 60 * 2)
-                        .background(Color("backgroundColorRow"))
+                        .frame(height: 64 * 2)
+                        .scrollDisabled(true)
                         .listStyle(.inset)
-                        .padding(0)
                         
                         Text("O que deseja fazer?")
                             .foregroundStyle(.darkPink)
                             .fontWeight(.semibold)
-                            .padding([.top, .horizontal])
-                        
+                            .padding([.top, .leading])
                         LazyVGrid(columns: [GridItem(), GridItem(), GridItem()], spacing: 20) {
-                            HomeViewOperationCard(type: .addMovement)
-                            HomeViewOperationCard(type: .movementCategory)
-                            NavigationLink(destination: PaymentMethodView()) { // Navegação para PaymentMethodView
-                                HomeViewOperationCard(type: .paymentMethod)
-                            }
-                            HomeViewOperationCard(type: .generalHistory)
+                            OperationCard(type: .addMovement, text: "Adicionar movimentação")
+                            OperationCard(type: .movementCategory, text: "Categoria de transação")
+                            OperationCard(type: .paymentMethod, text: "Método de pagamento")
+                            OperationCard(type: .generalHistory, text: "Histórico Geral")
                         }
                         .padding(.horizontal)
-                        
-                        Text("Instituições Financeiras")
-                            .foregroundStyle(.darkPink)
-                            .fontWeight(.semibold)
-                            .padding([.top, .horizontal])
-                        
-                        if viewModel.bankAccounts.isEmpty {
-                            HStack(alignment: .center) {
+                        HStack{
+                            Text("Instituições Financeiras")
+                                .foregroundStyle(.darkPink)
+                                .fontWeight(.semibold)
+                                .padding([.top, .leading])
+                            Spacer()
+                            Button(action: { self.homeVM.isShowingScreenNameBankAccount.toggle() }) {
+                                Image(systemName: "plus")
+                            }
+                            .padding([.top, .trailing])
+                        }
+                        if(self.homeVM.bankAccounts.isEmpty){
+                            HStack (alignment: .center) {
                                 Text("Não possui contas bancária")
                                     .font(.title3)
                                     .bold()
@@ -67,10 +63,14 @@ struct HomeView: View {
                             .frame(maxWidth: .infinity, minHeight: 130)
                         } else {
                             LazyVGrid(columns: [GridItem(), GridItem(), GridItem()], spacing: 20) {
-                                ForEach(viewModel.bankAccounts) { bankAccount in
-                                    HomeViewBankAccount(bankAccount: bankAccount)
+                                ForEach(self.bankAccounts) { bankAccount in
+                                    NavigationLink(
+                                        destination: { BankAccountView(modelContext: homeVM.modelContext, bankAccount: bankAccount) }) {
+                                            HomeViewBankAccount(bankAccount: bankAccount)
+                                        }
                                 }
                             }
+                            .padding(.bottom, 20)
                         }
                     }
                 }
@@ -78,9 +78,9 @@ struct HomeView: View {
                 
                 RoundedRectangle(cornerRadius: 20)
                     .foregroundStyle(.brightGold)
-                    .overlay(alignment: .bottomLeading) {
-                        if !viewModel.isShowingScreenName {
-                            Text("Olá, \(String(describing: viewModel.user.first!.name))!")
+                    .overlay (alignment: .bottomLeading){
+                        if (!self.homeVM.isShowingScreenNameUser) {
+                            Text("Olá, \(String(describing: self.homeVM.user.first!.name))!")
                                 .font(.largeTitle)
                                 .bold()
                                 .padding()
@@ -94,15 +94,17 @@ struct HomeView: View {
                     .frame(height: 175)
             }
             .ignoresSafeArea()
-            .toolbar {
-                HStack {
-                    Button(action: { viewModel.toggleHiddenValues() }) {
-                        if viewModel.hiddenValues {
+            .toolbar{
+                ToolbarItem(placement: .confirmationAction) {
+                    Button(action: { self.homeVM.toggleHiddenValues() }) {
+                        if self.homeVM.hiddenValues {
                             Label("Mostrar", systemImage: "eye.slash")
                         } else {
                             Label("Esconder", systemImage: "eye")
                         }
                     }
+                }
+                ToolbarItem(placement: .confirmationAction) {
                     NavigationLink(destination: SettingsView(settingsVM: settingsVM)) {
                         Image(systemName: "gearshape")
                     }
@@ -110,37 +112,20 @@ struct HomeView: View {
             }
             .toolbarBackground(.hidden)
         }
-        .sheet(isPresented: $viewModel.isShowingScreenName) {
-            VStack {
-                HStack {
-                    Button(action: {
-                        viewModel.appendUser()
-                    }) {
-                        Text("Confirmar")
-                            .padding(10)
-                    }
+        .sheet(isPresented: self.$homeVM.isShowingScreenNameUser, content: {
+            UserForm(name: self.$homeVM.personName, formState: .create, action: self.homeVM.appendUser)
+                .sheet(isPresented: self.$homeVM.isShowingScreenNameUser, content: {
+                    UserForm(name: self.$homeVM.personName, formState: .create, action: self.homeVM.appendUser)
+                })
+                .sheet(isPresented: self.$homeVM.isShowingScreenNameBankAccount, content: {
+                    FinancialInstitueForm(bankName: self.$homeVM.bankAccountName, originalName: self.homeVM.bankAccountName, formState: .create, action: self.homeVM.appendBankAccount)
+                })
+                .alert("Tem certeza de que deseja descartar esta nova Instituição Financeira?", isPresented: $homeVM.isShowingBankCancellationAlert) {
+                    Button("Descartar Alterações", role: .cancel) {  }
+                    Button("Continuar Editando", role: .destructive) {  }
+                        .tint(.blue)
                 }
-                .frame(maxWidth: .infinity, alignment: .trailing)
-                .padding([.top, .trailing], 10)
-                
-                VStack {
-                    Text("Como gostaria de ser chamado?")
-                        .fontWeight(.semibold)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    
-                    TextField("Nome", text: $viewModel.personName)
-                        .frame(maxWidth: .infinity)
-                    
-                    Rectangle()
-                        .frame(maxWidth: .infinity, maxHeight: 1)
-                        .foregroundStyle(Color("Home/ModalLine"))
-                }
-                .frame(maxHeight: .infinity)
-                .padding(.horizontal, 40)
-            }
-            .presentationDetents([.height(200)])
-            .interactiveDismissDisabled(true)
-        }
+        })
     }
 }
 

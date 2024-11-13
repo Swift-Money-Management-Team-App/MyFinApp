@@ -9,9 +9,11 @@ struct HomeViewBankAccount: View {
                 VStack {
                     Text(bankAccount.name)
                         .font(.caption)
+                        .foregroundStyle(.black)
                     Spacer()
                     Text("R$ \(String(format: "%.2f", bankAccount.total))")
                         .font(.caption2)
+                        .foregroundStyle(.black)
                 }
                 .padding(10)
             }

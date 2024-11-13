@@ -5,7 +5,7 @@ import SwiftData
 @main
 struct MoneyManagement_AppApp: App {
     
-    let settingsVM = SettingsViewModel()
+    let settingsVM: SettingsViewModel
     
     @State var firstLaunchApplication: Bool = Storage.share.firstLaunchApplication
     @State private var showSplash = true
@@ -18,6 +18,7 @@ struct MoneyManagement_AppApp: App {
         } catch {
             fatalError("Failed to create ModelContainer.")
         }
+        self.settingsVM = SettingsViewModel(modelContext: container.mainContext)
     }
     
     var body: some Scene {
@@ -39,7 +40,7 @@ struct MoneyManagement_AppApp: App {
 @main
 struct MoneyManagement_AppApp: App {
     
-    let settingsVM = SettingsViewModel()
+    let settingsVM: SettingsViewModel
     
     @State var firstLaunchApplication: Bool = Storage.share.firstLaunchApplication
     @State private var showSplash = true
@@ -52,6 +53,7 @@ struct MoneyManagement_AppApp: App {
         } catch {
             fatalError("Failed to create ModelContainer.")
         }
+        self.settingsVM = SettingsViewModel(modelContext: container.mainContext)
     }
     
     var body: some Scene {

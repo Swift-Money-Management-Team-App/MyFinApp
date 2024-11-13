@@ -1,26 +1,26 @@
 import StoreKit
+import SwiftData
 import SwiftUI
 
 struct SettingsView: View {
     
-    @ObservedObject var settingsVM: SettingsViewModel = SettingsViewModel()
+    @ObservedObject var settingsVM: SettingsViewModel
     @Environment(\.requestReview) var requestReview
     
     private let sharedLinkRow = SharedLinkRow()
     
     var body: some View {
         NavigationView {
-                VStack(spacing: 0) {
+            VStack(spacing: 0) {
                 RoundedRectangle(cornerRadius: 20)
                     .foregroundStyle(.brightGold)
                     .frame(maxHeight: 175)
-                
                 Form {
                     List {
                         Section(LocalizedStringKey(stringLiteral: "Configuração de Perfil")) {
                             
                             Button {
-                            // TODO: Colocar para aparecer a tela de Usuário
+                                self.settingsVM.isShowingScreenNameUser = true
                             } label: {
                                 HStack(spacing: 20) {
                                     Label {
@@ -120,9 +120,15 @@ struct SettingsView: View {
         }
         .navigationTitle(LocalizedStringKey(stringLiteral: "Configurações"))
         .navigationBarTitleDisplayMode(.large)
+        .sheet(isPresented: $settingsVM.isShowingScreenNameUser, content: {
+            UserForm(
+                name: $settingsVM.personName,
+                formState: .read,
+                action: settingsVM.setNameUser)
+        })
     }
 }
-
-#Preview {
-    SettingsView(settingsVM: SettingsViewModel())
-}
+//
+//#Preview {
+//    SettingsView(settingsVM: SettingsViewModel())
+//}

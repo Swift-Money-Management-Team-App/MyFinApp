@@ -43,7 +43,6 @@ class HomeViewModel : ObservableObject {
         }
     }
     
-    //    TODO: AQUI ESTÁ DANDO PROBLEMAS POIS ESTÁ SÓ APPEND USUÁRIO E NÃO ADICIONANDO SOMENTE UM USUÁRUIO
     func appendUser() {
         self.modelContext.insert(User(name: self.personName))
         do {

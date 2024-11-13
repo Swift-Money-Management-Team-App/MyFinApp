@@ -16,6 +16,8 @@ class SettingsViewModel: ObservableObject {
     var isShowingBankCancellationAlert: Bool = false
     var isShowOnboarding: Bool = false
     
+    private var firstLaunchApplication: Bool = Storage.share.firstLaunchApplication
+    
     // Constantes
     private let SHARED_LINK = URL(string: "https://apps.apple.com/us/app/MoneyManagementApp/id11111111")!
     private let PRIVACY_POLICY = URL(string: "https://www.google.com.br")! // TODO: UPDATE THIS URL TO PRIVACY POLICY
@@ -24,7 +26,13 @@ class SettingsViewModel: ObservableObject {
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
         self.fetchUser()
-        self.personName = self.user.first?.name ?? ""
+        
+        if(firstLaunchApplication) {
+            self.personName = ""
+        } else {
+            self.fetchUser()
+            self.personName = self.user.first!.name
+        }
     }
     
     func fetchUser() {
@@ -36,9 +44,6 @@ class SettingsViewModel: ObservableObject {
     }
     
     func setNameUser() {
-        for user in self.user {
-            print(user)
-        }
         self.user.first?.name = personName
         do {
             try modelContext.save()

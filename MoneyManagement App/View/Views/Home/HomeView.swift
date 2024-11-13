@@ -13,10 +13,10 @@ struct HomeView: View {
     }
     
     var body: some View {
-        NavigationStack{
-            ZStack (alignment: .top) {
+        NavigationStack {
+            ZStack(alignment: .top) {
                 ScrollView {
-                    VStack (alignment: .leading) {
+                    VStack(alignment: .leading) {
                         Spacer(minLength: 175)
                         Text("Saldos")
                             .foregroundStyle(.darkPink)
@@ -75,6 +75,7 @@ struct HomeView: View {
                     }
                 }
                 .background(Color.background)
+                
                 RoundedRectangle(cornerRadius: 20)
                     .foregroundStyle(.brightGold)
                     .overlay (alignment: .bottomLeading){
@@ -104,15 +105,15 @@ struct HomeView: View {
                     }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    NavigationLink {
-                        SettingsView(settingsVM: self.settingsVM)
-                    } label: {
+                    NavigationLink(destination: SettingsView(settingsVM: settingsVM)) {
                         Image(systemName: "gearshape")
                     }
                 }
             }
             .toolbarBackground(.hidden)
         }
+        .sheet(isPresented: self.$homeVM.isShowingScreenNameUser, content: {
+            UserForm(name: self.$homeVM.personName, formState: .create, action: self.homeVM.appendUser)
         .sheet(isPresented: self.$homeVM.isShowingScreenNameUser, content: {
             UserForm(name: self.$homeVM.personName, formState: .create, action: self.homeVM.appendUser)
         })
@@ -123,8 +124,6 @@ struct HomeView: View {
             Button("Descartar Alterações", role: .cancel) {  }
             Button("Continuar Editando", role: .destructive) {  }
                 .tint(.blue)
-        }
-    }
 }
 
 #Preview {

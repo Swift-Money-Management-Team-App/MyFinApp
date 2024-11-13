@@ -14,7 +14,7 @@ struct MoneyManagement_AppApp: App {
     
     init() {
         do {
-            container = try ModelContainer(for: User.self, BankAccount.self)
+            container = try ModelContainer(for: User.self, BankAccount.self, Method.self)
         } catch {
             fatalError("Failed to create ModelContainer.")
         }
@@ -49,7 +49,7 @@ struct MoneyManagement_AppApp: App {
     
     init() {
         do {
-            container = try ModelContainer(for: User.self, BankAccount.self)
+            container = try ModelContainer(for: User.self, BankAccount.self, Method.self)
         } catch {
             fatalError("Failed to create ModelContainer.")
         }

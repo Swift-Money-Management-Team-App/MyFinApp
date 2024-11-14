@@ -71,7 +71,9 @@ struct BankAccountView: View {
                                 .padding([.top, .leading])
                             Spacer()
                             // TODO: Adioncar conta
-                            Button(action: {  }) {
+                            Button(action: {
+                                bankAccountVM.presentAddAccountView = true
+                            }) {
                                 Image(systemName: "plus")
                             }
                             .padding([.top, .trailing])
@@ -121,6 +123,14 @@ struct BankAccountView: View {
                 self.bankAccountVM.deleteBankAccount()
                 self.dismiss()
             })
+        }
+        .sheet(isPresented: $bankAccountVM.presentAddAccountView) {
+            NavigationStack {
+                AddAccountView(accountName: $bankAccountVM.accountName, isCreditCard: $bankAccountVM.isCreditCard, invoiceClosing: $bankAccountVM.closeDay, bankAccount: self.bankAccountVM.bankAccount, modelContext: self.bankAccountVM.modelContext) {
+                    bankAccountVM.appendAccount()
+                }
+            }
+            .presentationDetents([.medium])
         }
     }
     

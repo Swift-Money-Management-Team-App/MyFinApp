@@ -11,10 +11,14 @@ class BankAccountViewModel: ObservableObject {
     var accounts: [Account] = []
     // Entrada de Dados
     var bankAccountName: String = ""
+    var accountName : String = ""
+    var isCreditCard : Bool = false
+    var closeDay : Int = 0
     // Dados para visualização
     
     // Booleans para visualização
     var isShowingBankEdit: Bool = false
+    var presentAddAccountView = false
     
     init(modelContext: ModelContext, bankAccount: BankAccount) {
         self.modelContext = modelContext
@@ -54,6 +58,32 @@ class BankAccountViewModel: ObservableObject {
         } catch {
             print("Deu ruim 1")
         }
+    }
+    
+    func appendAccount () {
+        let account = Account(idUser: self.bankAccount.idUser, name: self.accountName)
+        
+        print("arguments: \(self.accountName), \(isCreditCard), \(closeDay)")
+        
+        self.modelContext.insert(account)
+        
+        if self.isCreditCard {
+            account.isCreditCard = true
+            account.closeDay = closeDay
+        }
+        
+        do {
+            try self.modelContext.save()
+        } catch {
+            print("Deu ruim 2")
+        }
+        self.fetchAccounts()
+        
+        
+        //accounts.append(account)
+        presentAddAccountView = false
+        
+        
     }
     
 }

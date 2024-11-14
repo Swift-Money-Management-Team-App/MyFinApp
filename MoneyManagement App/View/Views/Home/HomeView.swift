@@ -114,18 +114,19 @@ struct HomeView: View {
         }
         .sheet(isPresented: self.$homeVM.isShowingScreenNameUser, content: {
             UserForm(name: self.$homeVM.personName, formState: .create, action: self.homeVM.appendUser)
-                .sheet(isPresented: self.$homeVM.isShowingScreenNameUser, content: {
-                    UserForm(name: self.$homeVM.personName, formState: .create, action: self.homeVM.appendUser)
-                })
-                .sheet(isPresented: self.$homeVM.isShowingScreenNameBankAccount, content: {
-                    FinancialInstitueForm(bankName: self.$homeVM.bankAccountName, originalName: self.homeVM.bankAccountName, formState: .create, action: self.homeVM.appendBankAccount)
-                })
-                .alert("Tem certeza de que deseja descartar esta nova Instituição Financeira?", isPresented: $homeVM.isShowingBankCancellationAlert) {
-                    Button("Descartar Alterações", role: .cancel) {  }
-                    Button("Continuar Editando", role: .destructive) {  }
-                        .tint(.blue)
-                }
+                
         })
+        .sheet(isPresented: self.$homeVM.isShowingScreenNameUser, content: {
+            UserForm(name: self.$homeVM.personName, formState: .create, action: self.homeVM.appendUser)
+        })
+        .sheet(isPresented: self.$homeVM.isShowingScreenNameBankAccount, content: {
+            FinancialInstitueForm(bankName: self.$homeVM.bankAccountName, originalName: self.homeVM.bankAccountName, formState: .create, action: self.homeVM.appendBankAccount)
+        })
+        .alert("Tem certeza de que deseja descartar esta nova Instituição Financeira?", isPresented: $homeVM.isShowingBankCancellationAlert) {
+            Button("Descartar Alterações", role: .cancel) {  }
+            Button("Continuar Editando", role: .destructive) {  }
+                .tint(.blue)
+        }
     }
 }
 

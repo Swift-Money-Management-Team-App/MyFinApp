@@ -33,7 +33,7 @@ class HomeViewModel : ObservableObject {
         } catch {
             print("Deu ruim 1")
         }
-    }
+    }//
     
     func fetchBankAccounts() {
         do {

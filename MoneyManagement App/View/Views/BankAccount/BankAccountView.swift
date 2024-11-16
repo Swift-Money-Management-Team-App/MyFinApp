@@ -10,6 +10,14 @@ struct BankAccountView: View {
         self.bankAccountVM = BankAccountViewModel(modelContext: modelContext, bankAccount: bankAccount)
     }
     
+    @Query(filter: #Predicate<Account> { account in
+        account.isCreditCard == true
+    }, sort: \Account.name) var creditCards: [Account]
+    
+    @Query(filter: #Predicate<Account> { account in
+        account.isCreditCard == false
+    }, sort: \Account.name) var accounts: [Account]
+    
     var body: some View {
         NavigationStack{
             ZStack (alignment: .top) {
@@ -43,12 +51,16 @@ struct BankAccountView: View {
                                 .padding([.top, .leading])
                             Spacer()
                             // TODO: Adioncar cartão de crédito
-                            Button(action: {  }) {
+                            Button(action: {
+                                bankAccountVM.cleanInputs()
+                                bankAccountVM.isCreditCard = true
+                                bankAccountVM.presentAddAccountView = true
+                            }) {
                                 Image(systemName: "plus")
                             }
                             .padding([.top, .trailing])
                         }
-                        if(bankAccountVM.creditCards.isEmpty){
+                        if(creditCards.isEmpty){
                             HStack (alignment: .center) {
                                 Text("Não possui cartões de créditos")
                                     .font(.title3)
@@ -59,7 +71,7 @@ struct BankAccountView: View {
                             .frame(maxWidth: .infinity, minHeight: 130)
                         } else {
                             LazyVGrid(columns: [GridItem(), GridItem(), GridItem()], spacing: 20) {
-                                ForEach(bankAccountVM.accounts) { account in
+                                ForEach(creditCards) { account in
                                     BankAccountViewAccount(account: account)
                                 }
                             }
@@ -71,12 +83,15 @@ struct BankAccountView: View {
                                 .padding([.top, .leading])
                             Spacer()
                             // TODO: Adioncar conta
-                            Button(action: {  }) {
+                            Button(action: {
+                                bankAccountVM.cleanInputs()
+                                bankAccountVM.presentAddAccountView = true
+                            }) {
                                 Image(systemName: "plus")
                             }
                             .padding([.top, .trailing])
                         }
-                        if(bankAccountVM.accounts.isEmpty){
+                        if(accounts.isEmpty){
                             HStack (alignment: .center) {
                                 Text("Não possui contas")
                                     .font(.title3)
@@ -87,7 +102,7 @@ struct BankAccountView: View {
                             .frame(maxWidth: .infinity, minHeight: 130)
                         } else {
                             LazyVGrid(columns: [GridItem(), GridItem(), GridItem()], spacing: 20) {
-                                ForEach(bankAccountVM.accounts) { account in
+                                ForEach(accounts) { account in
                                     BankAccountViewAccount(account: account)
                                 }
                             }
@@ -121,6 +136,14 @@ struct BankAccountView: View {
                 self.bankAccountVM.deleteBankAccount()
                 self.dismiss()
             })
+        }
+        .sheet(isPresented: $bankAccountVM.presentAddAccountView) {
+            NavigationStack {
+                AddAccountView(accountName: $bankAccountVM.accountName, isCreditCard: $bankAccountVM.isCreditCard, invoiceClosing: $bankAccountVM.closeDay, bankAccount: self.bankAccountVM.bankAccount, modelContext: self.bankAccountVM.modelContext) {
+                    bankAccountVM.appendAccount()
+                }
+            }
+            .presentationDetents([.medium])
         }
     }
     

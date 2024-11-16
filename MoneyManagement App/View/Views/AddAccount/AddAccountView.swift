@@ -2,15 +2,11 @@ import SwiftUI
 import SwiftData
 
 struct AddAccountView: View {
-//    var account : Account?
-    //@ObservedObject var vm : AddAccountViewModel
     @Environment(\.dismiss) var dismiss
-    
     @Binding var accountName : String
     @Binding var isCreditCard : Bool
     @Binding var invoiceClosing : Int
     @State var showAlertDiscard : Bool = false
-    //var account : Account?
     var bankAccount : BankAccount
     let modelContext : ModelContext
     
@@ -42,9 +38,6 @@ struct AddAccountView: View {
                 Toggle("Criar como cartão de crédito", isOn: $isCreditCard)
                 if isCreditCard {
                     Divider()
-                    //DatePicker("", selection: $vm.invoiceClosing, in: Date() ... Date.distantFuture, displayedComponents: .date)
-                      //  .datePickerStyle(.compact)
-                    
                     HStack {
                         Text("Dia do fechamento da fatura")
                         Spacer()
@@ -89,11 +82,3 @@ struct AddAccountView: View {
         }
     }
 }
-
-/*
- #Preview {
- NavigationStack {
- //AddAccountView(account: nil)
- }
- }
- */

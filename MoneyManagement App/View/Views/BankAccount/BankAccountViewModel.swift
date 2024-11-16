@@ -7,8 +7,6 @@ class BankAccountViewModel: ObservableObject {
     // SwiftData
     let modelContext: ModelContext
     var bankAccount: BankAccount
-    //var creditCards: [Account] = []
-    //var accounts: [Account] = []
     // Entrada de Dados
     var bankAccountName: String = ""
     var accountName : String = ""
@@ -24,27 +22,6 @@ class BankAccountViewModel: ObservableObject {
         self.bankAccountName = self.bankAccount.name
     }
     
-    /*
-    
-    func fetchCreditCards() {
-        do {
-            self.creditCards = try modelContext.fetch(FetchDescriptor<Account>(sortBy: [.init(\.name)]))
-        } catch {
-            print("Deu ruim 1")
-        }
-    }
-    
-    func fetchAccounts() {
-        do {
-            let accountsFetched = try modelContext.fetch(FetchDescriptor<Account>(sortBy: [.init(\.name)]))
-            accounts.removeAll()
-            accounts.append(contentsOf: accountsFetched)
-        } catch {
-            print("Deu ruim 1")
-        }
-    }
-    */
-     
     func setNameBankAccount() {
         self.bankAccount.name = self.bankAccountName
         do {

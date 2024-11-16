@@ -72,7 +72,6 @@ struct BankAccountView: View {
                         } else {
                             LazyVGrid(columns: [GridItem(), GridItem(), GridItem()], spacing: 20) {
                                 ForEach(creditCards) { account in
-                                    bankAccountVM.cleanInputs()
                                     BankAccountViewAccount(account: account)
                                 }
                             }
@@ -85,6 +84,7 @@ struct BankAccountView: View {
                             Spacer()
                             // TODO: Adioncar conta
                             Button(action: {
+                                bankAccountVM.cleanInputs()
                                 bankAccountVM.presentAddAccountView = true
                             }) {
                                 Image(systemName: "plus")

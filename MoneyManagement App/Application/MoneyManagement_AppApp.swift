@@ -46,7 +46,7 @@ struct MoneyManagement_AppApp: App {
     @ObservedObject var navigation: Navigation = .navigation
     @State var firstLaunchApplication: Bool = Storage.share.firstLaunchApplication
     @State private var showSplash = true
-        
+    
     var body: some Scene {
         WindowGroup {
             ZStack {

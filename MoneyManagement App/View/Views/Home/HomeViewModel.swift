@@ -1,74 +1,42 @@
 import Foundation
 import SwiftData
 
-@Observable
-class HomeViewModel : ObservableObject {
-    
-    // SwiftData
-    let modelContext: ModelContext
-    var user: [User] = []
-    var bankAccounts: [BankAccount] = []
-    // Entrada de Dados
-    var personName: String = ""
-    var bankAccountName: String = ""
-    // Dados para visualização
-    var hiddenValues: Bool = Storage.share.hiddenValues
-    var valueAllCurrentAccounts: Double = 0
-    var valueAllCreditCards: Double = 0
-    // Booleans para visualização
-    var isShowingScreenNameUser: Bool = false
-    var isShowingScreenNameBankAccount: Bool = false
-    var isShowingBankCancellationAlert: Bool = false
-    
-    init(modelContext: ModelContext) {
-        self.modelContext = modelContext
-        self.fetchUser()
-        self.fetchBankAccounts()
-        self.isShowingScreenNameUser = self.user.isEmpty ? true : false
-    }
-    
-    func fetchUser() {
-        do {
-            self.user = try modelContext.fetch(FetchDescriptor<User>(sortBy: [.init(\.name)]))
-        } catch {
-            print("Deu ruim 1")
-        }
-    }
-    
-    func fetchBankAccounts() {
-        do {
-            self.bankAccounts = try modelContext.fetch(FetchDescriptor<BankAccount>(sortBy: [.init(\.name)]))
-        } catch {
-            print("Deu ruim 1")
-        }
-    }
-    
-    //    TODO: AQUI ESTÁ DANDO PROBLEMAS POIS ESTÁ SÓ APPEND USUÁRIO E NÃO ADICIONANDO SOMENTE UM USUÁRUIO
+
+extension HomeView {
+
     func appendUser() {
-        self.modelContext.insert(User(name: self.personName))
-        do {
-            try modelContext.save()
-        } catch {
-            print("Deu ruim 2")
-        }
-        self.fetchUser()
+        repeat { self.modelContext.insert(User(name: self.personName)) } while self.save()
         self.isShowingScreenNameUser = false
+        // Categorias sendo adicionada
+        for category in earningCategoryStandard {
+            repeat { self.modelContext.insert(EarningCategory(idUser: self.user.first!.id, emoji: category.emoji, name: category.name)) } while self.save()
+        }
+        for category in expenseCategoryStandard {
+            repeat { self.modelContext.insert(ExpenseCategory(idUser: self.user.first!.id, emoji: category.emoji, name: category.name)) } while self.save()
+        }
+        for category in methodStandard {
+            repeat { self.modelContext.insert(Method(idUser: self.user.first!.id, emoji: category.emoji, name: category.name)) } while self.save()
+        }
     }
     
     func appendBankAccount() {
-        self.modelContext.insert(BankAccount(idUser: self.user.first!.id, name: self.bankAccountName))
-        do {
-            try modelContext.save()
-        } catch {
-            print("Deu ruim 2")
-        }
-        self.fetchBankAccounts()
+        repeat { self.modelContext.insert(BankAccount(idUser: self.user.first!.id, name: self.bankAccountName)) } while self.save()
         self.isShowingScreenNameBankAccount = false
     }
     
     func toggleHiddenValues() {
         self.hiddenValues.toggle()
         Storage.share.hiddenValues.toggle()
+    }
+    
+    func save() -> Bool {
+        do {
+            try modelContext.save()
+            return false
+        } catch {
+            print("Deu ruim 2")
+            return true
+        }
     }
     
 }

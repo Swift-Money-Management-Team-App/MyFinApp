@@ -9,7 +9,7 @@ final class ExpenseCategory {
     var id: UUID
     var idUser: UUID
     var emoji: String
-    var name:String
+    var name: String
     
     init(idUser: UUID, emoji: String, name: String) {
         self.id = UUID()
@@ -19,3 +19,11 @@ final class ExpenseCategory {
     }
     
 }
+
+let expenseCategoryStandard = [
+    (emoji: "fork.knife", name: "Alimentação"),
+    (emoji: "bus", name: "Transporte"),
+    (emoji: "popcorn", name: "Entretenimento"),
+    (emoji: "drop", name: "Água"),
+    (emoji: "bolt", name: "Luz")
+]

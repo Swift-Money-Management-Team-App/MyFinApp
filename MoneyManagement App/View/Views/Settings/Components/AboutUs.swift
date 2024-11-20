@@ -8,21 +8,19 @@ struct Profile: View {
         
         @Environment(\.openURL) var openURL
         
-        NavigationView {
-            VStack {
-                VStack(spacing: 0) {
-                    RoundedRectangle(cornerRadius: 20)
-                        .foregroundStyle(.brightGold)
-                        .frame(maxHeight: 175)
-                    List {
-                        ForEach(aboutUsVM.getMembers()) { member in
-                            createUserTeam(name: member.name, role: member.role, linkedinUrl:  member.linkedinUrl)
-                        }
+        VStack {
+            VStack(spacing: 0) {
+                RoundedRectangle(cornerRadius: 20)
+                    .foregroundStyle(.brightGold)
+                    .frame(maxHeight: 175)
+                List {
+                    ForEach(aboutUsVM.getMembers()) { member in
+                        createUserTeam(name: member.name, role: member.role, linkedinUrl:  member.linkedinUrl)
                     }
                 }
             }
-            .ignoresSafeArea()
         }
+        .ignoresSafeArea()
         .navigationTitle(LocalizedStringKey(stringLiteral: "Desenvolvedores"))
         .navigationBarTitleDisplayMode(.large)
     }

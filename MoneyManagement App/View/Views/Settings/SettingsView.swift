@@ -52,9 +52,7 @@ struct SettingsView: View {
                     
                     Section(LocalizedStringKey(stringLiteral: "Termos e Privacidade")) {
                         
-                        NavigationLink {
-                            PrivacyPolicy()
-                        } label: {
+                        NavigationLink(value: NavigationScreen.privacyPolicy) {
                             Label {
                                 Text(LocalizedStringKey(stringLiteral: "Política de Privacidade"))
                                     .foregroundStyle(.black)
@@ -65,9 +63,7 @@ struct SettingsView: View {
                         }
                         .foregroundStyle(.accent)
                         
-                        NavigationLink {
-                            TermsView()
-                        } label: {
+                        NavigationLink(value: NavigationScreen.terms) {
                             Label {
                                 Text("Termos de Uso")
                                     .foregroundStyle(.black)
@@ -81,7 +77,6 @@ struct SettingsView: View {
                     
                     Section("Sobre o Aplicativo") {
                         // Share App
-                        
                         sharedLinkRow.createSharedLinkRow(url: self.getSharedLink(), label: "Compartilhe o Aplicativo", labelForegroundStyle: .black, isShowDisclosureIcon: true, iconSystemName: "square.and.arrow.up", iconForegroundStyle: .accent)
                         
                         // Review App in Store
@@ -105,9 +100,7 @@ struct SettingsView: View {
                         }
                         
                         // About Us
-                        NavigationLink {
-                            Profile()
-                        } label: {
+                        NavigationLink(value: NavigationScreen.aboutUs) {
                             Label {
                                 Text(LocalizedStringKey(stringLiteral: "Sobre Nós"))
                                     .foregroundStyle(.black)

@@ -43,22 +43,10 @@ struct MoneyManagement_AppApp: App {
 @main
 struct MoneyManagement_AppApp: App {
     
-    let settingsVM = SettingsViewModel()
-    
+    @ObservedObject var navigation: Navigation = .navigation
     @State var firstLaunchApplication: Bool = Storage.share.firstLaunchApplication
     @State private var showSplash = true
-    
-    let container: ModelContainer
-    
-    init() {
-        do {
-            container = try ModelContainer(for: User.self, BankAccount.self)
-        } catch {
-            fatalError("Failed to create ModelContainer.")
-        }
-        self.settingsVM = SettingsViewModel(modelContext: container.mainContext)
-    }
-    
+        
     var body: some Scene {
         WindowGroup {
             ZStack {
@@ -77,10 +65,25 @@ struct MoneyManagement_AppApp: App {
                         OnboardingView(isFirstLaunch: $firstLaunchApplication)
                             .transition(.opacity)
                     } else {
-                        HomeView(modelContext: container.mainContext)
-                            .modelContainer(container)
-                            .environmentObject(self.settingsVM)
-                            .transition(.opacity)
+                        NavigationStack(path: $navigation.screens) {
+                            HomeView()
+                                .transition(.opacity)
+                                .navigationDestination(for: NavigationScreen.self) { screen in
+                                    switch(screen) {
+                                    case .settings:
+                                        SettingsView()
+                                    case .account(account: let account):
+                                        Text("Conta")
+                                    case .bankAccount(bankAccount: let bankAccount):
+                                        BankAccountView(bankAccount: bankAccount)
+                                    case .movement(account: let account, bankAccount: let bankAccount):
+                                        Text("Movimento")
+                                    case .payment(payment: let payment):
+                                        Text("Pagamento")
+                                    }
+                                }
+                        }
+                        .modelContainer(for: [Account.self, BankAccount.self, EarningCategory.self, ExpenseCategory.self, Movement.self, Method.self, Payment.self, User.self])
                     }
                 }
             }

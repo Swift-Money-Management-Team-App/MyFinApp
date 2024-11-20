@@ -27,9 +27,13 @@ struct MoneyManagement_AppApp: App {
                             case .bankAccount(bankAccount: let bankAccount):
                                 BankAccountView(bankAccount: bankAccount)
                             case .movement(account: let account, bankAccount: let bankAccount):
-                                Text("Movimento")
+                                AddMovementView(account: account, bankAccount: bankAccount)
                             case .payment(payment: let payment):
-                                Text("Pagamento")
+                                if let payment = payment {
+                                    AddPaymentView(payment: payment, type: .create)
+                                } else {
+                                    AddPaymentView(type: .create)
+                                }
                             }
                         }
                 }

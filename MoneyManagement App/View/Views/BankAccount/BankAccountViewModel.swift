@@ -1,26 +1,7 @@
 import Foundation
 import SwiftData
 
-@Observable
-class BankAccountViewModel: ObservableObject {
-    
-    // SwiftData
-    let modelContext: ModelContext
-    var bankAccount: BankAccount
-    // Entrada de Dados
-    var bankAccountName: String = ""
-    var accountName : String = ""
-    var isCreditCard : Bool = false
-    var closeDay : Int = 0    
-    // Booleans para visualização
-    var isShowingBankEdit: Bool = false
-    var presentAddAccountView = false
-    
-    init(modelContext: ModelContext, bankAccount: BankAccount) {
-        self.modelContext = modelContext
-        self.bankAccount = bankAccount
-        self.bankAccountName = self.bankAccount.name
-    }
+extension BankAccountView {
     
     func setNameBankAccount() {
         self.bankAccount.name = self.bankAccountName

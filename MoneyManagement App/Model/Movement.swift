@@ -2,9 +2,9 @@ import Foundation
 import SwiftData
 
 @Model
-final class Transaction {
+final class Movement {
     
-    #Unique<Transaction>([\.id], [])
+    #Unique<Movement>([\.id], [])
     
     var id: UUID
     var idAccount: UUID
@@ -16,7 +16,7 @@ final class Transaction {
     var total: Double
     var date: Date
     
-    init(id: UUID, idAccount: UUID, destiny: UUID? = nil, earningCategory: UUID? = nil, expenseCategory: UUID? = nil, description: String? = nil, total: Decimal, date: Date) {
+    init(idAccount: UUID, destiny: UUID? = nil, earningCategory: UUID? = nil, expenseCategory: UUID? = nil, description: String? = nil, total: Decimal, date: Date) {
         self.id = UUID()
         self.idAccount = idAccount
         self.destiny = destiny

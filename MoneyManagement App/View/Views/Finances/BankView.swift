@@ -23,26 +23,20 @@ struct BankView: View {
                         }
                     }
                     
-                    Text("Itaú")
+                    Text(LocalizedStringKey.bankViewTitle.label)
                         .font(.largeTitle)
                         .bold()
                 }
                 .padding()
                 .background(Color.yellow.opacity(0.6))
-//                .clipShape(.rect(
-//                    topLeadingRadius: 0,
-//                    bottomLeadingRadius: 20,
-//                    bottomTrailingRadius: 20,
-//                    topTrailingRadius: 0
-//                ))
                 
                 // Saldo Total
                 VStack(alignment: .leading) {
-                    Text("Saldo Total")
+                    Text(LocalizedStringKey.totalBalance.label)
                         .font(.headline)
                         .foregroundColor(.purple)
                     HStack {
-                        Text("Contas")
+                        Text(LocalizedStringKey.accounts.label)
                         Spacer()
                         Text("R$ 27.933,06")
                     }
@@ -56,21 +50,21 @@ struct BankView: View {
                 
                 // O que deseja fazer?
                 VStack(alignment: .leading) {
-                    Text("O que deseja fazer?")
+                    Text(LocalizedStringKey.whatToDo.label)
                         .font(.headline)
                         .foregroundColor(.purple)
                     
                     HStack(spacing: 20) {
-                        ActionButtonView(icon: "square.and.pencil", title: "Adicionar movimentação")
-                        ActionButtonView(icon: "clock.arrow.circlepath", title: "Histórico do Itaú")
+                        ActionButtonView(icon: "square.and.pencil", title: LocalizedStringKey.addTransaction.label)
+                        ActionButtonView(icon: "clock.arrow.circlepath", title: LocalizedStringKey.historyOfBank.label)
                     }
                 }
                 .padding(.horizontal)
                 
                 // Cartão de Crédito
-                VStack() {
+                VStack {
                     HStack(spacing: 10) {
-                        Text("Cartão de Crédito")
+                        Text(LocalizedStringKey.creditCard.label)
                             .font(.headline)
                             .foregroundColor(.purple)
                         Spacer()
@@ -82,9 +76,9 @@ struct BankView: View {
                     }
                     ScrollView(.horizontal) {
                         HStack {
-                            AccountCardView(title: "Cartão de Crédito", value: "R$ 500,00")
-                            AccountCardView(title: "Poupança", value: "R$ 1.000,00")
-                            AccountCardView(title: "Caixinha", value: "R$ 1.500,00")
+                            AccountCardView(title: LocalizedStringKey.creditCard.label, value: "R$ 500,00")
+                            AccountCardView(title: LocalizedStringKey.savings.label, value: "R$ 1.000,00")
+                            AccountCardView(title: LocalizedStringKey.box.label, value: "R$ 1.500,00")
                         }
                     }
                     .scrollIndicators(.hidden)
@@ -95,7 +89,7 @@ struct BankView: View {
                 // Contas
                 VStack(alignment: .leading) {
                     HStack {
-                        Text("Contas")
+                        Text(LocalizedStringKey.accounts.label)
                             .font(.headline)
                             .foregroundColor(.purple)
                         Spacer()
@@ -107,14 +101,14 @@ struct BankView: View {
                     }
                     VStack(spacing: 10) {
                         HStack(spacing: 20) {
-                            AccountCardView(title: "Conta Corrente", value: "R$ 500,00")
-                            AccountCardView(title: "Poupança", value: "R$ 1.000,00")
-                            AccountCardView(title: "Caixinha", value: "R$ 1.500,00")
+                            AccountCardView(title: LocalizedStringKey.currentAccount.label, value: "R$ 500,00")
+                            AccountCardView(title: LocalizedStringKey.savings.label, value: "R$ 1.000,00")
+                            AccountCardView(title: LocalizedStringKey.box.label, value: "R$ 1.500,00")
                         }
                         HStack(spacing: 20) {
-                            AccountCardView(title: "Tesouro Direto Selic 2026", value: "R$ 10.000,00")
-                            AccountCardView(title: "Bitcoin", value: "R$ 9.500,53")
-                            AccountCardView(title: "CDB 110%", value: "R$ 5.432,53")
+                            AccountCardView(title: LocalizedStringKey.treasureDirect.label, value: "R$ 10.000,00")
+                            AccountCardView(title: LocalizedStringKey.bitcoin.label, value: "R$ 9.500,53")
+                            AccountCardView(title: LocalizedStringKey.cdb.label, value: "R$ 5.432,53")
                         }
                     }
                 }
@@ -124,8 +118,6 @@ struct BankView: View {
             }
             .navigationBarHidden(true)
         }
-
-        
     }
 }
 

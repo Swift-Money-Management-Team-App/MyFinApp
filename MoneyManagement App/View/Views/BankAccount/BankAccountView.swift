@@ -13,8 +13,8 @@ struct BankAccountView: View {
     }, sort: \Account.name) var accounts: [Account] = []
     // Entrada de Dados
     @State var bankAccountName: String = ""
-    @State var accountName : String = ""
-    @State var closeDay : Int = 0
+    @State var accountName: String = ""
+    @State var closeDay: Int = 0
     // Dados para visualização
     let bankAccount: BankAccount
     @State var isCreditCard: Bool = false
@@ -22,145 +22,55 @@ struct BankAccountView: View {
     @State var isShowingBankEdit: Bool = false
     @State var presentAddAccountView: Bool = false
     
-    
-    
     var body: some View {
-        ZStack (alignment: .top) {
+        ZStack(alignment: .top) {
             ScrollView {
-                VStack (alignment: .leading) {
+                VStack(alignment: .leading) {
                     Spacer(minLength: 175)
-                    Text("Saldo Total")
+                    
+                    Text(LocalizedStringKey.totalBalance.label)
                         .foregroundStyle(.darkPink)
                         .fontWeight(.semibold)
                         .padding([.top, .leading])
+                    
                     List {
-                        ConditionCell(cellName: "Contas", valueAllAccounts: .constant(300.50), hiddenValues: .constant(false))
+                        ConditionCell(
+                            cellName: LocalizedStringKey.accounts.label,
+                            valueAllAccounts: .constant(300.50),
+                            hiddenValues: .constant(false)
+                        )
                     }
                     .frame(height: 64)
                     .scrollDisabled(true)
                     .listStyle(.inset)
                     
-                    Text("O que deseja fazer?")
+                    Text(LocalizedStringKey.whatToDo.label)
                         .foregroundStyle(.darkPink)
                         .fontWeight(.semibold)
                         .padding([.top, .leading])
+                    
                     LazyVGrid(columns: [GridItem(), GridItem(), GridItem()], spacing: 20) {
-                        OperationCard(type: .addMovement, text: "Adicionar movimentação")
-                        OperationCard(type: .generalHistory, text: "Histórico da conta bancária")
+                        OperationCard(type: .addMovement, text: LocalizedStringKey.addTransaction.label)
+                        OperationCard(type: .generalHistory, text: LocalizedStringKey.bankAccountHistory.label)
                     }
                     .padding(.horizontal)
-                    HStack {
-                        Text("Cartão de Crédito")
-                            .foregroundStyle(.darkPink)
-                            .fontWeight(.semibold)
-                            .padding([.top, .leading])
-                        Spacer()
-                        // TODO: Adioncar cartão de crédito
-                        Button(action: {  }) {
-                            Image(systemName: "plus")
-                        }
-                        .padding([.top, .trailing])
-                    }
-                    if(creditCards.isEmpty){
-                        HStack (alignment: .center) {
-                            Text("Não possui cartões de créditos")
-                                .font(.title3)
-                                .bold()
-                                .padding(10)
-                        }
-                        .fixedSize()
-                        .frame(maxWidth: .infinity, minHeight: 130)
+                    
+                    createSectionTitle(title: LocalizedStringKey.creditCard.label)
+                    
+                    if creditCards.isEmpty {
+                        createEmptyStateText(text: LocalizedStringKey.noCreditCards.label)
                     } else {
                         LazyVGrid(columns: [GridItem(), GridItem(), GridItem()], spacing: 20) {
-                            OperationCard(type: .addMovement, text: "Adicionar movimentação")
-                            OperationCard(type: .generalHistory, text: "Histórico da conta bancária")
-                        }
-                        .padding(.horizontal)
-                        HStack {
-                            Text("Cartão de Crédito")
-                                .foregroundStyle(.darkPink)
-                                .fontWeight(.semibold)
-                                .padding([.top, .leading])
-                            Spacer()
-                            // TODO: Adioncar cartão de crédito
-                            Button(action: {
-                                cleanInputs()
-                                isCreditCard = true
-                                presentAddAccountView = true
-                            }) {
-                                Image(systemName: "plus")
-                            }
-                            .padding([.top, .trailing])
-                        }
-                        if(creditCards.isEmpty){
-                            HStack (alignment: .center) {
-                                Text("Não possui cartões de créditos")
-                                    .font(.title3)
-                                    .bold()
-                                    .padding(10)
-                            }
-                            .fixedSize()
-                            .frame(maxWidth: .infinity, minHeight: 130)
-                        } else {
-                            LazyVGrid(columns: [GridItem(), GridItem(), GridItem()], spacing: 20) {
-                                ForEach(creditCards) { account in
-                                    BankAccountViewAccount(account: account)
-                                }
-                            }
-                        }
-                        HStack {
-                            Text("Contas")
-                                .foregroundStyle(.darkPink)
-                                .fontWeight(.semibold)
-                                .padding([.top, .leading])
-                            Spacer()
-                            // TODO: Adioncar conta
-                            Button(action: {
-                                cleanInputs()
-                                presentAddAccountView = true
-                            }) {
-                                Image(systemName: "plus")
-                            }
-                            .padding([.top, .trailing])
-                        }
-                        if(accounts.isEmpty){
-                            HStack (alignment: .center) {
-                                Text("Não possui contas")
-                                    .font(.title3)
-                                    .bold()
-                                    .padding(10)
-                            }
-                            .fixedSize()
-                            .frame(maxWidth: .infinity, minHeight: 130)
-                        } else {
-                            LazyVGrid(columns: [GridItem(), GridItem(), GridItem()], spacing: 20) {
-                                ForEach(accounts) { account in
-                                    BankAccountViewAccount(account: account)
-                                }
+                            ForEach(creditCards) { account in
+                                BankAccountViewAccount(account: account)
                             }
                         }
                     }
-                    HStack {
-                        Text("Contas")
-                            .foregroundStyle(.darkPink)
-                            .fontWeight(.semibold)
-                            .padding([.top, .leading])
-                        Spacer()
-                        // TODO: Adioncar conta
-                        Button(action: {  }) {
-                            Image(systemName: "plus")
-                        }
-                        .padding([.top, .trailing])
-                    }
-                    if(accounts.isEmpty){
-                        HStack (alignment: .center) {
-                            Text("Não possui contas")
-                                .font(.title3)
-                                .bold()
-                                .padding(10)
-                        }
-                        .fixedSize()
-                        .frame(maxWidth: .infinity, minHeight: 130)
+                    
+                    createSectionTitle(title: LocalizedStringKey.accounts.label)
+                    
+                    if accounts.isEmpty {
+                        createEmptyStateText(text: LocalizedStringKey.noAccounts.label)
                     } else {
                         LazyVGrid(columns: [GridItem(), GridItem(), GridItem()], spacing: 20) {
                             ForEach(accounts) { account in
@@ -172,9 +82,10 @@ struct BankAccountView: View {
                 .padding(.bottom, 20)
             }
             .background(Color.background)
+            
             RoundedRectangle(cornerRadius: 20)
                 .foregroundStyle(.brightGold)
-                .overlay (alignment: .bottomLeading){
+                .overlay(alignment: .bottomLeading) {
                     Text("\(bankAccount.name)")
                         .font(.largeTitle)
                         .bold()
@@ -186,12 +97,12 @@ struct BankAccountView: View {
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
                 Button(action: { Navigation.navigation.screens.removeLast() }) {
-                    Text("Voltar")
+                    Text(LocalizedStringKey.back.button)
                 }
             }
             ToolbarItem {
                 Button(action: { isShowingBankEdit.toggle() }) {
-                    Label("Mostrar", systemImage: "pencil")
+                    Label(LocalizedStringKey.edit.button, systemImage: "pencil")
                 }
             }
         }
@@ -199,14 +110,26 @@ struct BankAccountView: View {
         .toolbarBackground(.hidden)
         .onAppear { self.bankAccountName = self.bankAccount.name }
         .sheet(isPresented: $isShowingBankEdit) {
-            FinancialInstitueForm(bankName: self.$bankAccountName, originalName: self.bankAccountName, formState: .read, action: self.setNameBankAccount, deleteAction: {
-                self.deleteBankAccount()
-                Navigation.navigation.screens.removeLast()
-            })
+            FinancialInstitueForm(
+                bankName: self.$bankAccountName,
+                originalName: self.bankAccountName,
+                formState: .read,
+                action: self.setNameBankAccount,
+                deleteAction: {
+                    self.deleteBankAccount()
+                    Navigation.navigation.screens.removeLast()
+                }
+            )
         }
         .sheet(isPresented: $presentAddAccountView) {
             NavigationStack {
-                AddAccountView(accountName: $accountName, isCreditCard: $isCreditCard, invoiceClosing: $closeDay, bankAccount: self.bankAccount, modelContext: self.modelContext) {
+                AddAccountView(
+                    accountName: $accountName,
+                    isCreditCard: $isCreditCard,
+                    invoiceClosing: $closeDay,
+                    bankAccount: self.bankAccount,
+                    modelContext: self.modelContext
+                ) {
                     appendAccount()
                 }
             }
@@ -214,6 +137,32 @@ struct BankAccountView: View {
         }
     }
     
+    @ViewBuilder
+    private func createSectionTitle(title: String) -> some View {
+        HStack {
+            Text(title)
+                .foregroundStyle(.darkPink)
+                .fontWeight(.semibold)
+                .padding([.top, .leading])
+            Spacer()
+            Button(action: { }) {
+                Image(systemName: "plus")
+            }
+            .padding([.top, .trailing])
+        }
+    }
+    
+    @ViewBuilder
+    private func createEmptyStateText(text: String) -> some View {
+        HStack(alignment: .center) {
+            Text(text)
+                .font(.title3)
+                .bold()
+                .padding(10)
+        }
+        .fixedSize()
+        .frame(maxWidth: .infinity, minHeight: 130)
+    }
 }
 
 #Preview {

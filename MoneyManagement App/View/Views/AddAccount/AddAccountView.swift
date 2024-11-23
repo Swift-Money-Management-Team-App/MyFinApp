@@ -3,23 +3,23 @@ import SwiftData
 
 struct AddAccountView: View {
     @Environment(\.dismiss) var dismiss
-    @Binding var accountName : String
-    @Binding var isCreditCard : Bool
-    @Binding var invoiceClosing : Int
-    @State var showAlertDiscard : Bool = false
-    var bankAccount : BankAccount
-    let modelContext : ModelContext
+    @Binding var accountName: String
+    @Binding var isCreditCard: Bool
+    @Binding var invoiceClosing: Int
+    @State var showAlertDiscard: Bool = false
+    var bankAccount: BankAccount
+    let modelContext: ModelContext
     
-    let action : () -> Void
+    let action: () -> Void
     
     var body: some View {
         VStack {
             Spacer()
             
             HStack {
-                Text("Nome")
+                Text(LocalizedStringKey.addAccountNameField.label)
                     .padding(.trailing)
-                TextField("Conta poupança", text: $accountName)
+                TextField(LocalizedStringKey.addAccountPlaceholder.label, text: $accountName)
                 
                 if !accountName.isEmpty {
                     Button {
@@ -35,11 +35,11 @@ struct AddAccountView: View {
             .padding(.bottom)
             
             VStack {
-                Toggle("Criar como cartão de crédito", isOn: $isCreditCard)
+                Toggle(LocalizedStringKey.addAccountToggle.label, isOn: $isCreditCard)
                 if isCreditCard {
                     Divider()
                     HStack {
-                        Text("Dia do fechamento da fatura")
+                        Text(LocalizedStringKey.addAccountInvoiceField.label)
                         Spacer()
                         TextField("0", value: $invoiceClosing, formatter: NumberFormatter())
                             .keyboardType(.numberPad)
@@ -53,32 +53,27 @@ struct AddAccountView: View {
             Spacer()
         }
         .background(Color.background)
-        .navigationTitle("Adicionar conta")
+        .navigationTitle(LocalizedStringKey.addAccountScreenTitle.label)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            
             ToolbarItem(placement: .topBarLeading) {
-                Button ("Voltar") {
+                Button(LocalizedStringKey.addAccountBackButton.button) { 
                     showAlertDiscard = !(accountName.isEmpty)
                 }
-                
             }
             
-            
             ToolbarItem(placement: .topBarTrailing) {
-                Button ("Salvar") {
+                Button(LocalizedStringKey.addAccountSaveButton.button) {
                     action()
                 }
             }
         }
-        .alert("Tem certeza de que deseja descartar estas alterações", isPresented: $showAlertDiscard) {
-            
-            Button("Descartar Alterações", role: .destructive) {
+        .alert(LocalizedStringKey.addAccountDiscardAlertTitle.message, isPresented: $showAlertDiscard) {
+            Button(LocalizedStringKey.addAccountDiscardButton.button, role: .destructive) {
                 dismiss()
             }
-            
-            Button("Continuar Editando", role: .cancel) {}
-            .fontWeight(.bold)
+            Button(LocalizedStringKey.addAccountContinueEditingButton.button, role: .cancel) {}
+                .fontWeight(.bold)
         }
     }
 }

@@ -1,7 +1,123 @@
-/* 
-  Labels.strings
-  MoneyManagement App
+// Onboarding
+onboardingWelcomeTitle = "Bem vindo ao\nPiggyBank!";
+onboardingRegisterTitle = "Registre suas finanças";
+onboardingRegisterDescription = "Controle todos os ganhos e gastos num só lugar.";
+onboardingManageTitle = "Gerencie suas finanças";
+onboardingManageDescription = "Organize onde está o seu dinheiro, adicionando várias instituições financeiras.";
+onboardingVisualizeTitle = "Visualize seu Patrimônio";
+onboardingVisualizeDescription = "Acompanhe o seu desempenho financeiro.";
 
-  Created by Raquel on 22/11/24.
-  
-*/
+// HomeView
+homeBalances = "Saldos";
+homeCheckingAccount = "Conta Corrente";
+homeCreditCard = "Cartão de Crédito";
+homeWhatToDo = "O que deseja fazer?";
+homeAddMovement = "Adicionar movimentação";
+homeTransactionCategory = "Categoria de transação";
+homePaymentMethod = "Método de pagamento";
+homeGeneralHistory = "Histórico Geral";
+homeFinancialInstitutions = "Instituições Financeiras";
+homeNoBankAccounts = "Não possui contas bancária";
+homeWelcome = "Olá,";
+homeGreeting = "Bem-vindo!";
+homeShow = "Mostrar";
+homeHide = "Esconder";
+
+
+// Settings
+profileSettings = "Configuração de Perfil";
+others = "Outros";
+termsAndPrivacy = "Termos e Privacidade";
+privacyPolicy = "Política de Privacidade";
+termsOfUse = "Termos de Uso";
+aboutApp = "Sobre o Aplicativo";
+shareApp = "Compartilhe o Aplicativo";
+rateApp = "Avalie o Aplicativo";
+aboutUs = "Sobre Nós";
+settingsScreenTitle = "Configurações";
+changeName = "Alterar o nome";
+
+// Privacy Policy (Titles)
+privacyPolicyTitle = "Privacy Policy";
+informationCollectionTitle = "What information does the Application obtain and how is it used?";
+locationInfoTitle = "Does the Application collect precise real time location information of the device?";
+thirdPartiesAccessTitle = "Do third parties see and/or have access to information obtained by the Application?";
+optOutRightsTitle = "What are my opt-out rights?";
+childrenTitle = "Children";
+securityTitle = "Security";
+changesTitle = "Changes";
+consentTitle = "Your Consent";
+contactUsTitle = "Contact Us";
+privacyPolicyScreenTitle = "Política de Privacidade";
+
+// About Us
+aboutUsScreenTitle = "Desenvolvedores";
+teamMemberName = "Nome do Membro";
+teamMemberRole = "Função";
+
+// Terms
+termsTitle = "Terms & Conditions";
+termsChangesTitle = "Changes to These Terms and Conditions";
+termsScreenTitle = "Termos de Uso";
+
+// Contact
+contactUsTitle = "Contact Us";
+contactUsDescription = "If you have any questions or suggestions about the Terms and Conditions, please do not hesitate to contact the Service Provider at contact@moneyapp.com.";
+
+// Others
+othersWelcomeScreenToggle = "Tela de boas vindas";
+
+// Bank
+bankViewTitle = "Itaú";
+totalBalance = "Saldo Total";
+accounts = "Contas";
+addTransaction = "Adicionar movimentação";
+historyOfBank = "Histórico do Itaú";
+creditCard = "Cartão de Crédito";
+currentAccount = "Conta Corrente";
+savings = "Poupança";
+box = "Caixinha";
+treasureDirect = "Tesouro Direto Selic 2026";
+bitcoin = "Bitcoin";
+cdb = "CDB 110%";
+whatToDo = "O que deseja fazer?";
+
+// Bank Account
+totalBalance = "Saldo Total";
+whatToDo = "O que deseja fazer?";
+addTransaction = "Adicionar movimentação";
+bankAccountHistory = "Histórico da conta bancária";
+creditCard = "Cartão de Crédito";
+noCreditCards = "Não possui cartões de créditos";
+accounts = "Contas";
+noAccounts = "Não possui contas";
+
+// Add Account
+addAccountNameField = "Nome";
+addAccountPlaceholder = "Conta poupança";
+addAccountToggle = "Criar como cartão de crédito";
+addAccountInvoiceField = "Dia do fechamento da fatura";
+addAccountScreenTitle = "Adicionar conta";
+
+// User Form
+userFormTitle = "Como gostaria de ser chamado?";
+userFormNameField = "Nome";
+userFormCreateTitle = "Adicionar Usuário";
+userFormReadTitle = "Usuário";
+userFormEditTitle = "Editar Usuário";
+userFormDiscardAlertTitle = "Tem certeza de que deseja descartar estas alterações?";
+userFormNamePlaceholder = "Digite seu nome aqui";
+
+// Financial Institue
+financialInstituteFormTitle = "Qual o nome da Instituição Financeira?";
+financialInstitutePlaceholder = "Nubank";
+financialInstituteNameField = "Nome:";
+financialInstituteAddTitle = "Adicionar instituição Financeira";
+financialInstituteEditTitle = "Editar instituição Financeira";
+
+// Shared Link
+sharedLinkLabel = "Compartilhar o Aplicativo";
+sharedLinkDisclosure = "Detalhes";
+
+// ToggleRow
+toggleExampleLabel = "Hello World";

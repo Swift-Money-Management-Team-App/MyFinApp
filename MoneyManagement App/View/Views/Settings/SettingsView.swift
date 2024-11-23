@@ -4,33 +4,28 @@ import SwiftUI
 
 struct SettingsView: View {
     
-    // SwiftData
     @Environment(\.modelContext) var modelContext
     @Query var user: [User]
-    // Entrada de Dados
     @State var personName: String = ""
-    // Dados para visualização
     @Environment(\.requestReview) var requestReview
-    // Booleans para visualização
     @State var isShowingScreenNameUser: Bool = false
-    @State var isShowingBankCancellationAlert: Bool = false
     @State var isShowOnboarding: Bool = false
     
     private let sharedLinkRow = SharedLinkRow()
     
     var body: some View {
-        ZStack (alignment: .top) {
+        ZStack(alignment: .top) {
             VStack(alignment: .leading, spacing: 0) {
                 Spacer(minLength: 175)
                 List {
-                    Section("Configuração de Perfil") {
+                    Section(LocalizedStringKey.profileSettings.label) {
                         Button {
                             self.isShowingScreenNameUser = true
                         } label: {
                             HStack(spacing: 20) {
                                 Label {
                                     HStack {
-                                        Text(LocalizedStringResource(stringLiteral: "Alterar o nome"))
+                                        Text(LocalizedStringKey.changeName.label)
                                             .foregroundStyle(.black)
                                         
                                         Spacer()
@@ -46,46 +41,48 @@ struct SettingsView: View {
                         }
                     }
                     
-                    Section("Outros") {
+                    Section(LocalizedStringKey.others.label) {
                         Others(isShowOnboarding: self.$isShowOnboarding)
                     }
                     
-                    Section(LocalizedStringKey(stringLiteral: "Termos e Privacidade")) {
-                        
+                    Section(LocalizedStringKey.termsAndPrivacy.label) {
                         NavigationLink(value: NavigationScreen.privacyPolicy) {
                             Label {
-                                Text(LocalizedStringKey(stringLiteral: "Política de Privacidade"))
+                                Text(LocalizedStringKey.privacyPolicy.label)
                                     .foregroundStyle(.black)
                             } icon: {
                                 Image(systemName: "document")
                                     .foregroundStyle(.accent)
                             }
                         }
-                        .foregroundStyle(.accent)
                         
                         NavigationLink(value: NavigationScreen.terms) {
                             Label {
-                                Text("Termos de Uso")
+                                Text(LocalizedStringKey.termsOfUse.label)
                                     .foregroundStyle(.black)
                             } icon: {
                                 Image(systemName: "text.page")
                                     .foregroundStyle(.accent)
                             }
                         }
-                        .foregroundStyle(.accent)
                     }
                     
-                    Section("Sobre o Aplicativo") {
-                        // Share App
-                        sharedLinkRow.createSharedLinkRow(url: self.getSharedLink(), label: "Compartilhe o Aplicativo", labelForegroundStyle: .black, isShowDisclosureIcon: true, iconSystemName: "square.and.arrow.up", iconForegroundStyle: .accent)
+                    Section(LocalizedStringKey.aboutApp.label) {
+                        sharedLinkRow.createSharedLinkRow(
+                            url: self.getSharedLink(),
+                            label: LocalizedStringKey.shareApp.label,
+                            labelForegroundStyle: .black,
+                            isShowDisclosureIcon: true,
+                            iconSystemName: "square.and.arrow.up",
+                            iconForegroundStyle: .accent
+                        )
                         
-                        // Review App in Store
                         Button {
                             self.requestReview()
                         } label: {
                             Label {
                                 HStack {
-                                    Text(LocalizedStringResource(stringLiteral: "Avalie o Aplicativo"))
+                                    Text(LocalizedStringKey.rateApp.label)
                                         .foregroundStyle(.black)
                                     
                                     Spacer()
@@ -99,17 +96,15 @@ struct SettingsView: View {
                             }
                         }
                         
-                        // About Us
                         NavigationLink(value: NavigationScreen.aboutUs) {
                             Label {
-                                Text(LocalizedStringKey(stringLiteral: "Sobre Nós"))
+                                Text(LocalizedStringKey.aboutUs.label)
                                     .foregroundStyle(.black)
                             } icon: {
                                 Image(systemName: "person.3")
                                     .foregroundStyle(.accent)
                             }
                         }
-                        .foregroundStyle(.accent)
                     }
                 }
                 .background(Color.background)
@@ -119,23 +114,23 @@ struct SettingsView: View {
                 .frame(height: 175)
         }
         .ignoresSafeArea()
-        .navigationTitle(LocalizedStringKey(stringLiteral: "Configurações"))
+        .navigationTitle(LocalizedStringKey.settingsScreenTitle.label)
         .navigationBarTitleDisplayMode(.large)
         .navigationBarBackButtonHidden(true)
-        .toolbar(content: {
+        .toolbar {
             ToolbarItem(placement: .cancellationAction) {
                 Button(action: { Navigation.navigation.screens.removeLast() }) {
                     HStack {
                         Image(systemName: "chevron.backward")
-                        Text("Início")
+                        Text(LocalizedStringKey.settingsButtonBackInit.button)
                     }
                 }
             }
-        })
-        .sheet(isPresented: $isShowingScreenNameUser, content: {
+        }
+        .sheet(isPresented: $isShowingScreenNameUser) {
             UserForm(name: $personName, formState: .read, action: setNameUser)
-                .onAppear { self.personName =  self.user.first!.name }
-        })
+                .onAppear { self.personName = self.user.first?.name ?? "" }
+        }
     }
 }
 

@@ -34,6 +34,7 @@ struct AddMovementView: View {
     // Booleans para visualização
     @State var screenFullEarningCategory: Bool = false
     @State var screenFullExpenseCategory: Bool = false
+    @State var screenFullPayment: Bool = false
     @State var alertCancel: Bool = false
     
     var body: some View {
@@ -104,7 +105,7 @@ struct AddMovementView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .foregroundStyle(.darkPink)
                         .fontWeight(.semibold)
-                    NavigationLink(value: NavigationScreen.payment()) {
+                    Button(action: { self.screenFullPayment.toggle() }) {
                         Image(systemName: "plus")
                     }
                 }
@@ -155,8 +156,9 @@ struct AddMovementView: View {
                 .tint(.blue)
             Button("Descartar Alterações", role: .destructive) { Navigation.navigation.screens.removeLast() }
         }
-        .fullScreenCover(isPresented: $screenFullExpenseCategory) {}
-        .fullScreenCover(isPresented: $screenFullEarningCategory) {}
+        //        .fullScreenCover(isPresented: $screenFullExpenseCategory) {}
+        //        .fullScreenCover(isPresented: $screenFullEarningCategory) {}
+        .fullScreenCover(isPresented: $screenFullPayment) { AddPaymentView(type: .create) }
     }
 }
 

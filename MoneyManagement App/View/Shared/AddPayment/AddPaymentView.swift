@@ -3,6 +3,8 @@ import SwiftData
 
 struct AddPaymentView: View {
     
+    @Environment(\.dismiss) var dismiss
+    
     // SwiftData
     @Environment(\.modelContext) var modelContext
     @Query var accounts: [Account]
@@ -30,100 +32,136 @@ struct AddPaymentView: View {
     }()
     // Booleans para visualização
     @State var alertCancel: Bool = false
+    @State var selectAccount: Bool = false
+    @State var selectBankAccount: Bool = false
+    @State var selectMethod: Bool = false
     
     var body: some View {
-        List {
-            Section {
-                Label {} icon: {
-                    HStack {
-                        Image(systemName: "wallet.bifold")
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 60)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding(20)
-                }
-                .labelStyle(.iconOnly)
-                NavigationLink(destination: {
-                    AddPaymentViewSelectBankAccount(selectedBankAccount: .constant(.init(idUser: UUID(), name: "Safade")))
-                }) {
-                    HStack {
-                        Text("Institução Financeira")
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        Text("Banco")
-                            .foregroundStyle(.gray)
-                    }
-                }
-                NavigationLink(destination: {
-                    AddPaymentViewSelectAccount(selectedAccount: .constant(.init(idUser: UUID(), name: "Safade")))
-                }) {
-                    HStack {
-                        Text("Conta")
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        Text("Conta")
-                            .foregroundStyle(.gray)
-                    }
-                }
-            }
-            Section {
-                NavigationLink(destination: {
-                    AddPaymentViewSelectMethod(selectedMethod: .constant(.init(idUser: UUID(), emoji: "Safade", name: "Safade")))
-                        .modelContainer(for: Method.self)
-                }) {
-                    HStack {
-                        Text("Método de pagamento")
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        Text("Categoria")
-                            .foregroundStyle(.gray)
-                    }
-                }
-                Label(title: {
-                    HStack {
-                        Text("Valor")
-                        Spacer()
+        NavigationStack {
+            List {
+                Section {
+                    Label {} icon: {
                         HStack {
-                            Text("R$")
-                            CurrencyTextField(numberFormatter: currencyFormatter, value: $value)
+                            Image(systemName: "wallet.bifold")
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 60)
                         }
-                        .fixedSize()
+                        .frame(maxWidth: .infinity)
+                        .padding(20)
                     }
-                    
-                }, icon: {})
-                .labelStyle(.titleOnly)
-                Label(title: {
-                    DatePicker("Horário", selection: $time, displayedComponents: [.hourAndMinute])
-                }, icon: {})
-                .labelStyle(.titleOnly)
+                    .labelStyle(.iconOnly)
+                    Button(action: { self.selectBankAccount.toggle() }) {
+                        HStack {
+                            Text("Institução Financeira")
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .foregroundStyle(.black)
+                            HStack {
+                                Text(self.bankAccount?.name ?? "Bradesco")
+                                    .foregroundStyle(.gray)
+                                Image(systemName: "chevron.forward")
+                                    .foregroundStyle(.gray)
+                            }
+                            
+                        }
+                    }
+                    Button(action: { self.selectAccount.toggle() }) {
+                        HStack {
+                            Text("Conta")
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .foregroundStyle(.black)
+                            HStack {
+                                Text(self.account?.name ?? ".Hak")
+                                    .foregroundStyle(.gray)
+                                Image(systemName: "chevron.forward")
+                                    .foregroundStyle(.gray)
+                            }
+                        }
+                    }
+                }
+                Section {
+                    Button(action: { self.selectMethod.toggle() }) {
+                        HStack {
+                            Text("Método de pagamento")
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .foregroundStyle(.black)
+                            HStack {
+                                Text(self.method?.name ?? "Hackeando")
+                                    .foregroundStyle(.gray)
+                                Image(systemName: "chevron.forward")
+                                    .foregroundStyle(.gray)
+                            }
+                        }
+                    }
+                    Label(title: {
+                        HStack {
+                            Text("Valor")
+                            Spacer()
+                            HStack {
+                                Text("R$")
+                                CurrencyTextField(numberFormatter: currencyFormatter, value: $value)
+                            }
+                            .fixedSize()
+                        }
+                        
+                    }, icon: {})
+                    .labelStyle(.titleOnly)
+                    Label(title: {
+                        DatePicker("Horário", selection: $time, displayedComponents: [.hourAndMinute])
+                    }, icon: {})
+                    .labelStyle(.titleOnly)
+                }
+            }
+            .listStyle(.grouped)
+            .background(Color.background)
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button(action: { dismiss() }) {
+                        Text("Cancelar")
+                    }
+                }
+                ToolbarItem(placement: .principal) {
+                    VStack {
+                        Text(self.type == .create ? "Adicionar pagamento": "Editar pagamento")
+                        
+                    }
+                }
+                ToolbarItem {
+                    Button(action: {}) {
+                        Text(self.type == .create ? "Adicionar": "Editar")
+                    }
+                }
             }
         }
-        .listStyle(.grouped)
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .cancellationAction) {
-                Button(action: { Navigation.navigation.screens.removeLast() }) {
-                    Text("Cancelar")
-                }
+        .onAppear {
+            if let account = self.account {
+                self.account = account
+            } else {
+                self.account = accounts.first!
             }
-            ToolbarItem(placement: .principal) {
-                VStack {
-                    Text(self.type == .create ? "Adicionar pagamento": "Editar pagamento")
-                    
-                }
+            if let bankAccount = self.bankAccount {
+                self.bankAccount = bankAccount
+            } else {
+                self.bankAccount = bankAccounts.first!
             }
-            ToolbarItem {
-                Button(action: {}) {
-                    Text(self.type == .create ? "Adicionar": "Editar")
-                }
-            }
+            self.method = methods.first!
         }
-        .background(Color.background)
-        .navigationBarBackButtonHidden(true)
         .alert("Tem certeza de que deseja descartar estas alterações?", isPresented: $alertCancel) {
             Button("Continuar Editando", role: .cancel) {}
                 .tint(.blue)
             Button("Descartar Alterações", role: .destructive) {}
         }
+        .fullScreenCover(isPresented: $selectAccount, content: {
+            AddPaymentViewSelectAccount(selectedAccount: self.$account)
+        })
+        .fullScreenCover(isPresented: $selectBankAccount, content: {
+            AddPaymentViewSelectBankAccount(selectedBankAccount: self.$bankAccount)
+        })
+        .fullScreenCover(isPresented: $selectMethod, content: {
+            AddPaymentViewSelectMethod(selectedMethod: self.$method)
+        })
     }
     
 }

@@ -3,31 +3,40 @@ import SwiftData
 
 struct AddPaymentViewSelectMethod: View {
     
-    @Binding var selectedMethod: Method
+    @Environment(\.dismiss) var dismiss
+    
+    // SwiftData
     @Query var methods: [Method]
+    // Entrada de Dados
+    @Binding var selectedMethod: Method?
+    // Dados para visualização
+    
+    // Booleans para visualização
+    
     
     var body: some View {
-        NavigationStack {
+        NavigationView {
             List {
                 ForEach(methods) { method in
-                    Button(action: { }) {
+                    Button(action: { self.selectedMethod = method }) {
                         HStack{
                             Text(method.name)
                                 .foregroundStyle(.black)
                             Spacer()
-                            Image(systemName: "checkmark")
-                                .foregroundStyle(.blue)
+                            if self.selectedMethod == method {
+                                Image(systemName: "checkmark")
+                                    .foregroundStyle(.blue)
+                            }
                         }
                     }
                 }
             }
             .listStyle(.grouped)
+            .background(Color.background)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button(action: {}) {
-                        Text("Voltar")
-                    }
+                    Button("Voltar") { dismiss() }
                 }
                 ToolbarItem(placement: .principal) {
                     VStack {
@@ -36,7 +45,6 @@ struct AddPaymentViewSelectMethod: View {
                     }
                 }
             }
-            .background(Color.background)
         }
     }
     

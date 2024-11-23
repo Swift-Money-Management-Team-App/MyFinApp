@@ -3,31 +3,40 @@ import SwiftData
 
 struct AddPaymentViewSelectBankAccount: View {
     
-    @Binding var selectedBankAccount: BankAccount
+    @Environment(\.dismiss) var dismiss
+    
+    // SwiftData
     @Query var bankAccounts: [BankAccount]
+    // Entrada de Dados
+    @Binding var selectedBankAccount: BankAccount?
+    // Dados para visualização
+    
+    // Booleans para visualização
+    
     
     var body: some View {
-        NavigationStack {
+        NavigationView {
             List {
                 ForEach(bankAccounts) { bankAccount in
-                    Button(action: { }) {
+                    Button(action: { self.selectedBankAccount = bankAccount }) {
                         HStack{
                             Text(bankAccount.name)
                                 .foregroundStyle(.black)
                             Spacer()
-                            Image(systemName: "checkmark")
-                                .foregroundStyle(.blue)
+                            if self.selectedBankAccount == bankAccount {
+                                Image(systemName: "checkmark")
+                                    .foregroundStyle(.blue)
+                            }
                         }
                     }
                 }
             }
             .listStyle(.grouped)
+            .background(Color.background)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button(action: {}) {
-                        Text("Voltar")
-                    }
+                    Button("Voltar") { dismiss() }
                 }
                 ToolbarItem(placement: .principal) {
                     VStack {
@@ -36,7 +45,6 @@ struct AddPaymentViewSelectBankAccount: View {
                     }
                 }
             }
-            .background(Color.background)
         }
     }
     

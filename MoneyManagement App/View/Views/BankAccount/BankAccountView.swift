@@ -74,7 +74,7 @@ struct BankAccountView: View {
                             .padding([.top, .leading])
                         Spacer()
                         // TODO: Adioncar conta
-                        Button(action: {  }) {
+                        Button(action: { self.fakeAccounts() }) {
                             Image(systemName: "plus")
                         }
                         .padding([.top, .trailing])

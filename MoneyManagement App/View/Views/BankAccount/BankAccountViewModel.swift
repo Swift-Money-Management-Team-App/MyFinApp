@@ -21,4 +21,8 @@ extension BankAccountView {
         }
     }
     
+    func fakeAccounts() {
+        self.modelContext.insert(Account(idUser: self.bankAccount.id, name: "Safade"))
+    }
+    
 }

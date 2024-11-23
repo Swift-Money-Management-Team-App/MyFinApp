@@ -22,121 +22,164 @@ struct UserForm: View {
     var body: some View {
         NavigationStack {
             VStack {
-                Text(LocalizedStringKey(stringLiteral: "Como gostaria de ser chamado?"))
-                    .fontWeight(.semibold)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.horizontal)
-                ZStack (alignment: .center) {
-                    Rectangle()
-                        .foregroundStyle(Color("backgroundColorRow"))
-                        .frame(height: 50)
-                    TextField(text: $name, label: {
-                        Text(self.name)
-                    })
-                    .foregroundStyle(formState == .read ? .gray : .black)
-                    .disabled(formState == .read ? true : false)
-                    .frame(maxWidth: .infinity)
-                    .padding(.horizontal, 80)
-                    
-                    HStack {
-                        Text(LocalizedStringKey(stringLiteral: "Nome"))
-                            .padding(.leading)
-                        Spacer()
-                        if (!self.name.isEmpty && formState != .read) {
-                            Button(action: {
-                                self.clearAllVariables()
-                            }) {
-                                Image(systemName: "xmark.circle.fill")
-                                    .foregroundStyle(.gray)
-                            }
-                            .padding(.trailing)
-                            .transition(.opacity)
-                        }
-                    }
-                }
+                formTitle
+                nameInputField
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color.background)
-            .toolbar {
-                if(formState != .create) {
-                    ToolbarItem(placement: .cancellationAction) {
-                        Button(action: {
-                            self.handleCancelButton()
-                        }) {
-                            Text(LocalizedStringKey(stringLiteral: (formState == .read ? "Voltar" : "Cancelar")))
-                                .padding(10)
-                        }
-                    }
-                }
-                ToolbarItem(placement: .principal) {
-                    Text(LocalizedStringKey(stringLiteral: (formState == .create ? "Adicionar Usuário" : formState == .read ? "Usuário" : "Editar Usuário")))
-                        .multilineTextAlignment(.center)
-                }
-                ToolbarItem {
-                    Button(action: {
-                        self.handleEditButton()
-                    }) {
-                        Text(LocalizedStringKey(stringLiteral: (formState == .create ? "Adicionar" : formState == .read ? "Editar" : "Salvar")))
-                            .padding(10)
-                    }
-                    .disabled(handleSaveButton())
-                }
-            }
+            .toolbar { toolbarContent }
         }
         .presentationDetents([.height(200)])
         .interactiveDismissDisabled(true)
-        .alert(LocalizedStringKey(stringLiteral: "Tem certeza de que deseja descartar estas alterações?"), isPresented: self.$isShowDiscardChangeAlert) {
-            Button(LocalizedStringKey(stringLiteral: "Descartar Alterações"), role: .destructive) {
-                self.discardAllChanges()
-            }
-            Button(role: .cancel) {} label: {
-                Text(LocalizedStringKey(stringLiteral: "Continuar Editando"))
-                    .foregroundStyle(.blue)
-            }
+        .alert(LocalizedStringKey.userFormDiscardAlertTitle.label, isPresented: $isShowDiscardChangeAlert) {
+            discardAlertActions
         }
     }
 }
 
 extension UserForm {
     
+    // MARK: - Subviews
+    
+    private var formTitle: some View {
+        Text(LocalizedStringKey.userFormTitle.label)
+            .fontWeight(.semibold)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal)
+    }
+    
+    private var nameInputField: some View {
+        ZStack(alignment: .center) {
+            Rectangle()
+                .foregroundStyle(Color("backgroundColorRow"))
+                .frame(height: 50)
+            
+            TextField(text: $name) {
+                Text(name.isEmpty ? LocalizedStringKey.userFormNamePlaceholder.label : name)
+            }
+            .foregroundStyle(formState == .read ? .gray : .black)
+            .disabled(formState == .read)
+            .frame(maxWidth: .infinity)
+            .padding(.horizontal, 80)
+            
+            HStack {
+                Text(LocalizedStringKey.userFormNameField.label)
+                    .padding(.leading)
+                Spacer()
+                if !name.isEmpty && formState != .read {
+                    Button(action: { clearAllVariables() }) {
+                        Image(systemName: "xmark.circle.fill")
+                            .foregroundStyle(.gray)
+                    }
+                    .padding(.trailing)
+                    .transition(.opacity)
+                }
+            }
+        }
+    }
+    
+    private var toolbarContent: some ToolbarContent {
+        Group {
+            if formState != .create {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button(action: { handleCancelButton() }) {
+                        Text(cancelButtonTitle).padding(10)
+                    }
+                }
+            }
+            
+            ToolbarItem(placement: .principal) {
+                Text(formTitleText)
+                    .multilineTextAlignment(.center)
+            }
+            
+            ToolbarItem(placement: .confirmationAction) {
+                Button(action: { handleEditButton() }) {
+                    Text(editButtonTitle).padding(10)
+                }
+                .disabled(handleSaveButton())
+            }
+        }
+    }
+
+    
+    private var discardAlertActions: some View {
+        Group {
+            Button(LocalizedStringKey.userFormDiscardButton.button, role: .destructive) {
+                discardAllChanges()
+            }
+            Button(LocalizedStringKey.userFormContinueEditingButton.button, role: .cancel) {}
+                .foregroundStyle(.blue)
+        }
+    }
+    
+    // MARK: - Computed Properties
+    
+    private var cancelButtonTitle: String {
+        formState == .read
+        ? LocalizedStringKey.userFormBackButton.button
+        : LocalizedStringKey.userFormCancelButton.button
+    }
+    
+    private var formTitleText: String {
+        switch formState {
+        case .create:
+            return LocalizedStringKey.userFormCreateTitle.label
+        case .read:
+            return LocalizedStringKey.userFormReadTitle.label
+        case .update:
+            return LocalizedStringKey.userFormEditTitle.label
+        }
+    }
+    
+    private var editButtonTitle: String {
+        switch formState {
+        case .create:
+            return LocalizedStringKey.userFormAddButton.button
+        case .read:
+            return LocalizedStringKey.userFormEditButton.button
+        case .update:
+            return LocalizedStringKey.userFormSaveButton.button
+        }
+    }
+    
+    // MARK: - Logic
+    
     private func checkIfNameUpdate() -> Bool {
-        return self.name == self.originalName
+        name == originalName
     }
     
     private func handleSaveButton() -> Bool {
-        if(self.formState == .update && checkIfNameUpdate()) {
-            return true
-        }
-        return false
+        formState == .update && checkIfNameUpdate()
     }
     
     private func handleCancelButton() {
-        if (formState != .read && !checkIfNameUpdate()) {
-            self.isShowDiscardChangeAlert = true
-        } else if (formState == .update) {
-            self.formState = .read
-        }else {
-            self.dismiss()
+        if formState != .read && !checkIfNameUpdate() {
+            isShowDiscardChangeAlert = true
+        } else if formState == .update {
+            formState = .read
+        } else {
+            dismiss()
         }
     }
     
     private func handleEditButton() {
-        if(formState == .read) {
+        if formState == .read {
             formState = .update
         } else {
-            self.action()
-            self.dismiss()
+            action()
+            dismiss()
         }
     }
     
     private func clearAllVariables() {
-        self.name = ""
+        name = ""
     }
     
     private func discardAllChanges() {
-        self.formState = .read
-        self.clearAllVariables()
-        self.name = self.originalName
+        formState = .read
+        clearAllVariables()
+        name = originalName
     }
 }
 
@@ -147,5 +190,5 @@ enum UserFormState {
 }
 
 #Preview {
-    UserForm( name: .constant("Filipe"), formState: .update, action: { print("User Form Button Debug")})
+    UserForm(name: .constant("Filipe"), formState: .update, action: { print("User Form Button Debug") })
 }

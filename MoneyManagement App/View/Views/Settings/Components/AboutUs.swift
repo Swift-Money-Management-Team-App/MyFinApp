@@ -15,25 +15,29 @@ struct AboutUs: View {
                     .frame(maxHeight: 175)
                 List {
                     ForEach(aboutUsVM.getMembers()) { member in
-                        createUserTeam(name: member.name, role: member.role, linkedinUrl:  member.linkedinUrl)
+                        createUserTeam(
+                            name: member.name,
+                            role: member.role,
+                            linkedinUrl: member.linkedinUrl
+                        )
                     }
                 }
             }
         }
         .ignoresSafeArea()
-        .navigationTitle(LocalizedStringKey(stringLiteral: "Desenvolvedores"))
+        .navigationTitle(LocalizedStringKey.aboutUsScreenTitle.label)
         .navigationBarTitleDisplayMode(.large)
         .navigationBarBackButtonHidden(true)
-        .toolbar(content: {
+        .toolbar {
             ToolbarItem(placement: .cancellationAction) {
                 Button(action: { Navigation.navigation.screens.removeLast() }) {
                     HStack {
                         Image(systemName: "chevron.backward")
-                        Text("Configurações")
+                        Text(LocalizedStringKey.settingsButtonBack.button)
                     }
                 }
             }
-        })
+        }
     }
 }
 
@@ -50,7 +54,7 @@ extension AboutUs {
                 Image(systemName: "person")
                     .imageScale(.large)
                     .foregroundStyle(.accent)
-                VStack (alignment: .leading) {
+                VStack(alignment: .leading) {
                     Text(name)
                     Text(role)
                         .fontWeight(.thin)
@@ -62,7 +66,6 @@ extension AboutUs {
             }
         }
     }
-    
 }
 
 #Preview {

@@ -16,5 +16,7 @@ enum NavigationScreen: Hashable {
     case bankAccount(bankAccount: BankAccount)
     case movement(account: Account? = nil, bankAccount: BankAccount? = nil)
     case settings
-    
+    case privacyPolicy
+    case terms
+    case aboutUs
 }

@@ -4,19 +4,18 @@ struct TermsView: View {
     
     private let titleText = TitleText()
     private let bodyText = BodyText()
-
+    
     var body: some View {
-        NavigationStack {
-            VStack(spacing: 0) {
-                RoundedRectangle(cornerRadius: 20)
-                    .foregroundStyle(.brightGold)
-                    .frame(maxHeight: 175)
+        VStack(spacing: 0) {
+            RoundedRectangle(cornerRadius: 20)
+                .foregroundStyle(.brightGold)
+                .frame(maxHeight: 175)
+            
+            ScrollView {
                 
-                ScrollView {
-                    
-                    VStack(alignment: .leading) {
-                            titleText.createTitleText("Terms & Conditions")
-                            bodyText.createBodyText("""
+                VStack(alignment: .leading) {
+                    titleText.createTitleText("Terms & Conditions")
+                    bodyText.createBodyText("""
 These terms and conditions applies to the MONEY APP MANAGEMENT app (hereby referred to as "Application") for mobile devices that was created by Money Management App (hereby referred to as "Service Provider") as a Free service.
 
 Upon downloading or utilizing the Application, you are automatically agreeing to the following terms. It is strongly advised that you thoroughly read and understand these terms prior to using the Application. Unauthorized copying, modification of the Application, any part of the Application, or our trademarks is strictly prohibited. Any attempts to extract the source code of the Application, translate the Application into other languages, or create derivative versions are not permitted. All trademarks, copyrights, database rights, and other intellectual property rights related to the Application remain the property of the Service Provider.
@@ -37,25 +36,35 @@ In terms of the Service Provider's responsibility for your use of the applicatio
 
 The Service Provider may wish to update the application at some point. The application is currently available as per the requirements for the operating system (and for any additional systems they decide to extend the availability of the application to) may change, and you will need to download the updates if you want to continue using the application. The Service Provider does not guarantee that it will always update the application so that it is relevant to you and/or compatible with the particular operating system version installed on your device. However, you agree to always accept updates to the application when offered to you. The Service Provider may also wish to cease providing the application and may terminate its use at any time without providing termination notice to you. Unless they inform you otherwise, upon any termination, (a) the rights and licenses granted to you in these terms will end; (b) you must cease using the application, and (if necessary) delete it from your device.
 """)
-
-                        titleText.createTitleText("Changes to These Terms and Conditions")
-                        Text("""
+                    
+                    titleText.createTitleText("Changes to These Terms and Conditions")
+                    Text("""
 The Service Provider may periodically update their Terms and Conditions. Therefore, you are advised to review this page regularly for any changes. The Service Provider will notify you of any changes by posting the new Terms and Conditions on this page.
 These terms and conditions are effective as of 2024-12-10
 """)
-                        
-                        titleText.createTitleText("Contact Us")
-                        Text("""
+                    
+                    titleText.createTitleText("Contact Us")
+                    Text("""
 If you have any questions or suggestions about the Terms and Conditions, please do not hesitate to contact the Service Provider at contact@moneyapp.com.
 """)
-                    }
                 }
-                .padding()
             }
-            .ignoresSafeArea()
+            .padding()
         }
+        .ignoresSafeArea()
         .navigationTitle(LocalizedStringKey(stringLiteral: "Termos de Uso"))
         .navigationBarTitleDisplayMode(.large)
+        .navigationBarBackButtonHidden(true)
+        .toolbar(content: {
+            ToolbarItem(placement: .cancellationAction) {
+                Button(action: { Navigation.navigation.screens.removeLast() }) {
+                    HStack {
+                        Image(systemName: "chevron.backward")
+                        Text("Configurações")
+                    }
+                }
+            }
+        })
     }
 }
 

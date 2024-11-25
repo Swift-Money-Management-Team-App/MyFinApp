@@ -5,14 +5,24 @@ struct BankAccountView: View {
     
     // SwiftData
     @Environment(\.modelContext) var modelContext
-    @Query var creditCards: [Account] = []
-    @Query var accounts: [Account] = []
+    @Query(filter: #Predicate<Account> { account in
+        account.isCreditCard == true
+    }, sort: \Account.name) var creditCards: [Account] = []
+    @Query(filter: #Predicate<Account> { account in
+        account.isCreditCard == false
+    }, sort: \Account.name) var accounts: [Account] = []
     // Entrada de Dados
     @State var bankAccountName: String = ""
+    @State var accountName : String = ""
+    @State var closeDay : Int = 0
     // Dados para visualização
     let bankAccount: BankAccount
+    @State var isCreditCard: Bool = false
     // Booleans para visualização
     @State var isShowingBankEdit: Bool = false
+    @State var presentAddAccountView: Bool = false
+    
+    
     
     var body: some View {
         ZStack (alignment: .top) {
@@ -62,8 +72,71 @@ struct BankAccountView: View {
                         .frame(maxWidth: .infinity, minHeight: 130)
                     } else {
                         LazyVGrid(columns: [GridItem(), GridItem(), GridItem()], spacing: 20) {
-                            ForEach(accounts) { account in
-                                BankAccountViewAccount(account: account)
+                            OperationCard(type: .addMovement, text: "Adicionar movimentação")
+                            OperationCard(type: .generalHistory, text: "Histórico da conta bancária")
+                        }
+                        .padding(.horizontal)
+                        HStack {
+                            Text("Cartão de Crédito")
+                                .foregroundStyle(.darkPink)
+                                .fontWeight(.semibold)
+                                .padding([.top, .leading])
+                            Spacer()
+                            // TODO: Adioncar cartão de crédito
+                            Button(action: {
+                                cleanInputs()
+                                isCreditCard = true
+                                presentAddAccountView = true
+                            }) {
+                                Image(systemName: "plus")
+                            }
+                            .padding([.top, .trailing])
+                        }
+                        if(creditCards.isEmpty){
+                            HStack (alignment: .center) {
+                                Text("Não possui cartões de créditos")
+                                    .font(.title3)
+                                    .bold()
+                                    .padding(10)
+                            }
+                            .fixedSize()
+                            .frame(maxWidth: .infinity, minHeight: 130)
+                        } else {
+                            LazyVGrid(columns: [GridItem(), GridItem(), GridItem()], spacing: 20) {
+                                ForEach(creditCards) { account in
+                                    BankAccountViewAccount(account: account)
+                                }
+                            }
+                        }
+                        HStack {
+                            Text("Contas")
+                                .foregroundStyle(.darkPink)
+                                .fontWeight(.semibold)
+                                .padding([.top, .leading])
+                            Spacer()
+                            // TODO: Adioncar conta
+                            Button(action: {
+                                cleanInputs()
+                                presentAddAccountView = true
+                            }) {
+                                Image(systemName: "plus")
+                            }
+                            .padding([.top, .trailing])
+                        }
+                        if(accounts.isEmpty){
+                            HStack (alignment: .center) {
+                                Text("Não possui contas")
+                                    .font(.title3)
+                                    .bold()
+                                    .padding(10)
+                            }
+                            .fixedSize()
+                            .frame(maxWidth: .infinity, minHeight: 130)
+                        } else {
+                            LazyVGrid(columns: [GridItem(), GridItem(), GridItem()], spacing: 20) {
+                                ForEach(accounts) { account in
+                                    BankAccountViewAccount(account: account)
+                                }
                             }
                         }
                     }
@@ -131,10 +204,18 @@ struct BankAccountView: View {
                 Navigation.navigation.screens.removeLast()
             })
         }
+        .sheet(isPresented: $presentAddAccountView) {
+            NavigationStack {
+                AddAccountView(accountName: $accountName, isCreditCard: $isCreditCard, invoiceClosing: $closeDay, bankAccount: self.bankAccount, modelContext: self.modelContext) {
+                    appendAccount()
+                }
+            }
+            .presentationDetents([.medium])
+        }
     }
     
 }
 
 #Preview {
-    BankAccountView(bankAccount: BankAccount(idUser: UUID(), name: "Safade"))
+    BankAccountView(bankAccount: BankAccount(idUser: UUID(), name: "Filipe"))
 }

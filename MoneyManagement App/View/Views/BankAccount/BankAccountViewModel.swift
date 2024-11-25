@@ -25,4 +25,31 @@ extension BankAccountView {
         self.modelContext.insert(Account(idUser: self.bankAccount.id, name: "Safade"))
     }
     
+    func appendAccount () {
+        let account = Account(idUser: self.bankAccount.idUser, name: self.accountName)
+        
+        self.modelContext.insert(account)
+        
+        if self.isCreditCard {
+            account.isCreditCard = true
+            account.closeDay = closeDay
+        }
+        
+        do {
+            try self.modelContext.save()
+        } catch {
+            print("Deu ruim")
+        }
+        
+        cleanInputs()
+        
+        presentAddAccountView = false
+    }
+    
+    func cleanInputs () {
+        self.bankAccountName = ""
+        self.isCreditCard = false
+        self.closeDay = 1
+    }
+    
 }

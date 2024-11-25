@@ -1,7 +1,6 @@
 import Foundation
 import SwiftData
 
-
 extension HomeView {
 
     func appendUser() {

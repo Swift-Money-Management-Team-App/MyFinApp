@@ -20,17 +20,6 @@ struct AddMovementView: View {
     // Dados para visualização
     @State var earned: Bool = Storage.share.earned
     @State var moved: Bool = false
-    let currencyFormatter: NumberFormatter = {
-        let formatter = NumberFormatter()
-        formatter.currencyCode = "BRL"
-        formatter.currencySymbol = "R$"
-        formatter.minimumFractionDigits = 2
-        formatter.maximumFractionDigits = 2
-        formatter.minimumIntegerDigits = 2
-        formatter.maximumIntegerDigits = 13
-        formatter.usesGroupingSeparator = true
-        return formatter
-    }()
     // Booleans para visualização
     @State var screenFullEarningCategory: Bool = false
     @State var screenFullExpenseCategory: Bool = false
@@ -54,29 +43,20 @@ struct AddMovementView: View {
                     self.moved = true
                 }
                 .labelStyle(.titleOnly)
-                Button(action: {
-                    if earned {
-                        self.screenFullEarningCategory.toggle()
-                    } else {
-                        self.screenFullExpenseCategory.toggle()
-                    }
-                }) {
-                    HStack {
-                        Text("Categoria")
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .foregroundStyle(.black)
-                        HStack {
-                            if earned {
-                                Text("Categoria")
-                                    .foregroundStyle(.gray)
-                            } else {
-                                Text("Categoria")
-                                    .foregroundStyle(.gray)
-                            }
-                            Image(systemName: "chevron.forward")
-                                .foregroundStyle(.gray)
+                if earned {
+                    Picker("Categoria", selection: $earningCategory) {
+                        ForEach(self.$earningCategories) { earningCategory in
+                            Label(earningCategory.name, systemImage: earningCategory.emoji)
                         }
                     }
+                    .pickerStyle(.navigationLink)
+                } else {
+                    Picker("Categoria", selection: $expenseCategory) {
+                        ForEach(self.$expenseCategories) { expenseCategory in
+                            Label(expenseCategory.name, systemImage: expenseCategory.emoji)
+                        }
+                    }
+                    .pickerStyle(.navigationLink)
                 }
                 VStack {
                     Text("Descrição")
@@ -118,7 +98,7 @@ struct AddMovementView: View {
                     HStack {
                         Text("Total")
                             .frame(maxWidth: .infinity, alignment: .leading)
-                        Text("R$ \(currencyFormatter.string(for: self.total)!)")
+                        Text("R$ \(self.total.formatToCurrency)")
                     }
                 } icon: {}
             }
@@ -156,8 +136,6 @@ struct AddMovementView: View {
                 .tint(.blue)
             Button("Descartar Alterações", role: .destructive) { Navigation.navigation.screens.removeLast() }
         }
-        //        .fullScreenCover(isPresented: $screenFullExpenseCategory) {}
-        //        .fullScreenCover(isPresented: $screenFullEarningCategory) {}
         .fullScreenCover(isPresented: $screenFullPayment) { AddPaymentView(type: .create) }
     }
 }

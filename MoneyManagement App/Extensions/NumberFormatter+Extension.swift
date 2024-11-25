@@ -13,4 +13,5 @@ extension NumberFormatter {
         formatter.usesGroupingSeparator = true
         return formatter
     }
+    
 }

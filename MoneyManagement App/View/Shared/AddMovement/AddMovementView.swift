@@ -43,21 +43,31 @@ struct AddMovementView: View {
                     self.moved = true
                 }
                 .labelStyle(.titleOnly)
-                if earned {
-                    Picker("Categoria", selection: $earningCategory) {
-                        ForEach(self.$earningCategories) { earningCategory in
-                            Label(earningCategory.name, systemImage: earningCategory.emoji)
+                Button(action: {
+                    if earned {
+                        self.screenFullEarningCategory.toggle()
+                    } else {
+                        self.screenFullExpenseCategory.toggle()
+                    }
+                }) {
+                    HStack {
+                        Text("Categoria")
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .foregroundStyle(.black)
+                        HStack {
+                            if earned {
+                                Text(earningCategory?.name ?? "Escolha")
+                                    .foregroundStyle(.gray)
+                            } else {
+                                Text(expenseCategory?.name ?? "Escolha")
+                                    .foregroundStyle(.gray)
+                            }
+                            Image(systemName: "chevron.forward")
+                                .foregroundStyle(.gray)
                         }
                     }
-                    .pickerStyle(.navigationLink)
-                } else {
-                    Picker("Categoria", selection: $expenseCategory) {
-                        ForEach(self.$expenseCategories) { expenseCategory in
-                            Label(expenseCategory.name, systemImage: expenseCategory.emoji)
-                        }
-                    }
-                    .pickerStyle(.navigationLink)
                 }
+                
                 VStack {
                     Text("Descrição")
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -98,10 +108,14 @@ struct AddMovementView: View {
                     HStack {
                         Text("Total")
                             .frame(maxWidth: .infinity, alignment: .leading)
-                        Text("R$ \(self.total.formatToCurrency)")
+                        Text("R$ \(NumberFormatter().formatToCurrency.string(for: self.total)!)")
                     }
                 } icon: {}
             }
+        }
+        .onAppear {
+            self.expenseCategory = self.expenseCategories.first!
+            self.earningCategory = self.earningCategories.first!
         }
         .listStyle(.grouped)
         .navigationBarTitleDisplayMode(.inline)
@@ -136,6 +150,8 @@ struct AddMovementView: View {
                 .tint(.blue)
             Button("Descartar Alterações", role: .destructive) { Navigation.navigation.screens.removeLast() }
         }
+        .fullScreenCover(isPresented: $screenFullEarningCategory) { AddMovementViewEarningCategory(selectedEarningCategory: $earningCategory) }
+        .fullScreenCover(isPresented: $screenFullExpenseCategory) { AddMovementViewExpenseCategory(selectedExpenseCategory: $expenseCategory) }
         .fullScreenCover(isPresented: $screenFullPayment) { AddPaymentView(type: .create) }
     }
 }

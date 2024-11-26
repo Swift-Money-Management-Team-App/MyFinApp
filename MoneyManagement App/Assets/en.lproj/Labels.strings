@@ -84,12 +84,12 @@ whatToDo = "O que deseja fazer?";
 
 // Bank Account
 totalBalance = "Saldo Total";
+accounts = "Contas";
 whatToDo = "O que deseja fazer?";
 addTransaction = "Adicionar movimentação";
 bankAccountHistory = "Histórico da conta bancária";
 creditCard = "Cartão de Crédito";
 noCreditCards = "Não possui cartões de créditos";
-accounts = "Contas";
 noAccounts = "Não possui contas";
 
 // Add Account

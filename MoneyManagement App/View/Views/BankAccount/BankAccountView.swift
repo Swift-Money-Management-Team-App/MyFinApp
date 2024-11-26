@@ -11,14 +11,17 @@ struct BankAccountView: View {
     @Query(filter: #Predicate<Account> { account in
         account.isCreditCard == false
     }, sort: \Account.name) var accounts: [Account] = []
-    // Entrada de Dados
+    
+    // Input Data
     @State var bankAccountName: String = ""
     @State var accountName: String = ""
     @State var closeDay: Int = 0
-    // Dados para visualização
+    
+    // Visualization Data
     let bankAccount: BankAccount
     @State var isCreditCard: Bool = false
-    // Booleans para visualização
+    
+    // View States
     @State var isShowingBankEdit: Bool = false
     @State var presentAddAccountView: Bool = false
     
@@ -55,82 +58,41 @@ struct BankAccountView: View {
                     }
                     .padding(.horizontal)
                     
-                    createSectionTitle(title: LocalizedStringKey.creditCard.label)
+                    HStack {
+                        Text(LocalizedStringKey.creditCard.label)
+                            .foregroundStyle(.darkPink)
+                            .fontWeight(.semibold)
+                            .padding([.top, .leading])
+                        Spacer()
+                        Button(action: {
+                            cleanInputs()
+                            isCreditCard = true
+                            presentAddAccountView = true
+                        }) {
+                            Image(systemName: "plus")
+                        }
+                        .padding([.top, .trailing])
+                    }
                     
                     if creditCards.isEmpty {
-                        createEmptyStateText(text: LocalizedStringKey.noCreditCards.label)
+                        HStack(alignment: .center) {
+                            Text(LocalizedStringKey.noCreditCards.label)
+                                .font(.title3)
+                                .bold()
+                                .padding(10)
+                        }
+                        .fixedSize()
+                        .frame(maxWidth: .infinity, minHeight: 130)
                     } else {
                         LazyVGrid(columns: [GridItem(), GridItem(), GridItem()], spacing: 20) {
-                            OperationCard(type: .addMovement, text: "Adicionar movimentação")
-                            OperationCard(type: .generalHistory, text: "Histórico da conta bancária")
-                        }
-                        .padding(.horizontal)
-                        HStack {
-                            Text("Cartão de Crédito")
-                                .foregroundStyle(.darkPink)
-                                .fontWeight(.semibold)
-                                .padding([.top, .leading])
-                            Spacer()
-                            // TODO: Adioncar cartão de crédito
-                            Button(action: {
-                                cleanInputs()
-                                isCreditCard = true
-                                presentAddAccountView = true
-                            }) {
-                                Image(systemName: "plus")
-                            }
-                            .padding([.top, .trailing])
-                        }
-                        if(creditCards.isEmpty){
-                            HStack (alignment: .center) {
-                                Text("Não possui cartões de créditos")
-                                    .font(.title3)
-                                    .bold()
-                                    .padding(10)
-                            }
-                            .fixedSize()
-                            .frame(maxWidth: .infinity, minHeight: 130)
-                        } else {
-                            LazyVGrid(columns: [GridItem(), GridItem(), GridItem()], spacing: 20) {
-                                ForEach(creditCards) { account in
-                                    BankAccountViewAccount(account: account)
-                                }
-                            }
-                        }
-                        HStack {
-                            Text("Contas")
-                                .foregroundStyle(.darkPink)
-                                .fontWeight(.semibold)
-                                .padding([.top, .leading])
-                            Spacer()
-                            // TODO: Adioncar conta
-                            Button(action: {
-                                cleanInputs()
-                                presentAddAccountView = true
-                            }) {
-                                Image(systemName: "plus")
-                            }
-                            .padding([.top, .trailing])
-                        }
-                        if(accounts.isEmpty){
-                            HStack (alignment: .center) {
-                                Text("Não possui contas")
-                                    .font(.title3)
-                                    .bold()
-                                    .padding(10)
-                            }
-                            .fixedSize()
-                            .frame(maxWidth: .infinity, minHeight: 130)
-                        } else {
-                            LazyVGrid(columns: [GridItem(), GridItem(), GridItem()], spacing: 20) {
-                                ForEach(accounts) { account in
-                                    BankAccountViewAccount(account: account)
-                                }
+                            ForEach(creditCards) { account in
+                                BankAccountViewAccount(account: account)
                             }
                         }
                     }
+                    
                     HStack {
-                        Text("Contas")
+                        Text(LocalizedStringKey.accounts.label)
                             .foregroundStyle(.darkPink)
                             .fontWeight(.semibold)
                             .padding([.top, .leading])
@@ -142,10 +104,15 @@ struct BankAccountView: View {
                         .padding([.top, .trailing])
                     }
                     
-                    createSectionTitle(title: LocalizedStringKey.accounts.label)
-                    
                     if accounts.isEmpty {
-                        createEmptyStateText(text: LocalizedStringKey.noAccounts.label)
+                        HStack(alignment: .center) {
+                            Text(LocalizedStringKey.noAccounts.label)
+                                .font(.title3)
+                                .bold()
+                                .padding(10)
+                        }
+                        .fixedSize()
+                        .frame(maxWidth: .infinity, minHeight: 130)
                     } else {
                         LazyVGrid(columns: [GridItem(), GridItem(), GridItem()], spacing: 20) {
                             ForEach(accounts) { account in
@@ -161,7 +128,7 @@ struct BankAccountView: View {
             RoundedRectangle(cornerRadius: 20)
                 .foregroundStyle(.brightGold)
                 .overlay(alignment: .bottomLeading) {
-                    Text("\(bankAccount.name)")
+                    Text(bankAccount.name)
                         .font(.largeTitle)
                         .bold()
                         .padding()
@@ -210,33 +177,6 @@ struct BankAccountView: View {
             }
             .presentationDetents([.medium])
         }
-    }
-    
-    @ViewBuilder
-    private func createSectionTitle(title: String) -> some View {
-        HStack {
-            Text(title)
-                .foregroundStyle(.darkPink)
-                .fontWeight(.semibold)
-                .padding([.top, .leading])
-            Spacer()
-            Button(action: { }) {
-                Image(systemName: "plus")
-            }
-            .padding([.top, .trailing])
-        }
-    }
-    
-    @ViewBuilder
-    private func createEmptyStateText(text: String) -> some View {
-        HStack(alignment: .center) {
-            Text(text)
-                .font(.title3)
-                .bold()
-                .padding(10)
-        }
-        .fixedSize()
-        .frame(maxWidth: .infinity, minHeight: 130)
     }
 }
 

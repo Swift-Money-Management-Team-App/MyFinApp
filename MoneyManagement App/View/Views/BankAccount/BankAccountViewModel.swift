@@ -21,9 +21,13 @@ extension BankAccountView {
         }
     }
     
+    func fakeAccounts() {
+        self.modelContext.insert(Account(idUser: self.bankAccount.id, name: "Safade"))
+    }
+    
     func appendAccount () {
         let account = Account(idUser: self.bankAccount.idUser, name: self.accountName)
-                
+        
         self.modelContext.insert(account)
         
         if self.isCreditCard {
@@ -47,4 +51,5 @@ extension BankAccountView {
         self.isCreditCard = false
         self.closeDay = 1
     }
+    
 }

@@ -61,10 +61,85 @@ struct BankAccountView: View {
                         createEmptyStateText(text: LocalizedStringKey.noCreditCards.label)
                     } else {
                         LazyVGrid(columns: [GridItem(), GridItem(), GridItem()], spacing: 20) {
-                            ForEach(creditCards) { account in
-                                BankAccountViewAccount(account: account)
+                            OperationCard(type: .addMovement, text: "Adicionar movimentação")
+                            OperationCard(type: .generalHistory, text: "Histórico da conta bancária")
+                        }
+                        .padding(.horizontal)
+                        HStack {
+                            Text("Cartão de Crédito")
+                                .foregroundStyle(.darkPink)
+                                .fontWeight(.semibold)
+                                .padding([.top, .leading])
+                            Spacer()
+                            // TODO: Adioncar cartão de crédito
+                            Button(action: {
+                                cleanInputs()
+                                isCreditCard = true
+                                presentAddAccountView = true
+                            }) {
+                                Image(systemName: "plus")
+                            }
+                            .padding([.top, .trailing])
+                        }
+                        if(creditCards.isEmpty){
+                            HStack (alignment: .center) {
+                                Text("Não possui cartões de créditos")
+                                    .font(.title3)
+                                    .bold()
+                                    .padding(10)
+                            }
+                            .fixedSize()
+                            .frame(maxWidth: .infinity, minHeight: 130)
+                        } else {
+                            LazyVGrid(columns: [GridItem(), GridItem(), GridItem()], spacing: 20) {
+                                ForEach(creditCards) { account in
+                                    BankAccountViewAccount(account: account)
+                                }
                             }
                         }
+                        HStack {
+                            Text("Contas")
+                                .foregroundStyle(.darkPink)
+                                .fontWeight(.semibold)
+                                .padding([.top, .leading])
+                            Spacer()
+                            // TODO: Adioncar conta
+                            Button(action: {
+                                cleanInputs()
+                                presentAddAccountView = true
+                            }) {
+                                Image(systemName: "plus")
+                            }
+                            .padding([.top, .trailing])
+                        }
+                        if(accounts.isEmpty){
+                            HStack (alignment: .center) {
+                                Text("Não possui contas")
+                                    .font(.title3)
+                                    .bold()
+                                    .padding(10)
+                            }
+                            .fixedSize()
+                            .frame(maxWidth: .infinity, minHeight: 130)
+                        } else {
+                            LazyVGrid(columns: [GridItem(), GridItem(), GridItem()], spacing: 20) {
+                                ForEach(accounts) { account in
+                                    BankAccountViewAccount(account: account)
+                                }
+                            }
+                        }
+                    }
+                    HStack {
+                        Text("Contas")
+                            .foregroundStyle(.darkPink)
+                            .fontWeight(.semibold)
+                            .padding([.top, .leading])
+                        Spacer()
+                        // TODO: Adioncar conta
+                        Button(action: { self.fakeAccounts() }) {
+                            Image(systemName: "plus")
+                        }
+                        .padding([.top, .trailing])
                     }
                     
                     createSectionTitle(title: LocalizedStringKey.accounts.label)

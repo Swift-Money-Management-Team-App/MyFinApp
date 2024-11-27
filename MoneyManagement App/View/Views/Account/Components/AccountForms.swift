@@ -9,9 +9,9 @@ struct AccountForms: View {
     @Query var Account: [Account] = []
     
     // Entrada de Dados
-    @State var name: String = ""
+    @State var name: String = "CONTA CORRENTE"
     @State var total: Double = 0
-    @State var isCreditCard: Bool = false
+    @State var isCreditCard: Bool = true
     @State var closeDay: Int = 1
     
     // Booleans para visualização
@@ -29,6 +29,10 @@ struct AccountForms: View {
     
     @State var formState: AccountFormState
     
+// TODO: MELHORAR A TELA DO PICKER
+// TODO: APLICAR ESSA TELA NA VIEW
+// TODO: FAZER A ACCOUNT VIEW
+    
     var body: some View {
         NavigationStack {
             List {
@@ -39,7 +43,9 @@ struct AccountForms: View {
                             TextField(text: $name) {
                                 Text(name.isEmpty ? LocalizedStringKey.userFormNamePlaceholder.label : name)
                             }
-                            
+                            .disabled(self.formState == .read)
+                            .foregroundStyle(formState == .read ? .gray : .black)
+
                             if (!self.name.isEmpty && self.formState != .read) {
                                 Button(action: {
                                     print("aa")
@@ -89,9 +95,29 @@ struct AccountForms: View {
         .animation(.none, value: 1)
         .listStyle(.grouped)
         .toolbar {
+            ToolbarItem(placement: .cancellationAction) {
+                Button(self.formState == .create ? "Cancelar" : "Voltar") {
+                    if(self.formState == .create) {
+                        self.dismiss()
+                    } else {
+                        self.formState = .read
+                    }
+                }
+            }
+            
             ToolbarItem(placement: .principal) {
                 VStack {
                     Text(self.formState == .create ? "Adicionar Conta" : self.formState == .read ? "AAAAA" /*TODO: COLOCAR O NOME DA CONTA*/ : "Editar Conta" )
+                }
+            }
+            
+            ToolbarItem(placement: .confirmationAction) {
+                Button(self.formState == .create ? "Adicionar" : self.formState == .read ? "Editar" : "Salvar") {
+                    if(self.formState == .create) {
+                        // TODO: ADICIONAR LÓGICA DE ADICIONAR
+                    } else {
+                        // TODO: ADICIONAR LÓGICA DE EDITAR
+                    }
                 }
             }
         }
@@ -130,7 +156,7 @@ struct AccountForms: View {
                 .background(.blue)
                 .tint(.blue)
         })
-        .alert("Tem certeza de que deseja descartar estas alterações?", isPresented: self.$isShowCantDeleteAlert) {
+        .alert("Este Conta já possui transações registradas!", isPresented: self.$isShowCantDeleteAlert) {
             Button("Voltar", role: .cancel) {}
                 .foregroundStyle(.blue)
                 .background(.blue)
@@ -155,5 +181,5 @@ enum AccountFormState {
 }
 
 #Preview {
-    AccountForms(formState: .create)
+    AccountForms(formState: .read)
 }

@@ -43,7 +43,6 @@ extension BankAccountView {
         
         cleanInputs()
         
-        presentAddAccountView = false
     }
     
     func cleanInputs () {

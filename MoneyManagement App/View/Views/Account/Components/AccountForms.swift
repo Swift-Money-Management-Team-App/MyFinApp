@@ -12,7 +12,7 @@ struct AccountForms: View {
     @State var name: String = ""
     @State var total: Double = 0
     @State var isCreditCard: Bool = false
-    @State var closeDay: Int? = 0
+    @State var closeDay: Int? = 1
     
     // Booleans para visualização
     @State var isShowDatePicker: Bool = false
@@ -51,10 +51,10 @@ struct AccountForms: View {
                         .padding(.horizontal, 80)
                         
                         HStack {
-                            Text(LocalizedStringKey(stringLiteral: "Nome"))
+                            Text("Nome")
                                 .padding(.leading)
                             Spacer()
-                            if (!self.name.isEmpty && formState != .read) {
+                            if (!self.name.isEmpty && self.formState != .read) {
                                 Button(action: {
                                     self.name.clearAllVariables
                                 }) {
@@ -79,15 +79,14 @@ struct AccountForms: View {
                                     RoundedRectangle(cornerRadius: 6)
                                         .frame(width: 45, height: 34, alignment: .center)
                                         .foregroundStyle(Color.background)
-                                    Text("1")
+                                    Text("\(self.$closeDay)")
                                         .foregroundStyle(Color.blue)
-                                    //                                    Text("1 \(self.$closeDay)")
                                 }
                             }
                         }
                     }
                     if formState == .read {
-                        Button(LocalizedStringKey(stringLiteral: "Apagar Conta"), role: .destructive) {
+                        Button("Apagar Conta", role: .destructive) {
                             self.isShowDeleteAlert = true
                         }
                     }

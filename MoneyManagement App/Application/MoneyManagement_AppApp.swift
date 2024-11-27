@@ -27,9 +27,7 @@ struct MoneyManagement_AppApp: App {
                             case .bankAccount(bankAccount: let bankAccount):
                                 BankAccountView(bankAccount: bankAccount)
                             case .movement(account: let account, bankAccount: let bankAccount):
-                                Text("Movimento")
-                            case .payment(payment: let payment):
-                                Text("Pagamento")
+                                AddMovementView(account: account, bankAccount: bankAccount)
                             case .privacyPolicy:
                                 PrivacyPolicy()
                             case .terms:

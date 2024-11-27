@@ -19,38 +19,51 @@ struct HomeView: View {
     @State var isShowingScreenNameBankAccount: Bool = false
     
     var body: some View {
-        
-        ZStack (alignment: .top) {
+        ZStack(alignment: .top) {
             ScrollView {
-                VStack (alignment: .leading) {
+                VStack(alignment: .leading) {
                     Spacer(minLength: 175)
-                    Text("Saldos")
+                    Text(LocalizedStringKey.homeBalances.label)
                         .foregroundStyle(.darkPink)
                         .fontWeight(.semibold)
                         .padding([.top, .leading])
+                    
                     List {
-                        ConditionCell(cellName: "Conta Corrente", valueAllAccounts: $valueAllCurrentAccounts, hiddenValues: $hiddenValues)
-                        ConditionCell(cellName: "Cartão de Crédito", valueAllAccounts: $valueAllCreditCards, hiddenValues: $hiddenValues)
+                        ConditionCell(
+                            cellName: LocalizedStringKey.homeCheckingAccount.label,
+                            valueAllAccounts: $valueAllCurrentAccounts,
+                            hiddenValues: $hiddenValues
+                        )
+                        ConditionCell(
+                            cellName: LocalizedStringKey.homeCreditCard.label,
+                            valueAllAccounts: $valueAllCreditCards,
+                            hiddenValues: $hiddenValues
+                        )
                     }
                     .frame(height: 64 * 2)
                     .scrollDisabled(true)
                     .listStyle(.inset)
                     
-                    Text("O que deseja fazer?")
+                    Text(LocalizedStringKey.homeWhatToDo.label)
                         .foregroundStyle(.darkPink)
                         .fontWeight(.semibold)
                         .padding([.top, .leading])
+                    
                     LazyVGrid(columns: [GridItem(), GridItem(), GridItem()], spacing: 20) {
                         NavigationLink(value: NavigationScreen.movement(account: nil, bankAccount: nil)) {
-                            OperationCard(type: .addMovement, text: "Adicionar movimentação")
+                            OperationCard(
+                                type: .addMovement,
+                                text: LocalizedStringKey.homeAddMovement.label
+                            )
                         }
-                        OperationCard(type: .movementCategory, text: "Categoria de transação")
-                        OperationCard(type: .paymentMethod, text: "Método de pagamento")
-                        OperationCard(type: .generalHistory, text: "Histórico Geral")
+                        OperationCard(type: .movementCategory, text: LocalizedStringKey.homeTransactionCategory.label)
+                        OperationCard(type: .paymentMethod, text: LocalizedStringKey.homePaymentMethod.label)
+                        OperationCard(type: .generalHistory, text: LocalizedStringKey.homeGeneralHistory.label)
                     }
                     .padding(.horizontal)
-                    HStack{
-                        Text("Instituições Financeiras")
+                    
+                    HStack {
+                        Text(LocalizedStringKey.homeFinancialInstitutions.label)
                             .foregroundStyle(.darkPink)
                             .fontWeight(.semibold)
                             .padding([.top, .leading])
@@ -60,9 +73,10 @@ struct HomeView: View {
                         }
                         .padding([.top, .trailing])
                     }
-                    if(self.bankAccounts.isEmpty){
-                        HStack (alignment: .center) {
-                            Text("Não possui contas bancária")
+                    
+                    if self.bankAccounts.isEmpty {
+                        HStack(alignment: .center) {
+                            Text(LocalizedStringKey.homeNoBankAccounts.label)
                                 .font(.title3)
                                 .bold()
                                 .padding(10)
@@ -73,30 +87,34 @@ struct HomeView: View {
                         LazyVGrid(columns: [GridItem(), GridItem(), GridItem()], spacing: 20) {
                             ForEach(self.bankAccounts) { bankAccount in
                                 NavigationLink(value: NavigationScreen.bankAccount(bankAccount: bankAccount)) {
-                                        HomeViewBankAccount(bankAccount: bankAccount)
-                                    }
+                                    HomeViewBankAccount(bankAccount: bankAccount)
+                                }
                             }
-                            
                         }
                         .padding(.bottom, 20)
                     }
                 }
             }
             .background(Color.background)
+            
             RoundedRectangle(cornerRadius: 20)
                 .foregroundStyle(.brightGold)
                 .frame(height: 175)
         }
         .ignoresSafeArea()
-        .navigationTitle(!self.isShowingScreenNameUser ? "Olá, \(self.user.first?.name ?? "...")!" : "Bem-vindo!")
+        .navigationTitle(
+            !self.isShowingScreenNameUser
+                ? "\(LocalizedStringKey.homeWelcome.label) \(self.user.first?.name ?? "...")!"
+                : LocalizedStringKey.homeGreeting.label
+        )
         .navigationBarTitleDisplayMode(.large)
-        .toolbar{
+        .toolbar {
             ToolbarItem(placement: .confirmationAction) {
                 Button(action: { self.toggleHiddenValues() }) {
                     if self.hiddenValues {
-                        Label("Mostrar", systemImage: "eye.slash")
+                        Label(LocalizedStringKey.homeShow.label, systemImage: "eye.slash")
                     } else {
-                        Label("Esconder", systemImage: "eye")
+                        Label(LocalizedStringKey.homeHide.label, systemImage: "eye")
                     }
                 }
             }
@@ -106,14 +124,19 @@ struct HomeView: View {
                 }
             }
         }
-        .onAppear { self.isShowingScreenNameUser = self.user.isEmpty ? true : false }
+        .onAppear { self.isShowingScreenNameUser = self.user.isEmpty }
         .toolbarBackground(.hidden)
-        .sheet(isPresented: self.$isShowingScreenNameUser, content: {
+        .sheet(isPresented: self.$isShowingScreenNameUser) {
             UserForm(name: self.$personName, formState: .create, action: self.appendUser)
-        })
-        .sheet(isPresented: self.$isShowingScreenNameBankAccount, content: {
-            FinancialInstitueForm(bankName: self.$bankAccountName, originalName: self.bankAccountName, formState: .create, action: self.appendBankAccount)
-        })
+        }
+        .sheet(isPresented: self.$isShowingScreenNameBankAccount) {
+            FinancialInstitueForm(
+                bankName: self.$bankAccountName,
+                originalName: self.bankAccountName,
+                formState: .create,
+                action: self.appendBankAccount
+            )
+        }
     }
 }
 

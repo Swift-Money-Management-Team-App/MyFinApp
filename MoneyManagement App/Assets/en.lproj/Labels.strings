@@ -48,7 +48,6 @@ securityTitle = "Security";
 changesTitle = "Changes";
 consentTitle = "Your Consent";
 contactUsTitle = "Contact Us";
-privacyPolicyScreenTitle = "Política de Privacidade";
 
 // About Us
 aboutUsScreenTitle = "Desenvolvedores";
@@ -58,7 +57,6 @@ teamMemberRole = "Função";
 // Terms
 termsTitle = "Terms & Conditions";
 termsChangesTitle = "Changes to These Terms and Conditions";
-termsScreenTitle = "Termos de Uso";
 
 // Contact
 contactUsTitle = "Contact Us";

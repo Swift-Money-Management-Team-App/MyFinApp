@@ -66,17 +66,6 @@ struct PrivacyPolicy: View {
         .ignoresSafeArea()
         .navigationTitle(LocalizedStringKey.privacyPolicyScreenTitle.label)
         .navigationBarTitleDisplayMode(.large)
-        .navigationBarBackButtonHidden(true)
-        .toolbar {
-            ToolbarItem(placement: .cancellationAction) {
-                Button(action: { Navigation.navigation.screens.removeLast() }) {
-                    HStack {
-                        Image(systemName: "chevron.backward")
-                        Text(LocalizedStringKey.settingsButtonBack.button)
-                    }
-                }
-            }
-        }
     }
 }
 

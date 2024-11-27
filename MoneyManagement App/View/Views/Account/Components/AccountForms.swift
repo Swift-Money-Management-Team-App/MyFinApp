@@ -12,7 +12,7 @@ struct AccountForms: View {
     @State var name: String = ""
     @State var total: Double = 0
     @State var isCreditCard: Bool = false
-    @State var closeDay: Int? = 1
+    @State var closeDay: Int = 1
     
     // Booleans para visualização
     @State var isShowDatePicker: Bool = false
@@ -31,45 +31,36 @@ struct AccountForms: View {
     
     var body: some View {
         NavigationStack {
-            
-            List {// NOME DA CONTA
+            List {
                 Section {
-                    Text("Nome")
-                        .fontWeight(.semibold)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.horizontal)
-                    ZStack (alignment: .center) {
-                        Rectangle()
-                            .foregroundStyle(Color("backgroundColorRow"))
-                            .frame(height: 50)
-                        TextField(text: $name, label: {
-                            Text(self.name)
-                        })
-                        .foregroundStyle(formState == .read ? .gray : .black)
-                        .disabled(formState == .read ? true : false)
-                        .frame(maxWidth: .infinity)
-                        .padding(.horizontal, 80)
-                        
                         HStack {
-                            Text("Nome")
-                                .padding(.leading)
-                            Spacer()
+                            Text(LocalizedStringKey.userFormNameField.label)
+                            
+                            TextField(text: $name) {
+                                Text(name.isEmpty ? LocalizedStringKey.userFormNamePlaceholder.label : name)
+                            }
+                            
                             if (!self.name.isEmpty && self.formState != .read) {
                                 Button(action: {
-                                    self.name.clearAllVariables
+                                    print("aa")
+                                    self.name = self.name.clearAllVariables
                                 }) {
                                     Image(systemName: "xmark.circle.fill")
                                         .foregroundStyle(.gray)
                                 }
-                                .padding(.trailing)
+                                .buttonStyle(.plain)
                                 .transition(.opacity)
-                            }
                         }
                     }
                 }
                 Section {
+                    
+                    // MARK: TOGGLE PARA CRIAR UMA CONTA DE CARTÃO DE CREDITO
                     Toggle("Criar como cartão de crédito", isOn: self.$isCreditCard)
+                        .disabled(self.formState == .read)
+                    
                     if isCreditCard {
+                        // MARK: SELECIONAR O DIA DO VENCIMENTO DO CARTÃO
                         Button(action: { self.isShowDatePicker = true }) {
                             HStack {
                                 Text("Dia do fechamento da fatura")
@@ -79,13 +70,15 @@ struct AccountForms: View {
                                     RoundedRectangle(cornerRadius: 6)
                                         .frame(width: 45, height: 34, alignment: .center)
                                         .foregroundStyle(Color.background)
-                                    Text("\(self.$closeDay)")
+                                    Text("\(self.closeDay)")
                                         .foregroundStyle(Color.blue)
                                 }
                             }
                         }
+                        .disabled(self.formState == .read)
                     }
                     if formState == .read {
+                        // MARK: EXCLUIR A CONTA
                         Button("Apagar Conta", role: .destructive) {
                             self.isShowDeleteAlert = true
                         }
@@ -93,6 +86,7 @@ struct AccountForms: View {
                 }
             }
         }
+        .animation(.none, value: 1)
         .listStyle(.grouped)
         .toolbar {
             ToolbarItem(placement: .principal) {
@@ -161,5 +155,5 @@ enum AccountFormState {
 }
 
 #Preview {
-    AccountForms(formState: .read)
+    AccountForms(formState: .create)
 }

@@ -5,55 +5,78 @@ struct BankAccountView: View {
     
     // SwiftData
     @Environment(\.modelContext) var modelContext
-    @Query var creditCards: [Account] = []
-    @Query var accounts: [Account] = []
-    // Entrada de Dados
+    @Query(filter: #Predicate<Account> { account in
+        account.isCreditCard == true
+    }, sort: \Account.name) var creditCards: [Account] = []
+    @Query(filter: #Predicate<Account> { account in
+        account.isCreditCard == false
+    }, sort: \Account.name) var accounts: [Account] = []
+    
+    // Input Data
     @State var bankAccountName: String = ""
-    // Dados para visualização
+    @State var accountName: String = ""
+    @State var closeDay: Int = 0
+    
+    // Visualization Data
     let bankAccount: BankAccount
-    // Booleans para visualização
+    @State var isCreditCard: Bool = false
+    
+    // View States
     @State var isShowingBankEdit: Bool = false
+    @State var presentAddAccountView: Bool = false
     
     var body: some View {
-        ZStack (alignment: .top) {
+        ZStack(alignment: .top) {
             ScrollView {
-                VStack (alignment: .leading) {
+                VStack(alignment: .leading) {
                     Spacer(minLength: 175)
-                    Text("Saldo Total")
+                    
+                    Text(LocalizedStringKey.totalBalance.label)
                         .foregroundStyle(.darkPink)
                         .fontWeight(.semibold)
                         .padding([.top, .leading])
+                    
                     List {
-                        ConditionCell(cellName: "Contas", valueAllAccounts: .constant(300.50), hiddenValues: .constant(false))
+                        ConditionCell(
+                            cellName: LocalizedStringKey.accounts.label,
+                            valueAllAccounts: .constant(300.50),
+                            hiddenValues: .constant(false)
+                        )
                     }
                     .frame(height: 64)
                     .scrollDisabled(true)
                     .listStyle(.inset)
                     
-                    Text("O que deseja fazer?")
+                    Text(LocalizedStringKey.whatToDo.label)
                         .foregroundStyle(.darkPink)
                         .fontWeight(.semibold)
                         .padding([.top, .leading])
+                    
                     LazyVGrid(columns: [GridItem(), GridItem(), GridItem()], spacing: 20) {
-                        OperationCard(type: .addMovement, text: "Adicionar movimentação")
-                        OperationCard(type: .generalHistory, text: "Histórico da conta bancária")
+                        OperationCard(type: .addMovement, text: LocalizedStringKey.addTransaction.label)
+                        OperationCard(type: .generalHistory, text: LocalizedStringKey.bankAccountHistory.label)
                     }
                     .padding(.horizontal)
+                    
                     HStack {
-                        Text("Cartão de Crédito")
+                        Text(LocalizedStringKey.creditCard.label)
                             .foregroundStyle(.darkPink)
                             .fontWeight(.semibold)
                             .padding([.top, .leading])
                         Spacer()
-                        // TODO: Adioncar cartão de crédito
-                        Button(action: {  }) {
+                        Button(action: {
+                            cleanInputs()
+                            isCreditCard = true
+                            presentAddAccountView = true
+                        }) {
                             Image(systemName: "plus")
                         }
                         .padding([.top, .trailing])
                     }
-                    if(creditCards.isEmpty){
-                        HStack (alignment: .center) {
-                            Text("Não possui cartões de créditos")
+                    
+                    if creditCards.isEmpty {
+                        HStack(alignment: .center) {
+                            Text(LocalizedStringKey.noCreditCards.label)
                                 .font(.title3)
                                 .bold()
                                 .padding(10)
@@ -62,13 +85,14 @@ struct BankAccountView: View {
                         .frame(maxWidth: .infinity, minHeight: 130)
                     } else {
                         LazyVGrid(columns: [GridItem(), GridItem(), GridItem()], spacing: 20) {
-                            ForEach(accounts) { account in
+                            ForEach(creditCards) { account in
                                 BankAccountViewAccount(account: account)
                             }
                         }
                     }
+                    
                     HStack {
-                        Text("Contas")
+                        Text(LocalizedStringKey.accounts.label)
                             .foregroundStyle(.darkPink)
                             .fontWeight(.semibold)
                             .padding([.top, .leading])
@@ -79,9 +103,10 @@ struct BankAccountView: View {
                         }
                         .padding([.top, .trailing])
                     }
-                    if(accounts.isEmpty){
-                        HStack (alignment: .center) {
-                            Text("Não possui contas")
+                    
+                    if accounts.isEmpty {
+                        HStack(alignment: .center) {
+                            Text(LocalizedStringKey.noAccounts.label)
                                 .font(.title3)
                                 .bold()
                                 .padding(10)
@@ -99,10 +124,11 @@ struct BankAccountView: View {
                 .padding(.bottom, 20)
             }
             .background(Color.background)
+            
             RoundedRectangle(cornerRadius: 20)
                 .foregroundStyle(.brightGold)
-                .overlay (alignment: .bottomLeading){
-                    Text("\(bankAccount.name)")
+                .overlay(alignment: .bottomLeading) {
+                    Text(bankAccount.name)
                         .font(.largeTitle)
                         .bold()
                         .padding()
@@ -113,12 +139,12 @@ struct BankAccountView: View {
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
                 Button(action: { Navigation.navigation.screens.removeLast() }) {
-                    Text("Voltar")
+                    Text(LocalizedStringKey.back.button)
                 }
             }
             ToolbarItem {
                 Button(action: { isShowingBankEdit.toggle() }) {
-                    Label("Mostrar", systemImage: "pencil")
+                    Label(LocalizedStringKey.edit.button, systemImage: "pencil")
                 }
             }
         }
@@ -126,15 +152,34 @@ struct BankAccountView: View {
         .toolbarBackground(.hidden)
         .onAppear { self.bankAccountName = self.bankAccount.name }
         .sheet(isPresented: $isShowingBankEdit) {
-            FinancialInstitueForm(bankName: self.$bankAccountName, originalName: self.bankAccountName, formState: .read, action: self.setNameBankAccount, deleteAction: {
-                self.deleteBankAccount()
-                Navigation.navigation.screens.removeLast()
-            })
+            FinancialInstitueForm(
+                bankName: self.$bankAccountName,
+                originalName: self.bankAccountName,
+                formState: .read,
+                action: self.setNameBankAccount,
+                deleteAction: {
+                    self.deleteBankAccount()
+                    Navigation.navigation.screens.removeLast()
+                }
+            )
+        }
+        .sheet(isPresented: $presentAddAccountView) {
+            NavigationStack {
+                AddAccountView(
+                    accountName: $accountName,
+                    isCreditCard: $isCreditCard,
+                    invoiceClosing: $closeDay,
+                    bankAccount: self.bankAccount,
+                    modelContext: self.modelContext
+                ) {
+                    appendAccount()
+                }
+            }
+            .presentationDetents([.medium])
         }
     }
-    
 }
 
 #Preview {
-    BankAccountView(bankAccount: BankAccount(idUser: UUID(), name: "Safade"))
+    BankAccountView(bankAccount: BankAccount(idUser: UUID(), name: "Filipe"))
 }

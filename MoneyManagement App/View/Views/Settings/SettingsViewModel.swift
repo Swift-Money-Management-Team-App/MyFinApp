@@ -25,6 +25,4 @@ extension SettingsView {
             print("Deu ruim 2")
         }
     }
-    
-    
 }

@@ -28,6 +28,12 @@ struct MoneyManagement_AppApp: App {
                                 BankAccountView(bankAccount: bankAccount)
                             case .movement(account: let account, bankAccount: let bankAccount):
                                 AddMovementView(account: account, bankAccount: bankAccount)
+                            case .privacyPolicy:
+                                PrivacyPolicy()
+                            case .terms:
+                                TermsView()
+                            case .aboutUs:
+                                AboutUs()
                             }
                         }
                 }
@@ -78,6 +84,8 @@ struct MoneyManagement_AppApp: App {
                                         Text("Movimento")
                                     case .payment(payment: let payment):
                                         Text("Pagamento")
+                                    case .privacyPolicy:
+                                        PrivacyPolicy()
                                     }
                                 }
                         }

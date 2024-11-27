@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct Profile: View {
+struct AboutUs: View {
     
     private var aboutUsVM = AboutUsViewModel()
     
@@ -8,27 +8,40 @@ struct Profile: View {
         
         @Environment(\.openURL) var openURL
         
-        NavigationView {
-            VStack {
-                VStack(spacing: 0) {
-                    RoundedRectangle(cornerRadius: 20)
-                        .foregroundStyle(.brightGold)
-                        .frame(maxHeight: 175)
-                    List {
-                        ForEach(aboutUsVM.getMembers()) { member in
-                            createUserTeam(name: member.name, role: member.role, linkedinUrl:  member.linkedinUrl)
-                        }
+        VStack {
+            VStack(spacing: 0) {
+                RoundedRectangle(cornerRadius: 20)
+                    .foregroundStyle(.brightGold)
+                    .frame(maxHeight: 175)
+                List {
+                    ForEach(aboutUsVM.getMembers()) { member in
+                        createUserTeam(
+                            name: member.name,
+                            role: member.role,
+                            linkedinUrl: member.linkedinUrl
+                        )
                     }
                 }
             }
-            .ignoresSafeArea()
         }
-        .navigationTitle(LocalizedStringKey(stringLiteral: "Desenvolvedores"))
+        .ignoresSafeArea()
+        .navigationTitle(LocalizedStringKey.aboutUsScreenTitle.label)
         .navigationBarTitleDisplayMode(.large)
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .cancellationAction) {
+                Button(action: { Navigation.navigation.screens.removeLast() }) {
+                    HStack {
+                        Image(systemName: "chevron.backward")
+                        Text(LocalizedStringKey.settingsButtonBack.button)
+                    }
+                }
+            }
+        }
     }
 }
 
-extension Profile {
+extension AboutUs {
     
     @ViewBuilder
     func createUserTeam(name: String, role: String, linkedinUrl: String) -> some View {
@@ -41,7 +54,7 @@ extension Profile {
                 Image(systemName: "person")
                     .imageScale(.large)
                     .foregroundStyle(.accent)
-                VStack (alignment: .leading) {
+                VStack(alignment: .leading) {
                     Text(name)
                     Text(role)
                         .fontWeight(.thin)
@@ -53,9 +66,8 @@ extension Profile {
             }
         }
     }
-    
 }
 
 #Preview {
-    Profile()
+    AboutUs()
 }

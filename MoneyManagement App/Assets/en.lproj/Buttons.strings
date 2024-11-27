@@ -1,0 +1,40 @@
+/* Onboarding */
+onboardingButtonStart = "Começar";
+
+// Settings
+changeName = "Alterar o nome";
+settingsButtonBackInit = "Início";
+
+//Shared
+linkedinURLButton = "Abrir LinkedIn";
+settingsButtonBack = "Configurações";
+
+// Add Acount
+addAccountBackButton = "Voltar";
+addAccountSaveButton = "Salvar";
+addAccountDiscardButton = "Descartar Alterações";
+addAccountContinueEditingButton = "Continuar Editando";
+
+// User Form
+userFormAddButton = "Adicionar";
+userFormEditButton = "Editar";
+userFormSaveButton = "Salvar";
+userFormBackButton = "Voltar";
+userFormCancelButton = "Cancelar";
+userFormDiscardButton = "Descartar Alterações";
+userFormContinueEditingButton = "Continuar Editando";
+
+// Financial Institue
+financialInstituteAddButton = "Adicionar";
+financialInstituteEditButton = "Editar";
+financialInstituteSaveButton = "Salvar";
+financialInstituteDeleteButton = "Apagar Instituição Financeira";
+financialInstituteCancelButton = "Cancelar";
+financialInstituteBackButton = "Voltar";
+financialInstituteDiscardChangesButton = "Descartar Alterações";
+financialInstituteContinueEditingButton = "Continuar Editando";
+
+// Bank Account
+back = "Voltar";
+edit = "Editar";
+

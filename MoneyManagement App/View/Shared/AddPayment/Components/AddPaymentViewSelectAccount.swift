@@ -10,7 +10,7 @@ struct AddPaymentViewSelectAccount: View {
     // Entrada de Dados
     @Binding var selectedAccount: Account?
     // Dados para visualização
-    
+    @Binding var bankAccount: BankAccount?
     // Booleans para visualização
     
     
@@ -18,7 +18,7 @@ struct AddPaymentViewSelectAccount: View {
         NavigationStack {
             List {
                 Section {
-                    ForEach(accounts) { account in
+                    ForEach(bankAccount != nil ? accounts.filter({ $0.idBankAccount == self.bankAccount?.id }) : accounts) { account in
                         Button(action: { self.selectedAccount = account }) {
                             HStack{
                                 Text(account.name)
@@ -53,5 +53,5 @@ struct AddPaymentViewSelectAccount: View {
 }
 
 #Preview {
-    AddPaymentViewSelectAccount(selectedAccount: .constant(.init(idUser: UUID(), name: "Safade")))
+    AddPaymentViewSelectAccount(selectedAccount: .constant(.init(idUser: UUID(), name: "Safade")), bankAccount: .constant(nil))
 }

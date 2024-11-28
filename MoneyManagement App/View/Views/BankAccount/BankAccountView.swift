@@ -85,7 +85,7 @@ struct BankAccountView: View {
                         .frame(maxWidth: .infinity, minHeight: 130)
                     } else {
                         LazyVGrid(columns: [GridItem(), GridItem(), GridItem()], spacing: 20) {
-                            ForEach(creditCards) { account in
+                            ForEach(creditCards.filter {account in account.idBankAccount == bankAccount.id }) { account in
                                 BankAccountViewAccount(account: account)
                             }
                         }
@@ -115,7 +115,7 @@ struct BankAccountView: View {
                         .frame(maxWidth: .infinity, minHeight: 130)
                     } else {
                         LazyVGrid(columns: [GridItem(), GridItem(), GridItem()], spacing: 20) {
-                            ForEach(accounts) { account in
+                            ForEach(accounts.filter {account in account.idBankAccount == bankAccount.id }) { account in
                                 BankAccountViewAccount(account: account)
                             }
                         }

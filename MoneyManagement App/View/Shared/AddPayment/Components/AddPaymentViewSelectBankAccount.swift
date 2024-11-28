@@ -7,6 +7,7 @@ struct AddPaymentViewSelectBankAccount: View {
     
     // SwiftData
     @Query var bankAccounts: [BankAccount]
+    @Query var accounts: [Account]
     // Entrada de Dados
     @Binding var selectedBankAccount: BankAccount?
     // Dados para visualização
@@ -17,7 +18,7 @@ struct AddPaymentViewSelectBankAccount: View {
     var body: some View {
         NavigationView {
             List {
-                ForEach(bankAccounts) { bankAccount in
+                ForEach(bankAccounts.filter { bankAccount in !(self.accounts.filter({ account in account.idBankAccount == bankAccount.id }).isEmpty) }) { bankAccount in
                     Button(action: { self.selectedBankAccount = bankAccount }) {
                         HStack{
                             Text(bankAccount.name)

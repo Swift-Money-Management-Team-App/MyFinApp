@@ -16,7 +16,11 @@ struct AddPaymentView: View {
     @State var method: Method? = nil
     @State var value: Double = 0.00
     @State var time: Date = .now
-    @State var payment: Payment? = nil
+    @State var competence : Date = .now
+    @Binding var payment: Payment?
+    @Binding var movement: Movement?
+    @Binding var payments: [Payment]
+    let actionUpdate: () -> Void
     // Dados para visualização
     let type: AddPaymentType
     let currencyFormatter: NumberFormatter = {
@@ -35,6 +39,7 @@ struct AddPaymentView: View {
     @State var selectAccount: Bool = false
     @State var selectBankAccount: Bool = false
     @State var selectMethod: Bool = false
+    @State var showCustomDatePicker: Bool = false
     
     var body: some View {
         NavigationStack {
@@ -64,6 +69,9 @@ struct AddPaymentView: View {
                             }
                             
                         }
+                    }
+                    .onChange(of: self.bankAccount) { _, _ in
+                        self.account = accounts.filter({ account in account.idBankAccount == self.bankAccount?.id }).first!
                     }
                     Button(action: { self.selectAccount.toggle() }) {
                         HStack {
@@ -110,6 +118,23 @@ struct AddPaymentView: View {
                         DatePicker("Horário", selection: $time, displayedComponents: [.hourAndMinute])
                     }, icon: {})
                     .labelStyle(.titleOnly)
+                    if self.account?.isCreditCard ?? false {
+                        Button(action: { self.showCustomDatePicker.toggle() }) {
+                            HStack {
+                                Text("Competência")
+                                    .foregroundStyle(.black)
+                                Spacer()
+                                Text(self.competence, format: .dateTime.month(.twoDigits).year())
+                                    .foregroundStyle(.black)
+                                    .padding(6)
+                                    .background {
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .foregroundStyle(.gray)
+                                            .opacity(0.2)
+                                    }
+                            }
+                        }
+                    }
                 }
             }
             .listStyle(.grouped)
@@ -129,24 +154,41 @@ struct AddPaymentView: View {
                     }
                 }
                 ToolbarItem {
-                    Button(action: {}) {
+                    Button(action: {
+                        if self.type == .create {
+                            self.addPayment()
+                        } else {
+                            self.changePayment()
+                            self.actionUpdate()
+                        }
+                        dismiss()
+                    }) {
                         Text(self.type == .create ? "Adicionar": "Editar")
                     }
                 }
             }
         }
         .onAppear {
-            if let account = self.account {
-                self.account = account
+            if let payment = self.payment {
+                self.bankAccount = self.bankAccounts.filter({ $0.id == self.accounts.filter({ $0.id == payment.idAccount }).first!.idBankAccount }).first!
+                self.account =  self.accounts.filter({ $0.id == payment.idAccount }).first!
+                self.method = self.methods.filter({ $0.id == payment.idMethod }).first
+                self.value = payment.value
+                self.time = payment.time
+                self.competence = payment.competence ?? Date.now
             } else {
-                self.account = accounts.first!
+                if let account = self.account {
+                    self.account = account
+                } else {
+                    self.account = accounts.first!
+                }
+                if let bankAccount = self.bankAccount {
+                    self.bankAccount = bankAccount
+                } else {
+                    self.bankAccount = bankAccounts.first!
+                }
+                self.method = methods.first!
             }
-            if let bankAccount = self.bankAccount {
-                self.bankAccount = bankAccount
-            } else {
-                self.bankAccount = bankAccounts.first!
-            }
-            self.method = methods.first!
         }
         .alert("Tem certeza de que deseja descartar estas alterações?", isPresented: $alertCancel) {
             Button("Continuar Editando", role: .cancel) {}
@@ -154,7 +196,7 @@ struct AddPaymentView: View {
             Button("Descartar Alterações", role: .destructive) {}
         }
         .fullScreenCover(isPresented: $selectAccount, content: {
-            AddPaymentViewSelectAccount(selectedAccount: self.$account)
+            AddPaymentViewSelectAccount(selectedAccount: self.$account, bankAccount: $bankAccount)
         })
         .fullScreenCover(isPresented: $selectBankAccount, content: {
             AddPaymentViewSelectBankAccount(selectedBankAccount: self.$bankAccount)
@@ -162,10 +204,13 @@ struct AddPaymentView: View {
         .fullScreenCover(isPresented: $selectMethod, content: {
             AddPaymentViewSelectMethod(selectedMethod: self.$method)
         })
+        .sheet(isPresented: $showCustomDatePicker) {
+            YearMonthPickerView(selectedDate: $competence)
+        }
     }
     
 }
 
 #Preview {
-    AddPaymentView(type: .create)
+    AddPaymentView(payment: .constant(nil), movement: .constant(.init(idUser: UUID(), total: 00.00, date: .now)), payments: .constant(.init()), actionUpdate: {}, type: .create)
 }

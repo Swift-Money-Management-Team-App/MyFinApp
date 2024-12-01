@@ -23,7 +23,6 @@ struct BankAccountView: View {
     
     // View States
     @State var isShowingBankEdit: Bool = false
-    @State var presentAddAccountView: Bool = false
     
     var body: some View {
         ZStack(alignment: .top) {
@@ -67,7 +66,6 @@ struct BankAccountView: View {
                         Button(action: {
                             cleanInputs()
                             isCreditCard = true
-                            presentAddAccountView = true
                         }) {
                             Image(systemName: "plus")
                         }
@@ -162,20 +160,6 @@ struct BankAccountView: View {
                     Navigation.navigation.screens.removeLast()
                 }
             )
-        }
-        .sheet(isPresented: $presentAddAccountView) {
-            NavigationStack {
-                AddAccountView(
-                    accountName: $accountName,
-                    isCreditCard: $isCreditCard,
-                    invoiceClosing: $closeDay,
-                    bankAccount: self.bankAccount,
-                    modelContext: self.modelContext
-                ) {
-                    appendAccount()
-                }
-            }
-            .presentationDetents([.medium])
         }
     }
 }

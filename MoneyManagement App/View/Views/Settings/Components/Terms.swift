@@ -13,10 +13,6 @@ struct TermsView: View {
             
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
-                    Text(LocalizedStringKey.termsTitle.label)
-                        .font(.title)
-                        .bold()
-                    
                     Text(LocalizedStringKey.termsDescription.message)
                     
                     Text(LocalizedStringKey.termsChangesTitle.label)
@@ -33,19 +29,8 @@ struct TermsView: View {
             }
         }
         .ignoresSafeArea()
-        .navigationTitle(LocalizedStringKey.termsScreenTitle.label)
+        .navigationTitle(LocalizedStringKey.termsTitle.label)
         .navigationBarTitleDisplayMode(.large)
-        .navigationBarBackButtonHidden(true)
-        .toolbar {
-            ToolbarItem(placement: .cancellationAction) {
-                Button(action: { Navigation.navigation.screens.removeLast() }) {
-                    HStack {
-                        Image(systemName: "chevron.backward")
-                        Text(LocalizedStringKey.settingsButtonBack.button)
-                    }
-                }
-            }
-        }
     }
 }
 

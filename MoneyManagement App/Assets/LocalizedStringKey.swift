@@ -61,7 +61,6 @@ enum LocalizedStringKey: String {
     case changesDescription
     case consentDescription
     case contactUsTitle
-    case privacyPolicyScreenTitle
     
     // About Us
     case aboutUsScreenTitle
@@ -74,7 +73,6 @@ enum LocalizedStringKey: String {
     case termsDescription
     case termsChangesTitle
     case termsChangesDescription
-    case termsScreenTitle
     
     // Others
     case othersWelcomeScreenToggle

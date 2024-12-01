@@ -9,10 +9,6 @@ struct PrivacyPolicy: View {
 
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
-                    Text(LocalizedStringKey.privacyPolicyTitle.label)
-                        .font(.title)
-                        .bold()
-                    
                     Text(LocalizedStringKey.privacyPolicyDescription.message)
                     
                     Text(LocalizedStringKey.informationCollectionTitle.label)
@@ -64,19 +60,8 @@ struct PrivacyPolicy: View {
             }
         }
         .ignoresSafeArea()
-        .navigationTitle(LocalizedStringKey.privacyPolicyScreenTitle.label)
+        .navigationTitle(LocalizedStringKey.privacyPolicyTitle.label)
         .navigationBarTitleDisplayMode(.large)
-        .navigationBarBackButtonHidden(true)
-        .toolbar {
-            ToolbarItem(placement: .cancellationAction) {
-                Button(action: { Navigation.navigation.screens.removeLast() }) {
-                    HStack {
-                        Image(systemName: "chevron.backward")
-                        Text(LocalizedStringKey.settingsButtonBack.button)
-                    }
-                }
-            }
-        }
     }
 }
 

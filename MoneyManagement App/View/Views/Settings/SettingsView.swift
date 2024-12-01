@@ -116,17 +116,6 @@ struct SettingsView: View {
         .ignoresSafeArea()
         .navigationTitle(LocalizedStringKey.settingsScreenTitle.label)
         .navigationBarTitleDisplayMode(.large)
-        .navigationBarBackButtonHidden(true)
-        .toolbar {
-            ToolbarItem(placement: .cancellationAction) {
-                Button(action: { Navigation.navigation.screens.removeLast() }) {
-                    HStack {
-                        Image(systemName: "chevron.backward")
-                        Text(LocalizedStringKey.settingsButtonBackInit.button)
-                    }
-                }
-            }
-        }
         .sheet(isPresented: $isShowingScreenNameUser) {
             UserForm(name: $personName, formState: .read, action: setNameUser)
                 .onAppear { self.personName = self.user.first?.name ?? "" }

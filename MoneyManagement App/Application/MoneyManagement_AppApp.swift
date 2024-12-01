@@ -23,7 +23,9 @@ struct MoneyManagement_AppApp: App {
                             case .settings:
                                 SettingsView()
                             case .account(account: let account):
-                                Text("Conta")
+                                Text("Account View")
+                                // TODO: DESCOMENTAR O CODIGO PARA ADICIONAR A VIEW
+                                //  AccountView()
                             case .bankAccount(bankAccount: let bankAccount):
                                 BankAccountView(bankAccount: bankAccount)
                             case .movement(account: let account, bankAccount: let bankAccount):
@@ -77,15 +79,19 @@ struct MoneyManagement_AppApp: App {
                                     case .settings:
                                         SettingsView()
                                     case .account(account: let account):
-                                        Text("Conta")
+                                        Text("Account View")
+                                        // TODO: DESCOMENTAR O CODIGO PARA ADICIONAR A VIEW
+                                        //  AccountView()
                                     case .bankAccount(bankAccount: let bankAccount):
                                         BankAccountView(bankAccount: bankAccount)
                                     case .movement(account: let account, bankAccount: let bankAccount):
-                                        Text("Movimento")
-                                    case .payment(payment: let payment):
-                                        Text("Pagamento")
+                                        AddMovementView(account: account, bankAccount: bankAccount)
                                     case .privacyPolicy:
                                         PrivacyPolicy()
+                                    case .terms:
+                                        TermsView()
+                                    case .aboutUs:
+                                        AboutUs()
                                     }
                                 }
                         }

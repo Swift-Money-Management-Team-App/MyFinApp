@@ -1,27 +1,28 @@
 import SwiftUI
 import SwiftData
 
-struct AccountForms: View {
+struct AccountForm: View {
     
-    @Environment(\.dismiss) var dismiss
+    @Environment(\.dismiss) private var dismiss
     
     // Swift Data
-    @Query var Account: [Account] = []
+    @Query var accounts: [Account] = []
+    
+    var account: Account?
     
     // Entrada de Dados
-    @State var name: String = "CONTA CORRENTE"
-    @State var total: Double = 0
-    @State var isCreditCard: Bool = true
-    @State var closeDay: Int = 1
+    @State private var name: String = ""
+    @State private var isCreditCard: Bool = false
+    @State private var closeDay: Int = 1
     
     // Booleans para visualização
-    @State var isShowDatePicker: Bool = false
+    @State private var isShowDatePicker: Bool = false
     
     //Alertas
-    @State var isShowDeleteAlert: Bool = false
-    @State var isShowDiscardNewAccountAlert: Bool = false
-    @State var isShowDiscardChangesAlert: Bool = false
-    @State var isShowCantDeleteAlert: Bool = false
+    @State private var isShowDeleteAlert: Bool = false
+    @State private var isShowDiscardNewAccountAlert: Bool = false
+    @State private var isShowDiscardChangesAlert: Bool = false
+    @State private var isShowCantDeleteAlert: Bool = false
     
     // Dados Originais
     private let originalName = ""
@@ -29,7 +30,6 @@ struct AccountForms: View {
     
     @State var formState: AccountFormState
     
-// TODO: MELHORAR A TELA DO PICKER
 // TODO: APLICAR ESSA TELA NA VIEW
 // TODO: FAZER A ACCOUNT VIEW
     
@@ -48,7 +48,6 @@ struct AccountForms: View {
 
                             if (!self.name.isEmpty && self.formState != .read) {
                                 Button(action: {
-                                    print("aa")
                                     self.name = self.name.clearAllVariables
                                 }) {
                                     Image(systemName: "xmark.circle.fill")
@@ -122,12 +121,7 @@ struct AccountForms: View {
             }
         }
         .sheet(isPresented: self.$isShowDatePicker, content: {
-            Picker("", selection: self.$closeDay) {
-                ForEach(1...31, id: \.self) { number in
-                    Text("\(number)").tag(number)
-                }
-            }
-            .pickerStyle(.wheel)
+            NumberPicker(closeDay: self.$closeDay)
         })
         .alert("Tem certeza de que deseja apagar esta conta?", isPresented: self.$isShowDeleteAlert, actions: {
             Button("Apagar Conta", role: .destructive) {
@@ -168,7 +162,13 @@ struct AccountForms: View {
 }
 
 // MARK: - VIEW MODEL
-extension AccountForms {
+extension AccountForm {
+    
+    func editAccount() {
+        self.account?.name = self.name
+        self.account?.isCreditCard = self.isCreditCard
+        self.account?.closeDay = self.closeDay
+    }
     
     
 }
@@ -181,5 +181,5 @@ enum AccountFormState {
 }
 
 #Preview {
-    AccountForms(formState: .read)
+    AccountForm(formState: .create)
 }

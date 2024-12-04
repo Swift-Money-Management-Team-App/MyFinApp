@@ -28,6 +28,12 @@ extension AddMovementView {
     }
     
     func appendMovement() {
+        if earned {
+            self.movement?.earningCategory = self.earningCategory!.id
+        } else {
+            self.movement?.expenseCategory = self.expenseCategory!.id
+        }
+        self.movement!.transactionDescription = self.description
         modelContext.insert(self.movement!)
     }
     

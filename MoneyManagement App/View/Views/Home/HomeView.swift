@@ -56,8 +56,18 @@ struct HomeView: View {
                                 text: LocalizedStringKey.homeAddMovement.label
                             )
                         }
-                        OperationCard(type: .movementCategory, text: LocalizedStringKey.homeTransactionCategory.label)
-                        OperationCard(type: .paymentMethod, text: LocalizedStringKey.homePaymentMethod.label)
+                        NavigationLink(value: NavigationScreen.categories) {
+                            OperationCard(
+                                type: .movementCategory,
+                                text: LocalizedStringKey.homeTransactionCategory.label
+                            )
+                        }
+                        NavigationLink(value: NavigationScreen.methods) {
+                            OperationCard(
+                                type: .paymentMethod,
+                                text: LocalizedStringKey.homePaymentMethod.label
+                            )
+                        }
                         OperationCard(type: .generalHistory, text: LocalizedStringKey.homeGeneralHistory.label)
                     }
                     .padding(.horizontal)
@@ -104,8 +114,8 @@ struct HomeView: View {
         .ignoresSafeArea()
         .navigationTitle(
             !self.isShowingScreenNameUser
-                ? "\(LocalizedStringKey.homeWelcome.label) \(self.user.first?.name ?? "...")!"
-                : LocalizedStringKey.homeGreeting.label
+            ? "\(LocalizedStringKey.homeWelcome.label) \(self.user.first?.name ?? "...")!"
+            : LocalizedStringKey.homeGreeting.label
         )
         .navigationBarTitleDisplayMode(.large)
         .toolbar {
@@ -141,6 +151,8 @@ struct HomeView: View {
 }
 
 #Preview {
-    HomeView()
-        .modelContainer(for: [User.self, BankAccount.self, EarningCategory.self, ExpenseCategory.self, Method.self])
+    NavigationStack {
+        HomeView()
+    }
+    .modelContainer(for: [User.self, BankAccount.self, EarningCategory.self, ExpenseCategory.self, Method.self])
 }

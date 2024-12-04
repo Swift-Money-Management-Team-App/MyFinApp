@@ -36,7 +36,12 @@ struct MoneyManagement_AppApp: App {
                                 TermsView()
                             case .aboutUs:
                                 AboutUs()
+                            case .methods:
+                                MethodCategoryView()
+                            case .categories:
+                                CategoriesView()
                             }
+                            
                         }
                 }
                 .modelContainer(for: [Account.self, BankAccount.self, EarningCategory.self, ExpenseCategory.self, Movement.self, Method.self, Payment.self, User.self])

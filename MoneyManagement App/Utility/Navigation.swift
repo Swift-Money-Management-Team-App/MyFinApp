@@ -19,4 +19,6 @@ enum NavigationScreen: Hashable {
     case privacyPolicy
     case terms
     case aboutUs
+    case methods
+    case categories
 }

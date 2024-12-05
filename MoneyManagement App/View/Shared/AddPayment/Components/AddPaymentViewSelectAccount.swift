@@ -20,7 +20,7 @@ struct AddPaymentViewSelectAccount: View {
                 Section {
                     ForEach(bankAccount != nil ? accounts.filter({ $0.idBankAccount == self.bankAccount?.id }) : accounts) { account in
                         Button(action: { self.selectedAccount = account }) {
-                            HStack{
+                            HStack {
                                 Text(account.name)
                                     .foregroundStyle(.black)
                                 Spacer()
@@ -38,18 +38,16 @@ struct AddPaymentViewSelectAccount: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Voltar") { dismiss() }
+                    Button(LocalizedStringKey.back.button) { dismiss() }
                 }
                 ToolbarItem(placement: .principal) {
                     VStack {
-                        Text("Contas")
-                        
+                        Text(LocalizedStringKey.accounts.label)
                     }
                 }
             }
         }
     }
-    
 }
 
 #Preview {

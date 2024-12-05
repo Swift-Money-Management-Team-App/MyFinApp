@@ -119,3 +119,89 @@ sharedLinkDisclosure = "Detalhes";
 
 // ToggleRow
 toggleExampleLabel = "Hello World";
+
+// Add Moviment
+addMovementEarning = "Ganho";
+addMovementDate = "Data";
+addMovementCategory = "Categoria";
+addMovementChoose = "Escolha";
+addMovementDescription = "Descrição";
+addMovementDescriptionPlaceholder = "Tutorial do IRSS";
+addMovementPayments = "Pagamentos";
+addMovementTotal = "Total";
+addMovementTitle = "Nova movimentação";
+
+// Add Movement View Expense
+expenseCategory = "Categoria de Gasto";
+
+// Add Movement View Earning
+earningCategory = "Categoria de Ganho";
+
+// Add Payment View Select Bank Account
+financialInstituteTitle = "Instituição Financeira";
+
+// Add Payment View Select Method
+paymentMethod = "Método de Pagamento";
+
+// Add Payment
+financialInstitute = "Instituição Financeira";
+account = "Conta";
+value = "Valor";
+time = "Horário";
+competence = "Competência";
+addPayment = "Adicionar pagamento";
+editPayment = "Editar pagamento";
+
+// Category Form Create
+earning = "Ganho";
+expense = "Gasto";
+name = "Nome";
+namePlaceholder = "Nome";
+newCategory = "Nova Categoria de Ganho";
+
+//Earning Category Form
+name = "Nome";
+namePlaceholder = "Nome";
+editEarningCategory = "Editar categoria de ganho";
+viewEarningCategory = "Visualizar categoria de ganho";
+existingMovements = "Esse Método de Gasto %@ já possui movimentos associados.";
+deleteTransactions = "Por favor exclua todas as transações.";
+deleteExpenseMethodConfirmation = "Excluir Método de Pagamento %@?";
+
+// Expense Category Form
+name = "Nome";
+namePlaceholder = "Digite o nome";
+editExpenseCategory = "Editar categoria de gasto";
+viewExpenseCategory = "Visualizar categoria de gasto";
+
+// Method Form Create
+newPaymentMethod = "Novo método de pagamento";
+
+// Method Form
+deletePaymentMethod = "Apagar Método de Pagamento";
+editPaymentMethod = "Editar método de pagamento";
+viewPaymentMethod = "Visualizar método de pagamento";
+
+// Account Form
+userFormNameField = "Nome";
+userFormNamePlaceholder = "Digite o nome";
+addAccountToggle = "Criar como cartão de crédito";
+addAccountInvoiceField = "Dia do fechamento da fatura";
+addAccountScreenTitle = "Adicionar Conta";
+editAccountScreenTitle = "Editar Conta";
+
+// Last Month Balance Row
+lastMonthBalance = "Saldo do Mês Anterior";
+currencySymbol = "R$";
+
+// All History View
+allHistoryTitle = "Histórico Geral";
+filters = "Filtros";
+
+// Bank History
+bankHistoryTitle = "Histórico";
+filters = "Filtros";
+totalBalance = "Saldo Total";
+salaryAdvance = "Adiantamento de Salário";
+
+

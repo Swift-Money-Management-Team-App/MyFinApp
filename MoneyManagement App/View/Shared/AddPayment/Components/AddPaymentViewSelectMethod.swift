@@ -36,12 +36,11 @@ struct AddPaymentViewSelectMethod: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Voltar") { dismiss() }
+                    Button(LocalizedStringKey.back.button) { dismiss() }
                 }
                 ToolbarItem(placement: .principal) {
                     VStack {
-                        Text("Método de Pagamento")
-                        
+                        Text(LocalizedStringKey.paymentMethod.label)
                     }
                 }
             }

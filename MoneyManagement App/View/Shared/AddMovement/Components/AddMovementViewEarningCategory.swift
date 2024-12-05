@@ -20,7 +20,7 @@ struct AddMovementViewEarningCategory: View {
                 Section {
                     ForEach(earningCategories) { earningCategory in
                         Button(action: { self.selectedEarningCategory = earningCategory }) {
-                            HStack{
+                            HStack {
                                 Text(earningCategory.name)
                                     .foregroundStyle(.black)
                                 Spacer()
@@ -38,11 +38,11 @@ struct AddMovementViewEarningCategory: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Voltar") { dismiss() }
+                    Button(LocalizedStringKey.back.button) { dismiss() }
                 }
                 ToolbarItem(placement: .principal) {
                     VStack {
-                        Text("Categoria de Ganho")
+                        Text(LocalizedStringKey.earningCategory.label)
                     }
                 }
             }

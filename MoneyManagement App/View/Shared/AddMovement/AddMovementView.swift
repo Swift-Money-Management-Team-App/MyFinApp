@@ -37,14 +37,14 @@ struct AddMovementView: View {
         List {
             Section {
                 Toggle(isOn: $earned) {
-                    Text("Ganho")
+                    Text(LocalizedStringKey.addMovementEarning.label)
                 }
                 .onChange(of: earned) { _, _ in
                     Storage.share.earned.toggle()
                     self.moved = true
                 }
                 Label(title: {
-                    DatePicker("Data", selection: $date, displayedComponents: [.date])
+                    DatePicker(LocalizedStringKey.addMovementDate.label, selection: $date, displayedComponents: [.date])
                 }, icon: {})
                 .onChange(of: date) { _, _ in
                     self.moved = true
@@ -58,15 +58,15 @@ struct AddMovementView: View {
                     }
                 }) {
                     HStack {
-                        Text("Categoria")
+                        Text(LocalizedStringKey.addMovementCategory.label)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .foregroundStyle(.black)
                         HStack {
                             if earned {
-                                Text(earningCategory?.name ?? "Escolha")
+                                Text(earningCategory?.name ?? LocalizedStringKey.addMovementChoose.label)
                                     .foregroundStyle(.gray)
                             } else {
-                                Text(expenseCategory?.name ?? "Escolha")
+                                Text(expenseCategory?.name ?? LocalizedStringKey.addMovementChoose.label)
                                     .foregroundStyle(.gray)
                             }
                             Image(systemName: "chevron.forward")
@@ -76,9 +76,9 @@ struct AddMovementView: View {
                 }
                 
                 VStack {
-                    Text("Descrição")
+                    Text(LocalizedStringKey.addMovementDescription.label)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    TextField("Tutorial do IRSS", text: $description, axis: .vertical)
+                    TextField(LocalizedStringKey.addMovementDescriptionPlaceholder.label, text: $description, axis: .vertical)
                         .lineLimit(3, reservesSpace: true)
                         .textFieldStyle(.roundedBorder)
                 }
@@ -86,7 +86,7 @@ struct AddMovementView: View {
                     self.moved = true
                 }
             }
-            Section (content: {
+            Section(content: {
                 ForEach(self.payments) { payment in
                     Button(action: {
                         self.selectedPaymentEdit = payment
@@ -107,7 +107,7 @@ struct AddMovementView: View {
                 }
             }, header: {
                 HStack {
-                    Text("Pagamentos")
+                    Text(LocalizedStringKey.addMovementPayments.label)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .foregroundStyle(.darkPink)
                         .fontWeight(.semibold)
@@ -122,7 +122,7 @@ struct AddMovementView: View {
             Section {
                 Label {
                     HStack {
-                        Text("Total")
+                        Text(LocalizedStringKey.addMovementTotal.label)
                             .frame(maxWidth: .infinity, alignment: .leading)
                         Text("R$ \(NumberFormatter().formatToCurrency.string(for: self.total)!)")
                     }
@@ -147,13 +147,12 @@ struct AddMovementView: View {
                         Navigation.navigation.screens.removeLast()
                     }
                 }) {
-                    Text("Cancelar")
+                    Text(LocalizedStringKey.cancel.button)
                 }
             }
             ToolbarItem(placement: .principal) {
                 VStack {
-                    Text("Nova movimentação")
-                    
+                    Text(LocalizedStringKey.addMovementTitle.label)
                 }
             }
             ToolbarItem {
@@ -162,20 +161,20 @@ struct AddMovementView: View {
                     self.appendMovement()
                     Navigation.navigation.screens.removeLast()
                 }) {
-                    Text("Adicionar")
+                    Text(LocalizedStringKey.add.button)
                 }
                 .disabled(self.payments.isEmpty)
             }
         }
-        .alert("Tem certeza de que deseja descartar estas alterações?", isPresented: $alertCancel) {
-            Button("Continuar Editando", role: .cancel) { self.alertCancel.toggle() }
+        .alert(LocalizedStringKey.addMovementDiscardAlertTitle.message, isPresented: $alertCancel) {
+            Button(LocalizedStringKey.continueEditing.button, role: .cancel) { self.alertCancel.toggle() }
                 .tint(.blue)
-            Button("Descartar Alterações", role: .destructive) { Navigation.navigation.screens.removeLast() }
+            Button(LocalizedStringKey.discardChanges.button, role: .destructive) { Navigation.navigation.screens.removeLast() }
         }
         .fullScreenCover(isPresented: $screenFullEarningCategory) { AddMovementViewEarningCategory(selectedEarningCategory: $earningCategory) }
         .fullScreenCover(isPresented: $screenFullExpenseCategory) { AddMovementViewExpenseCategory(selectedExpenseCategory: $expenseCategory) }
-        .fullScreenCover(isPresented: $screenFullCreatePayment) { AddPaymentView(payment: .constant(nil),movement: $movement, payments: $payments, actionUpdate: {}, type: .create) }
-        .fullScreenCover(isPresented: $screenFullEditPayment) { AddPaymentView(payment: $selectedPaymentEdit,movement: $movement, payments: $payments, actionUpdate: { self.changeTotal() }, type: .update) }
+        .fullScreenCover(isPresented: $screenFullCreatePayment) { AddPaymentView(payment: .constant(nil), movement: $movement, payments: $payments, actionUpdate: {}, type: .create) }
+        .fullScreenCover(isPresented: $screenFullEditPayment) { AddPaymentView(payment: $selectedPaymentEdit, movement: $movement, payments: $payments, actionUpdate: { self.changeTotal() }, type: .update) }
     }
 }
 

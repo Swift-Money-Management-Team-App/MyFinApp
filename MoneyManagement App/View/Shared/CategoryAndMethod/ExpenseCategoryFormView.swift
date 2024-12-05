@@ -26,13 +26,12 @@ struct ExpenseCategoryFormView: View {
             VStack(spacing: 0) {
                 List {
                     HStack {
-                        Text("Nome")
+                        Text(LocalizedStringKey.name.label)
                             .font(.subheadline)
                             .foregroundColor(.gray)
                             .padding(.horizontal)
                         
-                        
-                        TextField("Nome", text: $name)
+                        TextField(LocalizedStringKey.namePlaceholder.label, text: $name)
                             .padding(.horizontal)
                             .disabled(!self.isEditing)
                             .onChange(of: self.name) {
@@ -59,7 +58,7 @@ struct ExpenseCategoryFormView: View {
                     
                     if !isEditing {
                         Button(action: {
-                            let isEmpty = self.movements.filter({ movement in movement.expenseCategory == self.expenseCategory!.id }).isEmpty
+                            let isEmpty = self.movements.filter { $0.expenseCategory == self.expenseCategory!.id }.isEmpty
                             if isEmpty {
                                 self.showDeleteAlert = true
                             } else {
@@ -67,7 +66,7 @@ struct ExpenseCategoryFormView: View {
                                 self.showDeleteAlert2 = true
                             }
                         }) {
-                            Text("Apagar Método de Pagamento")
+                            Text(LocalizedStringKey.deleteExpenseMethod.button)
                                 .foregroundColor(.red)
                                 .font(.system(size: 16, weight: .semibold))
                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -79,11 +78,11 @@ struct ExpenseCategoryFormView: View {
             .padding(.vertical)
             .frame(maxHeight: .infinity, alignment: .top)
             .background(Color(UIColor.systemGray6).ignoresSafeArea())
-            .navigationTitle(isEditing ? "Editar categoria de gasto" : "Visualizar categoria de gasto")
+            .navigationTitle(isEditing ? LocalizedStringKey.editExpenseCategory.label : LocalizedStringKey.viewExpenseCategory.label)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Voltar") {
+                    Button(LocalizedStringKey.back.button) {
                         if isEditing {
                             checkForChangesBeforeDismiss()
                         } else {
@@ -92,7 +91,7 @@ struct ExpenseCategoryFormView: View {
                     }
                 }
                 ToolbarItem {
-                    Button(isEditing ? "Salvar" : "Editar") {
+                    Button(isEditing ? LocalizedStringKey.save.button : LocalizedStringKey.edit.button) {
                         if isEditing {
                             saveChanges()
                         } else {
@@ -109,23 +108,29 @@ struct ExpenseCategoryFormView: View {
             self.initialName = self.expenseCategory!.name
             self.initialEmoji = self.expenseCategory!.emoji
         }
-        .alert("Esse Método de Gasto \(expenseCategory!.name) já possui movimentos associados.", isPresented: $showDeleteAlert2) {
-            Button("Ok", role: .cancel) {}
+        .alert(
+            String(format: LocalizedStringKey.existingMovements.message, expenseCategory!.name),
+            isPresented: $showDeleteAlert2
+        ) {
+            Button(LocalizedStringKey.ok.button, role: .cancel) {}
         } message: {
-            Text("Por favor exclua todas as transações.")
+            Text(LocalizedStringKey.deleteTransactions.message)
         }
-        .alert("Excluir Método de Pagamento \(expenseCategory!.name)?", isPresented: $showDeleteAlert) {
-            Button("Excluir", role: .destructive) {
+        .alert(
+            String(format: LocalizedStringKey.deleteExpenseMethodConfirmation.message, expenseCategory!.name),
+            isPresented: $showDeleteAlert
+        ) {
+            Button(LocalizedStringKey.delete.button, role: .destructive) {
                 deleteMethod()
             }
-            Button("Cancelar", role: .cancel) {}
+            Button(LocalizedStringKey.cancel.button, role: .cancel) {}
         }
-        .alert("Descartar alterações?", isPresented: $showCancelEditAlert) {
-            Button("Sim", role: .destructive) {
+        .alert(LocalizedStringKey.discardChanges.message, isPresented: $showCancelEditAlert) {
+            Button(LocalizedStringKey.yes.button, role: .destructive) {
                 isEditing = false
                 resetChanges()
             }
-            Button("Não", role: .cancel) {}
+            Button(LocalizedStringKey.no.button, role: .cancel) {}
         }
     }
     

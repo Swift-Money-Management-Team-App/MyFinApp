@@ -58,28 +58,27 @@ struct AddPaymentView: View {
                     .labelStyle(.iconOnly)
                     Button(action: { self.selectBankAccount.toggle() }) {
                         HStack {
-                            Text("Institução Financeira")
+                            Text(LocalizedStringKey.financialInstitute.label)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .foregroundStyle(.black)
                             HStack {
-                                Text(self.bankAccount?.name ?? "Bradesco")
+                                Text(self.bankAccount?.name ?? LocalizedStringKey.bradesco.label)
                                     .foregroundStyle(.gray)
                                 Image(systemName: "chevron.forward")
                                     .foregroundStyle(.gray)
                             }
-                            
                         }
                     }
                     .onChange(of: self.bankAccount) { _, _ in
-                        self.account = accounts.filter({ account in account.idBankAccount == self.bankAccount?.id }).first!
+                        self.account = accounts.filter { $0.idBankAccount == self.bankAccount?.id }.first!
                     }
                     Button(action: { self.selectAccount.toggle() }) {
                         HStack {
-                            Text("Conta")
+                            Text(LocalizedStringKey.account.label)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .foregroundStyle(.black)
                             HStack {
-                                Text(self.account?.name ?? ".Hak")
+                                Text(self.account?.name ?? LocalizedStringKey.defaultAccount.label)
                                     .foregroundStyle(.gray)
                                 Image(systemName: "chevron.forward")
                                     .foregroundStyle(.gray)
@@ -90,11 +89,11 @@ struct AddPaymentView: View {
                 Section {
                     Button(action: { self.selectMethod.toggle() }) {
                         HStack {
-                            Text("Método de pagamento")
+                            Text(LocalizedStringKey.paymentMethod.label)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .foregroundStyle(.black)
                             HStack {
-                                Text(self.method?.name ?? "Hackeando")
+                                Text(self.method?.name ?? LocalizedStringKey.defaultMethod.label)
                                     .foregroundStyle(.gray)
                                 Image(systemName: "chevron.forward")
                                     .foregroundStyle(.gray)
@@ -103,7 +102,7 @@ struct AddPaymentView: View {
                     }
                     Label(title: {
                         HStack {
-                            Text("Valor")
+                            Text(LocalizedStringKey.value.label)
                             Spacer()
                             HStack {
                                 Text("R$")
@@ -111,17 +110,16 @@ struct AddPaymentView: View {
                             }
                             .fixedSize()
                         }
-                        
                     }, icon: {})
                     .labelStyle(.titleOnly)
                     Label(title: {
-                        DatePicker("Horário", selection: $time, displayedComponents: [.hourAndMinute])
+                        DatePicker(LocalizedStringKey.time.label, selection: $time, displayedComponents: [.hourAndMinute])
                     }, icon: {})
                     .labelStyle(.titleOnly)
                     if self.account?.isCreditCard ?? false {
                         Button(action: { self.showCustomDatePicker.toggle() }) {
                             HStack {
-                                Text("Competência")
+                                Text(LocalizedStringKey.competence.label)
                                     .foregroundStyle(.black)
                                 Spacer()
                                 Text(self.competence, format: .dateTime.month(.twoDigits).year())
@@ -144,13 +142,12 @@ struct AddPaymentView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(action: { dismiss() }) {
-                        Text("Cancelar")
+                        Text(LocalizedStringKey.cancel.button)
                     }
                 }
                 ToolbarItem(placement: .principal) {
                     VStack {
-                        Text(self.type == .create ? "Adicionar pagamento": "Editar pagamento")
-                        
+                        Text(self.type == .create ? LocalizedStringKey.addPayment.label : LocalizedStringKey.editPayment.label)
                     }
                 }
                 ToolbarItem {
@@ -163,7 +160,7 @@ struct AddPaymentView: View {
                         }
                         dismiss()
                     }) {
-                        Text(self.type == .create ? "Adicionar": "Editar")
+                        Text(self.type == .create ? LocalizedStringKey.add.button : LocalizedStringKey.edit.button)
                     }
                 }
             }
@@ -190,10 +187,10 @@ struct AddPaymentView: View {
                 self.method = methods.first!
             }
         }
-        .alert("Tem certeza de que deseja descartar estas alterações?", isPresented: $alertCancel) {
-            Button("Continuar Editando", role: .cancel) {}
+        .alert(LocalizedStringKey.discardChanges.message, isPresented: $alertCancel) {
+            Button(LocalizedStringKey.continueEditing.button, role: .cancel) {}
                 .tint(.blue)
-            Button("Descartar Alterações", role: .destructive) {}
+            Button(LocalizedStringKey.discard.button, role: .destructive) {}
         }
         .fullScreenCover(isPresented: $selectAccount, content: {
             AddPaymentViewSelectAccount(selectedAccount: self.$account, bankAccount: $bankAccount)
@@ -208,7 +205,6 @@ struct AddPaymentView: View {
             YearMonthPickerView(selectedDate: $competence)
         }
     }
-    
 }
 
 #Preview {

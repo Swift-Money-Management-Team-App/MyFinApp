@@ -30,45 +30,39 @@ struct AccountForm: View {
     
     @State var formState: AccountFormState
     
-// TODO: APLICAR ESSA TELA NA VIEW
-// TODO: FAZER A ACCOUNT VIEW
-    
     var body: some View {
         NavigationStack {
             List {
                 Section {
-                        HStack {
-                            Text(LocalizedStringKey.userFormNameField.label)
-                            
-                            TextField(text: $name) {
-                                Text(name.isEmpty ? LocalizedStringKey.userFormNamePlaceholder.label : name)
-                            }
-                            .disabled(self.formState == .read)
-                            .foregroundStyle(formState == .read ? .gray : .black)
+                    HStack {
+                        Text(LocalizedStringKey.userFormNameField.label)
+                        
+                        TextField(text: $name) {
+                            Text(name.isEmpty ? LocalizedStringKey.userFormNamePlaceholder.label : name)
+                        }
+                        .disabled(self.formState == .read)
+                        .foregroundStyle(formState == .read ? .gray : .black)
 
-                            if (!self.name.isEmpty && self.formState != .read) {
-                                Button(action: {
-                                    self.name = self.name.clearAllVariables
-                                }) {
-                                    Image(systemName: "xmark.circle.fill")
-                                        .foregroundStyle(.gray)
-                                }
-                                .buttonStyle(.plain)
-                                .transition(.opacity)
+                        if (!self.name.isEmpty && self.formState != .read) {
+                            Button(action: {
+                                self.name = self.name.clearAllVariables
+                            }) {
+                                Image(systemName: "xmark.circle.fill")
+                                    .foregroundStyle(.gray)
+                            }
+                            .buttonStyle(.plain)
+                            .transition(.opacity)
                         }
                     }
                 }
                 Section {
-                    
-                    // MARK: TOGGLE PARA CRIAR UMA CONTA DE CARTÃO DE CREDITO
-                    Toggle("Criar como cartão de crédito", isOn: self.$isCreditCard)
+                    Toggle(LocalizedStringKey.addAccountToggle.label, isOn: self.$isCreditCard)
                         .disabled(self.formState == .read)
                     
                     if isCreditCard {
-                        // MARK: SELECIONAR O DIA DO VENCIMENTO DO CARTÃO
                         Button(action: { self.isShowDatePicker = true }) {
                             HStack {
-                                Text("Dia do fechamento da fatura")
+                                Text(LocalizedStringKey.addAccountInvoiceField.label)
                                     .foregroundStyle(Color.black)
                                 Spacer()
                                 ZStack {
@@ -82,9 +76,9 @@ struct AccountForm: View {
                         }
                         .disabled(self.formState == .read)
                     }
+                    
                     if formState == .read {
-                        // MARK: EXCLUIR A CONTA
-                        Button("Apagar Conta", role: .destructive) {
+                        Button(LocalizedStringKey.deleteAccountButton.label, role: .destructive) {
                             self.isShowDeleteAlert = true
                         }
                     }
@@ -95,8 +89,8 @@ struct AccountForm: View {
         .listStyle(.grouped)
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
-                Button(self.formState == .create ? "Cancelar" : "Voltar") {
-                    if(self.formState == .create) {
+                Button(self.formState == .create ? LocalizedStringKey.cancel.button : LocalizedStringKey.back.button) {
+                    if self.formState == .create {
                         self.dismiss()
                     } else {
                         self.formState = .read
@@ -106,16 +100,28 @@ struct AccountForm: View {
             
             ToolbarItem(placement: .principal) {
                 VStack {
-                    Text(self.formState == .create ? "Adicionar Conta" : self.formState == .read ? "AAAAA" /*TODO: COLOCAR O NOME DA CONTA*/ : "Editar Conta" )
+                    Text(
+                        self.formState == .create
+                        ? LocalizedStringKey.addAccountScreenTitle.label
+                        : self.formState == .read
+                        ? account?.name ?? ""
+                        : LocalizedStringKey.editAccountScreenTitle.label
+                    )
                 }
             }
             
             ToolbarItem(placement: .confirmationAction) {
-                Button(self.formState == .create ? "Adicionar" : self.formState == .read ? "Editar" : "Salvar") {
-                    if(self.formState == .create) {
-                        // TODO: ADICIONAR LÓGICA DE ADICIONAR
+                Button(
+                    self.formState == .create
+                    ? LocalizedStringKey.addAccountSaveButton.button
+                    : self.formState == .read
+                    ? LocalizedStringKey.edit.button
+                    : LocalizedStringKey.save.button
+                ) {
+                    if self.formState == .create {
+                        // TODO: ADD LOGIC FOR ADDING ACCOUNT
                     } else {
-                        // TODO: ADICIONAR LÓGICA DE EDITAR
+                        // TODO: ADD LOGIC FOR EDITING ACCOUNT
                     }
                 }
             }
@@ -123,40 +129,28 @@ struct AccountForm: View {
         .sheet(isPresented: self.$isShowDatePicker, content: {
             NumberPicker(closeDay: self.$closeDay)
         })
-        .alert("Tem certeza de que deseja apagar esta conta?", isPresented: self.$isShowDeleteAlert, actions: {
-            Button("Apagar Conta", role: .destructive) {
-                // TODO: COLOCAR MÉTODO PARA APAGAR A CONTA
+        .alert(LocalizedStringKey.deleteAccountAlertTitle.message, isPresented: self.$isShowDeleteAlert, actions: {
+            Button(LocalizedStringKey.deleteAccountButton.button, role: .destructive) {
+                // TODO: ADD METHOD TO DELETE ACCOUNT
             }
-            Button("Cancelar", role: .cancel) {}
-                .foregroundStyle(.blue)
-                .background(.blue)
-                .tint(.blue)
+            Button(LocalizedStringKey.cancel.button, role: .cancel) {}
         })
-        .alert("Tem certeza de que deseja descartar esta nova conta?", isPresented: self.$isShowDiscardNewAccountAlert, actions: {
-            Button("Descartar Alterações", role: .destructive) {
-                // TODO: COLOCAR MÉTODO PARA DESCARTAR OS DADOS DA NOVA CONTA
+        .alert(LocalizedStringKey.discardNewAccountAlertTitle.message, isPresented: self.$isShowDiscardNewAccountAlert, actions: {
+            Button(LocalizedStringKey.discardChangesButton.button, role: .destructive) {
+                // TODO: ADD METHOD TO DISCARD NEW ACCOUNT DATA
             }
-            Button("Continuar Editando", role: .cancel) {}
-                .foregroundStyle(.blue)
-                .background(.blue)
-                .tint(.blue)
+            Button(LocalizedStringKey.continueEditingButton.button, role: .cancel) {}
         })
-        .alert("Tem certeza de que deseja descartar estas alterações?", isPresented: self.$isShowDiscardNewAccountAlert, actions: {
-            Button("Descartar Alterações", role: .destructive) {
-                // TODO: COLOCAR MÉTODO PARA DESCARTAR OS DADOS AO EDITAR UMA CONTA
+        .alert(LocalizedStringKey.discardChangesAlertTitle.message, isPresented: self.$isShowDiscardChangesAlert, actions: {
+            Button(LocalizedStringKey.discardChangesButton.button, role: .destructive) {
+                // TODO: ADD METHOD TO DISCARD EDITED ACCOUNT DATA
             }
-            Button("Continuar Editando", role: .cancel) {}
-                .foregroundStyle(.blue)
-                .background(.blue)
-                .tint(.blue)
+            Button(LocalizedStringKey.continueEditingButton.button, role: .cancel) {}
         })
-        .alert("Este Conta já possui transações registradas!", isPresented: self.$isShowCantDeleteAlert) {
-            Button("Voltar", role: .cancel) {}
-                .foregroundStyle(.blue)
-                .background(.blue)
-                .tint(.blue)
-        } message:  {
-            Text("Por favor exclua todas as transações ou exclua a Instituição Financeira.")
+        .alert(LocalizedStringKey.cannotDeleteAccountAlertTitle.message, isPresented: self.$isShowCantDeleteAlert) {
+            Button(LocalizedStringKey.back.button, role: .cancel) {}
+        } message: {
+            Text(LocalizedStringKey.cannotDeleteAccountAlertMessage.message)
         }
     }
 }

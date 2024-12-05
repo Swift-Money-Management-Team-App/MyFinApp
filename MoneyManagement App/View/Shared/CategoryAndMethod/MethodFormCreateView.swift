@@ -21,10 +21,10 @@ struct MethodFormCreateView: View {
             VStack(spacing: 0) {
                 List {
                     HStack {
-                        Text("Nome")
+                        Text(LocalizedStringKey.name.label)
                             .font(.subheadline)
                             .foregroundColor(.gray)
-                        TextField("Nome", text: $name)
+                        TextField(LocalizedStringKey.namePlaceholder.label, text: $name)
                             .onChange(of: self.name) {
                                 self.edited = true
                             }
@@ -39,11 +39,11 @@ struct MethodFormCreateView: View {
             .padding(.vertical)
             .frame(maxHeight: .infinity, alignment: .top)
             .background(Color(UIColor.systemGray6).ignoresSafeArea())
-            .navigationTitle("Novo método de pagamento")
+            .navigationTitle(LocalizedStringKey.newPaymentMethod.label)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Voltar") {
+                    Button(LocalizedStringKey.back.button) {
                         if self.edited {
                             self.showCancelEditAlert.toggle()
                         } else {
@@ -52,7 +52,7 @@ struct MethodFormCreateView: View {
                     }
                 }
                 ToolbarItem {
-                    Button("Adicionar") {
+                    Button(LocalizedStringKey.add.button) {
                         self.appendMethod()
                         dismiss()
                     }
@@ -61,11 +61,11 @@ struct MethodFormCreateView: View {
             }
         }
         .onAppear {}
-        .alert("Tem certeza de que deseja descartar este novo método de pagamento?", isPresented: $showCancelEditAlert) {
-            Button("Descartar Alterações", role: .destructive) {
+        .alert(LocalizedStringKey.discardNewMethod.message, isPresented: $showCancelEditAlert) {
+            Button(LocalizedStringKey.discardChanges.button, role: .destructive) {
                 dismiss()
             }
-            Button("Continuar Editando", role: .cancel) {}
+            Button(LocalizedStringKey.continueEditing.button, role: .cancel) {}
         }
     }
     

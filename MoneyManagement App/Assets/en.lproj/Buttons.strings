@@ -8,6 +8,15 @@ settingsButtonBackInit = "Início";
 //Shared
 linkedinURLButton = "Abrir LinkedIn";
 settingsButtonBack = "Configurações";
+back = "Voltar";
+save = "Salvar";
+edit = "Editar";
+deleteExpenseMethod = "Apagar Método de Pagamento";
+delete = "Excluir";
+cancel = "Cancelar";
+ok = "Ok";
+yes = "Sim";
+no = "Não";
 
 // Add Acount
 addAccountBackButton = "Voltar";
@@ -35,6 +44,29 @@ financialInstituteDiscardChangesButton = "Descartar Alterações";
 financialInstituteContinueEditingButton = "Continuar Editando";
 
 // Bank Account
-back = "Voltar";
 edit = "Editar";
+
+// Add Moviment
+cancel = "Cancelar";
+add = "Adicionar";
+continueEditing = "Continuar Editando";
+discardChanges = "Descartar Alterações";
+
+// Add Payment
+continueEditing = "Continuar Editando";
+discard = "Descartar Alterações";
+
+// Method Form Create
+continueEditing = "Continuar Editando";
+
+
+// Account Form
+deleteAccountButton = "Apagar Conta";
+discardChangesButton = "Descartar Alterações";
+continueEditingButton = "Continuar Editando";
+addAccountSaveButton = "Adicionar";
+
+// Earning Category Form
+deleteExpenseMethod = "Apagar Método de Pagamento";
+deleteEarningMethod = "Apagar Método de Pagamento";
 

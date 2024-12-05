@@ -27,13 +27,12 @@ struct EarningCategoryFormView: View {
             VStack(spacing: 0) {
                 List {
                     HStack {
-                        Text("Nome")
+                        Text(LocalizedStringKey.name.label)
                             .font(.subheadline)
                             .foregroundColor(.gray)
                             .padding(.horizontal)
                         
-                        
-                        TextField("Nome", text: $name)
+                        TextField(LocalizedStringKey.namePlaceholder.label, text: $name)
                             .padding(.horizontal)
                             .disabled(!self.isEditing)
                             .onChange(of: self.name) {
@@ -60,15 +59,14 @@ struct EarningCategoryFormView: View {
                     
                     if !isEditing {
                         Button(action: {
-                            let isEmpty =  self.movements.filter({ movement in movement.earningCategory == self.earningCategory!.id }).isEmpty
+                            let isEmpty = self.movements.filter { $0.earningCategory == self.earningCategory!.id }.isEmpty
                             if isEmpty {
                                 self.showDeleteAlert = true
                             } else {
-                                
                                 self.showDeleteAlert2 = true
                             }
                         }) {
-                            Text("Apagar Método de Pagamento")
+                            Text(LocalizedStringKey.deleteEarningMethod.button)
                                 .foregroundColor(.red)
                                 .font(.system(size: 16, weight: .semibold))
                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -80,11 +78,11 @@ struct EarningCategoryFormView: View {
             .padding(.vertical)
             .frame(maxHeight: .infinity, alignment: .top)
             .background(Color(UIColor.systemGray6).ignoresSafeArea())
-            .navigationTitle(isEditing ? "Editar categoria de ganho" : "Visualizar categoria de ganho")
+            .navigationTitle(isEditing ? LocalizedStringKey.editEarningCategory.label : LocalizedStringKey.viewEarningCategory.label)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Voltar") {
+                    Button(LocalizedStringKey.back.button) {
                         if isEditing {
                             checkForChangesBeforeDismiss()
                         } else {
@@ -93,7 +91,7 @@ struct EarningCategoryFormView: View {
                     }
                 }
                 ToolbarItem {
-                    Button(isEditing ? "Salvar" : "Editar") {
+                    Button(isEditing ? LocalizedStringKey.save.button : LocalizedStringKey.edit.button) {
                         if isEditing {
                             saveChanges()
                         } else {
@@ -110,23 +108,29 @@ struct EarningCategoryFormView: View {
             self.initialName = self.earningCategory!.name
             self.initialEmoji = self.earningCategory!.emoji
         }
-        .alert("Esse Método de Ganho \(earningCategory!.name) já possui movimentos associados.", isPresented: $showDeleteAlert2) {
-            Button("Ok", role: .cancel) {}
+        .alert(
+            String(format: LocalizedStringKey.existingMovements.message, earningCategory!.name),
+            isPresented: $showDeleteAlert2
+        ) {
+            Button(LocalizedStringKey.ok.button, role: .cancel) {}
         } message: {
-            Text("Por favor exclua todas as transações.")
+            Text(LocalizedStringKey.deleteTransactions.message)
         }
-        .alert("Excluir Método de Pagamento \(earningCategory!.name)?", isPresented: $showDeleteAlert) {
-            Button("Excluir", role: .destructive) {
+        .alert(
+            String(format: LocalizedStringKey.deleteEarningMethodConfirmation.message, earningCategory!.name),
+            isPresented: $showDeleteAlert
+        ) {
+            Button(LocalizedStringKey.delete.button, role: .destructive) {
                 deleteMethod()
             }
-            Button("Cancelar", role: .cancel) {}
+            Button(LocalizedStringKey.cancel.button, role: .cancel) {}
         }
-        .alert("Descartar alterações?", isPresented: $showCancelEditAlert) {
-            Button("Sim", role: .destructive) {
+        .alert(LocalizedStringKey.discardChanges.message, isPresented: $showCancelEditAlert) {
+            Button(LocalizedStringKey.yes.button, role: .destructive) {
                 isEditing = false
                 resetChanges()
             }
-            Button("Não", role: .cancel) {}
+            Button(LocalizedStringKey.no.button, role: .cancel) {}
         }
     }
     

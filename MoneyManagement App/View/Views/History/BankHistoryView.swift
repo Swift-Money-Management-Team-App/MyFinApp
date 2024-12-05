@@ -12,12 +12,11 @@ struct BankHistoryView: View {
         NavigationView {
             ZStack(alignment: .top) {
                 ScrollView {
-                    VStack (alignment: .leading) {
+                    VStack(alignment: .leading) {
                         RoundedRectangle(cornerRadius: 20)
                             .foregroundStyle(.brightGold)
                             .overlay(alignment: .bottomLeading) {
-                                // TODO: ADICIONAR O NOME DA CONTA
-                                Text("Histórico - \(self.accountName)")
+                                Text("\(LocalizedStringKey.bankHistoryTitle.label) - \(self.accountName)")
                                     .font(.largeTitle)
                                     .bold()
                                     .padding()
@@ -25,8 +24,7 @@ struct BankHistoryView: View {
                             .frame(height: 175)
                         
                         Picker("", selection: self.$segmentedPickerSelection) {
-                            ForEach(HistoryDateFilter.allCases, id: \.self) {
-                                option in
+                            ForEach(HistoryDateFilter.allCases, id: \.self) { option in
                                 Text(option.rawValue)
                             }
                         }
@@ -34,10 +32,9 @@ struct BankHistoryView: View {
                         .padding(.top, 44)
                         .padding([.leading, .trailing], 10)
                         
-                        Menu() {
+                        Menu {
                             Picker("", selection: self.$filterPickerSelection) {
-                                ForEach(OrderByFilter.allCases, id: \.self) {
-                                    option in
+                                ForEach(OrderByFilter.allCases, id: \.self) { option in
                                     Button(option.rawValue) {
                                         // TODO: ADICIONAR LÓGICA DOS FILTROS
                                     }
@@ -45,7 +42,7 @@ struct BankHistoryView: View {
                             }
                         } label: {
                             Button(action: {}) {
-                                Text("Filtros")
+                                Text(LocalizedStringKey.filters.label)
                                     .foregroundStyle(.white)
                             }
                             .buttonStyle(.bordered)
@@ -55,7 +52,7 @@ struct BankHistoryView: View {
                             .padding(.top, 20)
                         }
                         
-                        Text("Saldo Total")
+                        Text(LocalizedStringKey.totalBalance.label)
                             .foregroundStyle(.darkPink)
                             .fontWeight(.semibold)
                             .padding([.top, .leading])
@@ -67,11 +64,12 @@ struct BankHistoryView: View {
                         .scrollDisabled(true)
                         .listStyle(.inset)
                         
-                        Text("Saldo Total")
+                        Text(LocalizedStringKey.totalBalance.label)
                             .foregroundStyle(.darkPink)
                             .fontWeight(.semibold)
                             .padding([.top, .leading])
                             .padding(.top, 20)
+                        
                         List {
                             // TODO: COLOCAR O FOR EACH AQUI
                             
@@ -79,7 +77,13 @@ struct BankHistoryView: View {
                                 // TODO: COLOCAR O DESTINO DA VIEW PRA PODER ABRIR A INSTITUIÇÃO FINANCEIRA
                                 Text("a")
                             } label: {
-                                BankStatementRow(description: "Adiantamento de Salário", value: 50.50, icon: "dollarsign.square", day: "22", time: "09:41")
+                                BankStatementRow(
+                                    description: LocalizedStringKey.salaryAdvance.label,
+                                    value: 50.50,
+                                    icon: "dollarsign.square",
+                                    day: "22",
+                                    time: "09:41"
+                                )
                             }
                         }
                         .scrollDisabled(true)

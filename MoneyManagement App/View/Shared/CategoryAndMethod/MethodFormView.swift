@@ -27,13 +27,12 @@ struct MethodFormView: View {
             VStack(spacing: 0) {
                 List {
                     HStack {
-                        Text("Nome")
+                        Text(LocalizedStringKey.name.label)
                             .font(.subheadline)
                             .foregroundColor(.gray)
                             .padding(.horizontal)
                         
-                        
-                        TextField("Nome", text: $name)
+                        TextField(LocalizedStringKey.namePlaceholder.label, text: $name)
                             .padding(.horizontal)
                             .disabled(!self.isEditing)
                             .onChange(of: self.name) {
@@ -60,7 +59,7 @@ struct MethodFormView: View {
                     
                     if !isEditing {
                         Button(action: {
-                            let isEmpty =  self.payments.filter({ payment in payment.idMethod == self.method!.id }).isEmpty
+                            let isEmpty = self.payments.filter({ payment in payment.idMethod == self.method!.id }).isEmpty
                             if isEmpty {
                                 self.showDeleteAlert = true
                             } else {
@@ -68,7 +67,7 @@ struct MethodFormView: View {
                                 self.showDeleteAlert2 = true
                             }
                         }) {
-                            Text("Apagar Método de Pagamento")
+                            Text(LocalizedStringKey.deletePaymentMethod.label)
                                 .foregroundColor(.red)
                                 .font(.system(size: 16, weight: .semibold))
                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -80,11 +79,11 @@ struct MethodFormView: View {
             .padding(.vertical)
             .frame(maxHeight: .infinity, alignment: .top)
             .background(Color(UIColor.systemGray6).ignoresSafeArea())
-            .navigationTitle(isEditing ? "Editar método de pagamento" : "Visualizar método de pagamento")
+            .navigationTitle(isEditing ? LocalizedStringKey.editPaymentMethod.label : LocalizedStringKey.viewPaymentMethod.label)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Voltar") {
+                    Button(LocalizedStringKey.back.button) {
                         if isEditing {
                             checkForChangesBeforeDismiss()
                         } else {
@@ -93,7 +92,7 @@ struct MethodFormView: View {
                     }
                 }
                 ToolbarItem {
-                    Button(isEditing ? "Salvar" : "Editar") {
+                    Button(isEditing ? LocalizedStringKey.save.button : LocalizedStringKey.edit.button) {
                         if isEditing {
                             saveChanges()
                         } else {
@@ -110,23 +109,23 @@ struct MethodFormView: View {
             self.initialName = self.method!.name
             self.initialEmoji = self.method!.emoji
         }
-        .alert("Esse Método de Pagamento \(method!.name) já possui pagamentos associados.", isPresented: $showDeleteAlert2) {
-            Button("Ok", role: .cancel) {}
+        .alert(String(format: LocalizedStringKey.paymentMethodHasPayments.message, method!.name), isPresented: $showDeleteAlert2) {
+            Button(LocalizedStringKey.ok.button, role: .cancel) {}
         } message: {
-            Text("Por favor exclua todos os pagamentos.")
+            Text(LocalizedStringKey.deletePaymentsBeforeRemoving.message)
         }
-        .alert("Excluir Método de Pagamento \"\(method!.name)\"?", isPresented: $showDeleteAlert) {
-            Button("Excluir", role: .destructive) {
+        .alert(String(format: LocalizedStringKey.deletePaymentMethodConfirmation.message, method!.name), isPresented: $showDeleteAlert) {
+            Button(LocalizedStringKey.delete.button, role: .destructive) {
                 deleteMethod()
             }
-            Button("Cancelar", role: .cancel) {}
+            Button(LocalizedStringKey.cancel.button, role: .cancel) {}
         }
-        .alert("Descartar alterações?", isPresented: $showCancelEditAlert) {
-            Button("Sim", role: .destructive) {
+        .alert(LocalizedStringKey.discardChanges.message, isPresented: $showCancelEditAlert) {
+            Button(LocalizedStringKey.yes.button, role: .destructive) {
                 isEditing = false
                 resetChanges()
             }
-            Button("Não", role: .cancel) {}
+            Button(LocalizedStringKey.no.button, role: .cancel) {}
         }
     }
     

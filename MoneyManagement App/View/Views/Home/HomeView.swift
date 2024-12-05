@@ -122,9 +122,9 @@ struct HomeView: View {
             ToolbarItem(placement: .confirmationAction) {
                 Button(action: { self.toggleHiddenValues() }) {
                     if self.hiddenValues {
-                        Label(LocalizedStringKey.homeShow.label, systemImage: "eye.slash")
+                        Label(LocalizedStringKey.homeShow.label, systemImage: "eye")
                     } else {
-                        Label(LocalizedStringKey.homeHide.label, systemImage: "eye")
+                        Label(LocalizedStringKey.homeHide.label, systemImage: "eye.slash")
                     }
                 }
             }

@@ -10,6 +10,9 @@ struct Others: View {
             label: .othersWelcomeScreenToggle, 
             imageForegroundStyle: .accent
         )
+        .onChange(of: isShowOnboarding) {
+            Storage.share.firstLaunchApplication = true
+        }
     }
 }
 

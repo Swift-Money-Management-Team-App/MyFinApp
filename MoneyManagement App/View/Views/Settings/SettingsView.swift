@@ -9,7 +9,7 @@ struct SettingsView: View {
     @State var personName: String = ""
     @Environment(\.requestReview) var requestReview
     @State var isShowingScreenNameUser: Bool = false
-    @State var isShowOnboarding: Bool = false
+    @State var isShowOnboarding: Bool = Storage.share.firstLaunchApplication
     
     private let sharedLinkRow = SharedLinkRow()
     

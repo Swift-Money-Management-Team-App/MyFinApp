@@ -6,12 +6,12 @@ struct LastMonthBalanceRow: View {
     
     var body: some View {
         HStack {
-            Text("Saldo do Mês Anterior")
+            Text(LocalizedStringKey.lastMonthBalance.label)
                 .foregroundStyle(.black)
                 .font(.body)
 
             Spacer()
-            Text("R$ \(String(format: "%.2f", self.value))")
+            Text("\(LocalizedStringKey.currencySymbol.label)\(String(format: "%.2f", self.value))")
                 .foregroundStyle(.black)
                 .font(.body)
         }

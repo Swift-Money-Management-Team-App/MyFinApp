@@ -10,11 +10,11 @@ struct AllHistoryView: View {
         NavigationView {
             ZStack(alignment: .top) {
                 ScrollView {
-                    VStack (alignment: .leading) {
+                    VStack(alignment: .leading) {
                         RoundedRectangle(cornerRadius: 20)
                             .foregroundStyle(.brightGold)
                             .overlay(alignment: .bottomLeading) {
-                                Text("Histórico Geral")
+                                Text(LocalizedStringKey.allHistoryTitle.label)
                                     .font(.largeTitle)
                                     .bold()
                                     .padding()
@@ -31,7 +31,7 @@ struct AllHistoryView: View {
                         .padding(.top, 44)
                         .padding([.leading, .trailing], 10)
                         
-                        Menu() {
+                        Menu {
                             Picker("", selection: self.$filterPickerSelection) {
                                 ForEach(OrderByFilter.allCases, id: \.self) {
                                     option in
@@ -42,7 +42,7 @@ struct AllHistoryView: View {
                             }
                         } label: {
                             Button(action: {}) {
-                                Text("Filtros")
+                                Text(LocalizedStringKey.filters.label)
                                     .foregroundStyle(.white)
                             }
                             .buttonStyle(.bordered)
@@ -52,7 +52,7 @@ struct AllHistoryView: View {
                             .padding(.top, 20)
                         }
                         
-                        Text("Saldo Total")
+                        Text(LocalizedStringKey.totalBalance.label)
                             .foregroundStyle(.darkPink)
                             .fontWeight(.semibold)
                             .padding([.top, .leading])
@@ -64,7 +64,7 @@ struct AllHistoryView: View {
                         .scrollDisabled(true)
                         .listStyle(.inset)
                         
-                        Text("Saldo Total")
+                        Text(LocalizedStringKey.totalBalance.label)
                             .foregroundStyle(.darkPink)
                             .fontWeight(.semibold)
                             .padding([.top, .leading])
@@ -88,7 +88,6 @@ struct AllHistoryView: View {
                         .scrollDisabled(true)
                         .listStyle(.inset)
                         .frame(height: 300)
-                        
                     }
                 }
                 .background(Color.background)

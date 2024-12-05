@@ -191,6 +191,14 @@ editAccountScreenTitle = "Editar Conta";
 lastMonthBalance = "Saldo do Mês Anterior";
 currencySymbol = "R$";
 
+// All History View
+allHistoryTitle = "Histórico Geral";
+filters = "Filtros";
 
+// Bank History
+bankHistoryTitle = "Histórico";
+filters = "Filtros";
+totalBalance = "Saldo Total";
+salaryAdvance = "Adiantamento de Salário";
 
 

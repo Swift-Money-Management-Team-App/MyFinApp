@@ -21,3 +21,38 @@ addAccountDiscardAlertTitle = "Tem certeza de que deseja descartar estas altera�
 financialInstituteDiscardAlertTitle = "Tem certeza de que deseja descartar estas alterações?";
 financialInstituteDeleteAlertTitle = "Você tem certeza de que deseja apagar a Conta Bancária %@?";
 financialInstituteDeleteAlertMessage = "Ao deletar uma Instituição Financeira, você irá apagar todas as transações, todas contas e todo o histórico.\nEssa ação é permanente e não poderá ser desfeita!";
+
+// Add Moviment
+addMovementDiscardAlertTitle = "Tem certeza de que deseja descartar estas alterações?";
+
+// Add Payment
+discardChanges = "Tem certeza de que deseja descartar estas alterações?";
+bradesco = "Bradesco";
+defaultAccount = ".Hak";
+defaultMethod = "Hackeando";
+
+// CategoryFormCreate
+discardNewCategory = "Tem certeza de que deseja descartar este novo ganho?";
+
+//EarningCategoryForm
+existingMovements = "Esse Método de Ganho %@ já possui movimentos associados.";
+deleteTransactions = "Por favor exclua todas as transações.";
+deleteEarningMethodConfirmation = "Excluir Método de Pagamento %@?";
+discardChanges = "Descartar alterações?";
+
+// Method Form Create
+discardNewMethod = "Tem certeza de que deseja descartar este novo método de pagamento?";
+
+// Mtehod Form
+deletePaymentMethod = "Apagar Método de Pagamento";
+editPaymentMethod = "Editar método de pagamento";
+viewPaymentMethod = "Visualizar método de pagamento";
+
+// Account Form
+deleteAccountAlertTitle = "Tem certeza de que deseja apagar esta conta?";
+discardNewAccountAlertTitle = "Tem certeza de que deseja descartar esta nova conta?";
+discardChangesAlertTitle = "Tem certeza de que deseja descartar estas alterações?";
+cannotDeleteAccountAlertTitle = "Esta conta já possui transações registradas!";
+cannotDeleteAccountAlertMessage = "Por favor exclua todas as transações ou exclua a Instituição Financeira.";
+
+

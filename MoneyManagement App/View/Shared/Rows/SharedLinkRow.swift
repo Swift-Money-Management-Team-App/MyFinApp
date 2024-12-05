@@ -25,10 +25,10 @@ struct SharedLinkRow {
     }
     
     @ViewBuilder
-    private func createDisclosureIcon(fontSize: CGFloat? = 14, foregroundStyle: Color? = .black) -> some View {
+    private func createDisclosureIcon(fontSize: CGFloat? = 14) -> some View {
         Spacer()
         Image(systemName: "chevron.right")
             .font(.system(size: 14, weight: .bold))
-            .foregroundStyle(.disclosure)
+            .foregroundStyle(.accent)
     }
 }

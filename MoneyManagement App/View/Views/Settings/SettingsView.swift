@@ -31,7 +31,7 @@ struct SettingsView: View {
                                         Spacer()
                                         Image(systemName: "chevron.right")
                                             .font(.system(size: 14, weight: .bold))
-                                            .foregroundStyle(.disclosure)
+                                            .foregroundStyle(.accent)
                                     }
                                 } icon: {
                                     Image(systemName: "person")
@@ -88,7 +88,7 @@ struct SettingsView: View {
                                     Spacer()
                                     Image(systemName: "chevron.right")
                                         .font(.system(size: 14, weight: .bold))
-                                        .foregroundStyle(.disclosure)
+                                        .foregroundStyle(.accent)
                                 }
                             } icon: {
                                 Image(systemName: "storefront")

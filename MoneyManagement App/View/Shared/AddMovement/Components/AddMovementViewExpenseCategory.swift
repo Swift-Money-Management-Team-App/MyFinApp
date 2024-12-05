@@ -20,7 +20,7 @@ struct AddMovementViewExpenseCategory: View {
                 Section {
                     ForEach(expenseCategories) { expenseCategory in
                         Button(action: { self.selectedExpenseCategory = expenseCategory }) {
-                            HStack{
+                            HStack {
                                 Text(expenseCategory.name)
                                     .foregroundStyle(.black)
                                 Spacer()
@@ -38,12 +38,11 @@ struct AddMovementViewExpenseCategory: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Voltar") { dismiss() }
+                    Button(LocalizedStringKey.back.button) { dismiss() }
                 }
                 ToolbarItem(placement: .principal) {
                     VStack {
-                        Text("Categoria de Gasto")
-                        
+                        Text(LocalizedStringKey.expenseCategory.label)
                     }
                 }
             }
@@ -53,6 +52,8 @@ struct AddMovementViewExpenseCategory: View {
 }
 
 #Preview {
-    AddMovementViewExpenseCategory(selectedExpenseCategory: .constant(.init(idUser: UUID(), emoji: "Safade", name: "Safade")))
+    AddMovementViewExpenseCategory(
+        selectedExpenseCategory: .constant(.init(idUser: UUID(), emoji: "📦", name: "Exemplo"))
+    )
 }
 

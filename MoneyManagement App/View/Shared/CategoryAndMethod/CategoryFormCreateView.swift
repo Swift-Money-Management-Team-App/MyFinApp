@@ -23,16 +23,16 @@ struct CategoryFormCreateView: View {
             VStack(spacing: 0) {
                 List {
                     Toggle(isOn: $categoryTypeBool) {
-                        Text(self.categoryTypeBool ? "Ganho" : "Gasto")
+                        Text(self.categoryTypeBool ? LocalizedStringKey.earning.label : LocalizedStringKey.expense.label)
                     }
                     .onChange(of: self.categoryTypeBool) {
                         self.type = self.categoryTypeBool ? .earning : .expense
                     }
                     HStack {
-                        Text("Nome")
+                        Text(LocalizedStringKey.name.label)
                             .font(.subheadline)
                             .foregroundColor(.gray)
-                        TextField("Nome", text: $name)
+                        TextField(LocalizedStringKey.namePlaceholder.label, text: $name)
                             .onChange(of: self.name) {
                                 self.edited = true
                             }
@@ -47,11 +47,11 @@ struct CategoryFormCreateView: View {
             .padding(.vertical)
             .frame(maxHeight: .infinity, alignment: .top)
             .background(Color(UIColor.systemGray6).ignoresSafeArea())
-            .navigationTitle("Nova Categoria de Ganho")
+            .navigationTitle(LocalizedStringKey.newCategory.label)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Voltar") {
+                    Button(LocalizedStringKey.back.button) {
                         if self.edited {
                             self.showCancelEditAlert.toggle()
                         } else {
@@ -60,7 +60,7 @@ struct CategoryFormCreateView: View {
                     }
                 }
                 ToolbarItem {
-                    Button("Adicionar") {
+                    Button(LocalizedStringKey.add.button) {
                         self.appendCategory()
                         dismiss()
                     }
@@ -71,14 +71,13 @@ struct CategoryFormCreateView: View {
         .onAppear {
             self.categoryTypeBool = self.type == .earning
         }
-        .alert("Tem certeza de que deseja descartar este novo ganho?", isPresented: $showCancelEditAlert) {
-            Button("Descartar Alterações", role: .destructive) {
+        .alert(LocalizedStringKey.discardNewCategory.message, isPresented: $showCancelEditAlert) {
+            Button(LocalizedStringKey.discardChanges.button, role: .destructive) {
                 dismiss()
             }
-            Button("Continuar Editando", role: .cancel) {}
+            Button(LocalizedStringKey.continueEditing.button, role: .cancel) {}
         }
     }
-    
 }
 
 #Preview {

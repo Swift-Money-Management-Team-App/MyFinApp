@@ -30,8 +30,6 @@ This iOS app helps users manage their finances efficiently and effectively. Buil
 3. Build and run the app on a device or simulator.
 
 ## Developers
-- **Caio Oliveira Marques**
-- **Giovanni Favorin de Melo**
 - **Rafael Riki Ogawa Osiro**
 - **Raquel dos Santos Rezende**
 

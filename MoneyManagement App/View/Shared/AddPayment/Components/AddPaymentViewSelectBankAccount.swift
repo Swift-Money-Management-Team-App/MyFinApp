@@ -10,17 +10,13 @@ struct AddPaymentViewSelectBankAccount: View {
     @Query var accounts: [Account]
     // Entrada de Dados
     @Binding var selectedBankAccount: BankAccount?
-    // Dados para visualização
-    
-    // Booleans para visualização
-    
     
     var body: some View {
         NavigationView {
             List {
                 ForEach(bankAccounts.filter { bankAccount in !(self.accounts.filter({ account in account.idBankAccount == bankAccount.id }).isEmpty) }) { bankAccount in
                     Button(action: { self.selectedBankAccount = bankAccount }) {
-                        HStack{
+                        HStack {
                             Text(bankAccount.name)
                                 .foregroundStyle(.black)
                             Spacer()
@@ -37,12 +33,11 @@ struct AddPaymentViewSelectBankAccount: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Voltar") { dismiss() }
+                    Button(LocalizedStringKey.back.button) { dismiss() }
                 }
                 ToolbarItem(placement: .principal) {
                     VStack {
-                        Text("Instituição Financeira")
-                        
+                        Text(LocalizedStringKey.financialInstituteTitle.label)
                     }
                 }
             }

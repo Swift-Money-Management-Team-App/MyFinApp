@@ -91,8 +91,6 @@ enum LocalizedStringKey: String {
     case bankAccountHistory
     case noCreditCards
     case noAccounts
-    case back
-    case edit
     
     // Add Acount
     case addAccountNameField
@@ -155,8 +153,105 @@ enum LocalizedStringKey: String {
     case addTransaction
     case creditCard
     case whatToDo
+    case back
+    case edit
+    case cancel
+    case add
+    case paymentMethod
+    case continueEditing
+    case discardChanges
+    case name
+    case namePlaceholder
     
     case settingsButtonBack
+    
+    // Add Moviment
+    case addMovementEarning
+    case addMovementDate
+    case addMovementCategory
+    case addMovementChoose
+    case addMovementDescription
+    case addMovementDescriptionPlaceholder
+    case addMovementPayments
+    case addMovementTotal
+    case addMovementTitle
+    case addMovementDiscardAlertTitle
+    
+    // Add Movement View Expense
+    case expenseCategory
+    
+    // Add Movement View Earning
+    case earningCategory
+    
+    // Add Payment View Select Bank Account
+    case financialInstituteTitle
+    
+    
+    // Add Payment
+    case financialInstitute
+    case account
+    case value
+    case time
+    case competence
+    case addPayment
+    case editPayment
+    case discard
+    case bradesco
+    case defaultAccount
+    case defaultMethod
+    
+    // CategoryFormCreate
+    case earning
+    case expense
+    case newCategory
+    case discardNewCategory
+    
+    // EarningCategoryForm
+    case deleteEarningMethod
+    case editEarningCategory
+    case viewEarningCategory
+    case save
+    case existingMovements
+    case deleteTransactions
+    case deleteEarningMethodConfirmation
+    case delete
+    case ok
+    case yes
+    case no
+    
+    // ExpenseCategoryForm
+    case deleteExpenseMethod
+    case editExpenseCategory
+    case viewExpenseCategory
+    case deleteExpenseMethodConfirmation
+    
+    // Method Form Create
+    case newPaymentMethod
+    case discardNewMethod
+    
+    // Method Form
+    case deletePaymentMethod
+    case editPaymentMethod
+    case viewPaymentMethod
+    case paymentMethodHasPayments
+    case deletePaymentsBeforeRemoving
+    case deletePaymentMethodConfirmation
+    
+    // Account Form
+    case deleteAccountButton
+    case deleteAccountAlertTitle
+    case discardNewAccountAlertTitle
+    case discardChangesAlertTitle
+    case cannotDeleteAccountAlertTitle
+    case cannotDeleteAccountAlertMessage
+    case discardChangesButton
+    case continueEditingButton
+    case editAccountScreenTitle
+    
+    // Last Month Balance Row
+    case lastMonthBalance
+    case currencySymbol
+
     
 }
 

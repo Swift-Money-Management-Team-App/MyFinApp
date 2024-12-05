@@ -162,6 +162,7 @@ enum LocalizedStringKey: String {
     case discardChanges
     case name
     case namePlaceholder
+    case filters
     
     case settingsButtonBack
     
@@ -251,7 +252,13 @@ enum LocalizedStringKey: String {
     // Last Month Balance Row
     case lastMonthBalance
     case currencySymbol
-
+    
+    // All History View
+    case allHistoryTitle
+    
+    // Bank History
+    case bankHistoryTitle
+    case salaryAdvance
     
 }
 

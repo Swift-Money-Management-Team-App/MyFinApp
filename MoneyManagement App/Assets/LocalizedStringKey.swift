@@ -201,13 +201,13 @@ enum LocalizedStringKey: String {
     case defaultAccount
     case defaultMethod
     
-    // CategoryFormCreate
+    // Category Form Create
     case earning
     case expense
     case newCategory
     case discardNewCategory
     
-    // EarningCategoryForm
+    // Earning Category Form
     case deleteEarningMethod
     case editEarningCategory
     case viewEarningCategory

@@ -66,3 +66,7 @@ discardChangesButton = "Descartar Alterações";
 continueEditingButton = "Continuar Editando";
 addAccountSaveButton = "Adicionar";
 
+// Earning Category Form
+deleteExpenseMethod = "Apagar Método de Pagamento";
+deleteEarningMethod = "Apagar Método de Pagamento";
+

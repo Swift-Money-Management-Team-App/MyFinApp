@@ -152,20 +152,23 @@ competence = "Competência";
 addPayment = "Adicionar pagamento";
 editPayment = "Editar pagamento";
 
-// CategoryFormCreate
+// Category Form Create
 earning = "Ganho";
 expense = "Gasto";
 name = "Nome";
 namePlaceholder = "Nome";
 newCategory = "Nova Categoria de Ganho";
 
-//EarningCategoryForm
+//Earning Category Form
 name = "Nome";
 namePlaceholder = "Nome";
 editEarningCategory = "Editar categoria de ganho";
 viewEarningCategory = "Visualizar categoria de ganho";
+existingMovements = "Esse Método de Gasto %@ já possui movimentos associados.";
+deleteTransactions = "Por favor exclua todas as transações.";
+deleteExpenseMethodConfirmation = "Excluir Método de Pagamento %@?";
 
-// ExpenseCategoryForm
+// Expense Category Form
 name = "Nome";
 namePlaceholder = "Digite o nome";
 editExpenseCategory = "Editar categoria de gasto";

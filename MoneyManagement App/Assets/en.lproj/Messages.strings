@@ -40,6 +40,9 @@ deleteTransactions = "Por favor exclua todas as transações.";
 deleteEarningMethodConfirmation = "Excluir Método de Pagamento %@?";
 discardChanges = "Descartar alterações?";
 
+// Expense Category Form
+deleteExpenseMethodConfirmation = "Excluir Método de Pagamento %@?";
+
 // Method Form Create
 discardNewMethod = "Tem certeza de que deseja descartar este novo método de pagamento?";
 
@@ -47,6 +50,9 @@ discardNewMethod = "Tem certeza de que deseja descartar este novo método de pag
 deletePaymentMethod = "Apagar Método de Pagamento";
 editPaymentMethod = "Editar método de pagamento";
 viewPaymentMethod = "Visualizar método de pagamento";
+paymentMethodHasPayments = "Esse Método de Pagamento %@ já possui pagamentos associados.";
+deletePaymentsBeforeRemoving = "Por favor exclua todos os pagamentos.";
+deletePaymentMethodConfirmation = "Excluir Método de Pagamento \"%@\"?";
 
 // Account Form
 deleteAccountAlertTitle = "Tem certeza de que deseja apagar esta conta?";

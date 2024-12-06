@@ -6,12 +6,14 @@ class Storage {
     let userDefault: UserDefaults
     
     @UserDefault var firstLaunchApplication: Bool
+    @UserDefault var userName: String
     @UserDefault var hiddenValues: Bool
     @UserDefault var earned: Bool
     
     init(userDefault: UserDefaults  = .standard) {
         self.userDefault = userDefault
         self._firstLaunchApplication = .init(keys: .firstLaunchApplication, default: true, userDefault)
+        self._userName = .init(keys: .userName, default: "", userDefault)
         self._hiddenValues = .init(keys: .hiddenValues, default: true, userDefault)
         self._earned = .init(keys: .earned, default: true, userDefault)
     }

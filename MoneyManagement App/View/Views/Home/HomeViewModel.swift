@@ -1,11 +1,15 @@
 import Foundation
+import SwiftUI
 import SwiftData
 
 extension HomeView {
 
     func appendUser() {
         repeat { self.modelContext.insert(User(name: self.personName)) } while self.save()
+        Storage.share.userName = self.personName
+
         self.isShowingScreenNameUser = false
+        
         // Categorias sendo adicionada
         for category in earningCategoryStandard {
             repeat { self.modelContext.insert(EarningCategory(idUser: self.user.first!.id, emoji: category.emoji, name: category.name)) } while self.save()

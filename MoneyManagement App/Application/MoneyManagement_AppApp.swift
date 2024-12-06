@@ -1,62 +1,18 @@
 import SwiftUI
 import SwiftData
 
+@main
+struct MoneyManagement_AppApp: App {
+    
+    @ObservedObject var navigation: Navigation = .navigation
+    @State var firstLaunchApplication: Bool = Storage.share.firstLaunchApplication
+    private var userName: String = Storage.share.userName
 #if DEBUG
-@main
-struct MoneyManagement_AppApp: App {
-    
-    @ObservedObject var navigation: Navigation = .navigation
-    @State var firstLaunchApplication: Bool = Storage.share.firstLaunchApplication
-    @State private var showSplash = true
-    
-    var body: some Scene {
-        WindowGroup {
-            if firstLaunchApplication {
-                OnboardingView(isFirstLaunch: $firstLaunchApplication)
-                    .transition(.opacity)
-            } else {
-                NavigationStack(path: $navigation.screens) {
-                    HomeView()
-                        .transition(.opacity)
-                        .navigationDestination(for: NavigationScreen.self) { screen in
-                            switch(screen) {
-                            case .settings:
-                                SettingsView()
-                            case .account(account: let account):
-                                Text("Account View")
-                                // TODO: DESCOMENTAR O CODIGO PARA ADICIONAR A VIEW
-                                //  AccountView()
-                            case .bankAccount(bankAccount: let bankAccount):
-                                BankAccountView(bankAccount: bankAccount)
-                            case .movement(account: let account, bankAccount: let bankAccount):
-                                AddMovementView(account: account, bankAccount: bankAccount)
-                            case .privacyPolicy:
-                                PrivacyPolicy()
-                            case .terms:
-                                TermsView()
-                            case .aboutUs:
-                                AboutUs()
-                            case .methods:
-                                MethodCategoryView()
-                            case .categories:
-                                CategoriesView()
-                            }
-                            
-                        }
-                }
-                .modelContainer(for: [Account.self, BankAccount.self, EarningCategory.self, ExpenseCategory.self, Movement.self, Method.self, Payment.self, User.self])
-            }
-        }
-    }
-}
-
+    @State private var showSplash = false
 #else
-@main
-struct MoneyManagement_AppApp: App {
-    
-    @ObservedObject var navigation: Navigation = .navigation
-    @State var firstLaunchApplication: Bool = Storage.share.firstLaunchApplication
     @State private var showSplash = true
+#endif
+    @State var isShowingScreenNameUser: Bool = false
     
     var body: some Scene {
         WindowGroup {
@@ -72,39 +28,46 @@ struct MoneyManagement_AppApp: App {
                         }
                         .transition(.opacity)
                 } else {
-                    if firstLaunchApplication {
-                        OnboardingView(isFirstLaunch: $firstLaunchApplication)
+                    NavigationStack(path: $navigation.screens) {
+                        HomeView(isShowingScreenNameUser: self.$isShowingScreenNameUser)
                             .transition(.opacity)
-                    } else {
-                        NavigationStack(path: $navigation.screens) {
-                            HomeView()
-                                .transition(.opacity)
-                                .navigationDestination(for: NavigationScreen.self) { screen in
-                                    switch(screen) {
-                                    case .settings:
-                                        SettingsView()
-                                    case .account(account: let account):
-                                        Text("Account View")
-                                        // TODO: DESCOMENTAR O CODIGO PARA ADICIONAR A VIEW
-                                        //  AccountView()
-                                    case .bankAccount(bankAccount: let bankAccount):
-                                        BankAccountView(bankAccount: bankAccount)
-                                    case .movement(account: let account, bankAccount: let bankAccount):
-                                        AddMovementView(account: account, bankAccount: bankAccount)
-                                    case .privacyPolicy:
-                                        PrivacyPolicy()
-                                    case .terms:
-                                        TermsView()
-                                    case .aboutUs:
-                                        AboutUs()
-                                    }
+                            .navigationDestination(for: NavigationScreen.self) { screen in
+                                switch(screen) {
+                                case .settings:
+                                    SettingsView()
+                                case .account(account: let account):
+                                    Text("Account View")
+                                    // TODO: DESCOMENTAR O CODIGO PARA ADICIONAR A VIEW
+                                    //  AccountView()
+                                case .bankAccount(bankAccount: let bankAccount):
+                                    BankAccountView(bankAccount: bankAccount)
+                                case .movement(account: let account, bankAccount: let bankAccount):
+                                    AddMovementView(account: account, bankAccount: bankAccount)
+                                case .privacyPolicy:
+                                    PrivacyPolicy()
+                                case .terms:
+                                    TermsView()
+                                case .aboutUs:
+                                    AboutUs()
+                                case .methods:
+                                    MethodCategoryView()
+                                case .categories:
+                                    CategoriesView()
                                 }
-                        }
-                        .modelContainer(for: [Account.self, BankAccount.self, EarningCategory.self, ExpenseCategory.self, Movement.self, Method.self, Payment.self, User.self])
+                            }
+                            .sheet(isPresented: self.$firstLaunchApplication) {
+                                OnboardingView(isFirstLaunch: $firstLaunchApplication)
+                                    .transition(.opacity)
+                                    .onDisappear{
+                                        if(firstLaunchApplication == false && userName.isEmpty) {
+                                            self.isShowingScreenNameUser = true
+                                        }
+                                    }
+                            }
                     }
+                    .modelContainer(for: [Account.self, BankAccount.self, EarningCategory.self, ExpenseCategory.self, Movement.self, Method.self, Payment.self, User.self])
                 }
             }
         }
     }
 }
-#endif

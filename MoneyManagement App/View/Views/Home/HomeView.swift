@@ -15,7 +15,7 @@ struct HomeView: View {
     @State var valueAllCurrentAccounts: Double = 0
     @State var valueAllCreditCards: Double = 0
     // Booleans para visualização
-    @State var isShowingScreenNameUser: Bool = false
+    @Binding var isShowingScreenNameUser: Bool
     @State var isShowingScreenNameBankAccount: Bool = false
     
     var body: some View {
@@ -134,7 +134,6 @@ struct HomeView: View {
                 }
             }
         }
-        .onAppear { self.isShowingScreenNameUser = self.user.isEmpty }
         .toolbarBackground(.hidden)
         .sheet(isPresented: self.$isShowingScreenNameUser) {
             UserForm(name: self.$personName, formState: .create, action: self.appendUser)
@@ -152,7 +151,7 @@ struct HomeView: View {
 
 #Preview {
     NavigationStack {
-        HomeView()
+        HomeView(isShowingScreenNameUser: .constant(true))
     }
     .modelContainer(for: [User.self, BankAccount.self, EarningCategory.self, ExpenseCategory.self, Method.self])
 }

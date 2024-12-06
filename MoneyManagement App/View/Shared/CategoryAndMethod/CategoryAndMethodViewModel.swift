@@ -14,7 +14,7 @@ extension EarningCategoryFormView {
     func resetChanges() {
         name = initialName
         emoji = initialEmoji
-        dismiss()
+        isEditing = false
     }
     
     func saveChanges() {
@@ -22,7 +22,7 @@ extension EarningCategoryFormView {
             earningCategory!.name = name
             earningCategory!.emoji = emoji
         } while self.save()
-        isEditing = false
+        dismiss()
     }
     
     func deleteMethod() {

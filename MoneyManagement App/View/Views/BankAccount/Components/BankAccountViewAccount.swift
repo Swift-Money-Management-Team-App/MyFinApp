@@ -17,13 +17,16 @@ struct BankAccountViewAccount: View {
                     VStack {
                         Text(account.name)
                             .font(.caption)
+                            .foregroundStyle(.black)
                         Spacer()
                         if account.isCreditCard {
                             Text("R$ \(String(format: "%.2f", account.total))")
                                 .font(.caption2)
                                 .foregroundStyle(.red)
                         } else {
-                            Text("R$ \(String(format: "%.2f", account.total))").font(.caption2)
+                            Text("R$ \(String(format: "%.2f", account.total))")
+                                .font(.caption2)
+                                .foregroundStyle(.green)
                         }
                         
                     }
@@ -35,5 +38,5 @@ struct BankAccountViewAccount: View {
 }
 
 #Preview {
-    BankAccountViewAccount(account: .init(idUser: UUID(), name: "Safade", isCreditCard: true))
+    BankAccountViewAccount(account: .init(idBankAccount: UUID(), name: "Safade", isCreditCard: true))
 }

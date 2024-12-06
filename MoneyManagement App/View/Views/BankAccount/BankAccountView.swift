@@ -23,6 +23,7 @@ struct BankAccountView: View {
     
     // View States
     @State var isShowingBankEdit: Bool = false
+    @State var isShowingCreateAccount: Bool = false
     
     var body: some View {
         ZStack(alignment: .top) {
@@ -64,8 +65,8 @@ struct BankAccountView: View {
                             .padding([.top, .leading])
                         Spacer()
                         Button(action: {
-                            cleanInputs()
-                            isCreditCard = true
+                            self.isCreditCard = true
+                            self.isShowingCreateAccount.toggle()
                         }) {
                             Image(systemName: "plus")
                         }
@@ -84,7 +85,9 @@ struct BankAccountView: View {
                     } else {
                         LazyVGrid(columns: [GridItem(), GridItem(), GridItem()], spacing: 20) {
                             ForEach(creditCards.filter {account in account.idBankAccount == bankAccount.id }) { account in
-                                BankAccountViewAccount(account: account)
+                                NavigationLink(value: NavigationScreen.account(account: account)) {
+                                    BankAccountViewAccount(account: account)
+                                }
                             }
                         }
                     }
@@ -96,7 +99,10 @@ struct BankAccountView: View {
                             .padding([.top, .leading])
                         Spacer()
                         // TODO: Adioncar conta
-                        Button(action: { self.fakeAccounts() }) {
+                        Button(action: {
+                            self.isCreditCard = false
+                            self.isShowingCreateAccount.toggle()
+                        }) {
                             Image(systemName: "plus")
                         }
                         .padding([.top, .trailing])
@@ -114,7 +120,9 @@ struct BankAccountView: View {
                     } else {
                         LazyVGrid(columns: [GridItem(), GridItem(), GridItem()], spacing: 20) {
                             ForEach(accounts.filter {account in account.idBankAccount == bankAccount.id }) { account in
-                                BankAccountViewAccount(account: account)
+                                NavigationLink(value: NavigationScreen.account(account: account)) {
+                                    BankAccountViewAccount(account: account)
+                                }
                             }
                         }
                     }
@@ -160,6 +168,9 @@ struct BankAccountView: View {
                     Navigation.navigation.screens.removeLast()
                 }
             )
+        }
+        .sheet(isPresented: $isShowingCreateAccount) {
+            AccountForm(bankAccount: self.bankAccount, isCreditCard: self.isCreditCard, actionDelete: {}, formState: .create)
         }
     }
 }

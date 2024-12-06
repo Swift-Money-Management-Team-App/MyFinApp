@@ -51,5 +51,5 @@ struct AddPaymentViewSelectAccount: View {
 }
 
 #Preview {
-    AddPaymentViewSelectAccount(selectedAccount: .constant(.init(idUser: UUID(), name: "Safade")), bankAccount: .constant(nil))
+    AddPaymentViewSelectAccount(selectedAccount: .constant(.init(idBankAccount: UUID(), name: "Safade")), bankAccount: .constant(nil))
 }

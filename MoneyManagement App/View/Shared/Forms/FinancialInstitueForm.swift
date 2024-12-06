@@ -27,7 +27,18 @@ struct FinancialInstitueForm: View {
                 .toolbar { toolbarContent }
                 .presentationDetents([.height(250)])
                 .interactiveDismissDisabled(true)
-                .alert(isPresented: $isShowDiscardChangeAlert, content: discardAlert)
+                .alert(LocalizedStringKey.financialInstituteDiscardAlertTitle.message, isPresented: self.$isShowDiscardChangeAlert) {
+                    Button(LocalizedStringKey.financialInstituteDiscardChangesButton.button, role: .destructive) {
+                        if formState == .create {
+                            discardAllChanges()
+                        } else {
+                            formState = .read
+                            bankName = originalName
+                        }
+                    }
+                        .tint(.blue)
+                    Button(LocalizedStringKey.financialInstituteContinueEditingButton.button, role: .cancel) { }
+                }
                 .alert(isPresented: $isShowDeleteAlert, content: deleteAlert)
         }
     }
@@ -139,27 +150,13 @@ extension FinancialInstitueForm {
         }
     }
     
-    private func discardAlert() -> Alert {
-        Alert(
-            title: Text(LocalizedStringKey.financialInstituteDiscardAlertTitle.message),
-            primaryButton: .destructive(Text(LocalizedStringKey.financialInstituteDiscardChangesButton.button)) {
-                if formState == .create {
-                    discardAllChanges()
-                } else {
-                    formState = .read
-                    bankName = originalName
-                }
-            },
-            secondaryButton: .cancel(Text(LocalizedStringKey.financialInstituteContinueEditingButton.button))
-        )
-    }
-    
     private func deleteAlert() -> Alert {
         Alert(
             title: Text(String(format: LocalizedStringKey.financialInstituteDeleteAlertTitle.message, bankName)),
             message: Text(LocalizedStringKey.financialInstituteDeleteAlertMessage.message),
             primaryButton: .destructive(Text(LocalizedStringKey.financialInstituteDeleteButton.button)) {
                 deleteAction()
+                self.dismiss()
             },
             secondaryButton: .cancel(Text(LocalizedStringKey.financialInstituteCancelButton.button))
         )
@@ -183,6 +180,7 @@ extension FinancialInstitueForm {
         if formState != .read {
             action()
             clearAllVariables()
+            self.dismiss()
         } else {
             formState = .update
         }

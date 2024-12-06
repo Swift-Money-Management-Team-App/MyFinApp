@@ -43,10 +43,13 @@ discardChanges = "Descartar alterações?";
 // Expense Category Form
 deleteExpenseMethodConfirmation = "Excluir Método de Pagamento %@?";
 
+// Home
+navigateToAddMovementAlertTitle = "Para adicionar um movimento, é preciso criar uma Instituição Financeira e uma Conta!";
+
 // Method Form Create
 discardNewMethod = "Tem certeza de que deseja descartar este novo método de pagamento?";
 
-// Mtehod Form
+// Method Form
 deletePaymentMethod = "Apagar Método de Pagamento";
 editPaymentMethod = "Editar método de pagamento";
 viewPaymentMethod = "Visualizar método de pagamento";
@@ -60,5 +63,3 @@ discardNewAccountAlertTitle = "Tem certeza de que deseja descartar esta nova con
 discardChangesAlertTitle = "Tem certeza de que deseja descartar estas alterações?";
 cannotDeleteAccountAlertTitle = "Esta conta já possui transações registradas!";
 cannotDeleteAccountAlertMessage = "Por favor exclua todas as transações ou exclua a Instituição Financeira.";
-
-

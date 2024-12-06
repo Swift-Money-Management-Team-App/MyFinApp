@@ -7,6 +7,7 @@ struct HomeView: View {
     @Environment(\.modelContext) var modelContext
     @Query var user: [User]
     @Query var bankAccounts: [BankAccount]
+    @Query var accounts: [Account]
     // Entrada de Dados
     @State var personName: String = ""
     @State var bankAccountName: String = ""
@@ -17,6 +18,7 @@ struct HomeView: View {
     // Booleans para visualização
     @Binding var isShowingScreenNameUser: Bool
     @State var isShowingScreenNameBankAccount: Bool = false
+    @State var isShowAddMovementAlert: Bool = false
     
     var body: some View {
         ZStack(alignment: .top) {
@@ -50,18 +52,27 @@ struct HomeView: View {
                         .padding([.top, .leading])
                     
                     LazyVGrid(columns: [GridItem(), GridItem(), GridItem()], spacing: 20) {
+                        
                         NavigationLink(value: NavigationScreen.movement(account: nil, bankAccount: nil)) {
                             OperationCard(
                                 type: .addMovement,
                                 text: LocalizedStringKey.homeAddMovement.label
                             )
                         }
+                        .disabled(bankAccounts.filter({ bankAccount in !(self.accounts.filter({ account in account.idBankAccount == bankAccount.id }).isEmpty) }).isEmpty)
+                        .onTapGesture {
+                            if(bankAccounts.filter({ bankAccount in !(self.accounts.filter({ account in account.idBankAccount == bankAccount.id }).isEmpty) }).isEmpty) {
+                                self.isShowAddMovementAlert = true
+                            }
+                        }
+                        
                         NavigationLink(value: NavigationScreen.categories) {
                             OperationCard(
                                 type: .movementCategory,
                                 text: LocalizedStringKey.homeTransactionCategory.label
                             )
                         }
+                        
                         NavigationLink(value: NavigationScreen.methods) {
                             OperationCard(
                                 type: .paymentMethod,
@@ -138,6 +149,9 @@ struct HomeView: View {
         .sheet(isPresented: self.$isShowingScreenNameUser) {
             UserForm(name: self.$personName, formState: .create, action: self.appendUser)
         }
+        .alert(LocalizedStringKey.navigateToAddMovementAlertTitle.message, isPresented: self.$isShowAddMovementAlert, actions: {
+            Button(LocalizedStringKey.ok.button, role: .cancel) {}
+        })
         .sheet(isPresented: self.$isShowingScreenNameBankAccount) {
             FinancialInstitueForm(
                 bankName: self.$bankAccountName,
@@ -151,7 +165,7 @@ struct HomeView: View {
 
 #Preview {
     NavigationStack {
-        HomeView(isShowingScreenNameUser: .constant(true))
+        HomeView(isShowingScreenNameUser: .constant(false))
     }
     .modelContainer(for: [User.self, BankAccount.self, EarningCategory.self, ExpenseCategory.self, Method.self])
 }

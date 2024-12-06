@@ -175,5 +175,7 @@ enum AccountFormState {
 }
 
 #Preview {
-    AccountForm(formState: .create)
+    NavigationStack {
+        AccountForm(formState: .create)
+    }
 }

@@ -27,6 +27,7 @@ enum LocalizedStringKey: String {
     case homeGreeting
     case homeShow
     case homeHide
+    case navigateToAddMovementAlertTitle
     
     // Settings
     case profileSettings
@@ -163,8 +164,8 @@ enum LocalizedStringKey: String {
     case name
     case namePlaceholder
     case filters
-    
     case settingsButtonBack
+    case ok
     
     // Add Moviment
     case addMovementEarning
@@ -216,7 +217,6 @@ enum LocalizedStringKey: String {
     case deleteTransactions
     case deleteEarningMethodConfirmation
     case delete
-    case ok
     case yes
     case no
     

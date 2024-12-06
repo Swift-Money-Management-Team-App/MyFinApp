@@ -43,7 +43,6 @@ struct MethodCategoryView: View {
                     .frame(maxHeight: .infinity)
                 }
             }
-            .border(.red)
             RoundedRectangle(cornerRadius: 20)
                 .foregroundStyle(.brightGold)
                 .frame(height: 175)

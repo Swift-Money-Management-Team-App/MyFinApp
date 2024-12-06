@@ -31,11 +31,14 @@ struct HomeView: View {
                         .padding([.top, .leading])
                     
                     List {
+                        // TODO: FAZER A QUERY DO TOTAL DE TODAS AS CONTAS
                         ConditionCell(
                             cellName: LocalizedStringKey.homeCheckingAccount.label,
                             valueAllAccounts: $valueAllCurrentAccounts,
                             hiddenValues: $hiddenValues
                         )
+                        
+                        // TODO: FAZER A QUERY DO TOTAL DE TODOS CARTOES DE CREDITO
                         ConditionCell(
                             cellName: LocalizedStringKey.homeCreditCard.label,
                             valueAllAccounts: $valueAllCreditCards,

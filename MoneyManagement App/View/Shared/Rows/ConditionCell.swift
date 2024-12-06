@@ -7,34 +7,30 @@ struct ConditionCell: View {
     @Binding var hiddenValues: Bool
     
     var body: some View {
-        NavigationLink {
-            // TODO: Colocar para aparecer a tela de Usuário
-        } label: {
-            Label {
-                VStack (alignment: .leading, spacing: 2) {
-                    Text("Conta Corrente")
-                        .foregroundStyle(.black)
-                    if (hiddenValues) {
-                        HStack(spacing: 4) {
-                            ForEach(1..<6) { _ in
-                                Image(systemName: "circle.fill")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(height: 12)
-                                    .foregroundStyle(.black)
-                            }
+        Label {
+            VStack (alignment: .leading, spacing: 2) {
+                Text(self.cellName)
+                    .foregroundStyle(.black)
+                if (hiddenValues) {
+                    HStack(spacing: 4) {
+                        ForEach(1..<6) { _ in
+                            Image(systemName: "circle.fill")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(height: 12)
+                                .foregroundStyle(.black)
                         }
-                        .frame(height: 20)
-                        .padding(0)
-                    } else {
-                        Text("R$ \(String(format: "%.2f", valueAllAccounts))")
-                            .foregroundStyle(.black)
-                            .frame(height: 20)
                     }
+                    .frame(height: 20)
+                    .padding(0)
+                } else {
+                    Text("R$ \(String(format: "%.2f", valueAllAccounts))")
+                        .foregroundStyle(.black)
+                        .frame(height: 20)
                 }
-            } icon: {}
-                .labelStyle(.titleOnly)
-        }
+            }
+        } icon: {}
+            .labelStyle(.titleOnly)
     }
     
 }

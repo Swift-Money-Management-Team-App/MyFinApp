@@ -3,20 +3,23 @@ import SwiftData
 
 struct AccountForm: View {
     
-    @Environment(\.dismiss) private var dismiss
+    @Environment(\.dismiss) var dismiss
     
     // Swift Data
-    @Query var accounts: [Account] = []
-    
-    var account: Account?
+    @Environment(\.modelContext) var modelContext
+    @Query var payments: [Payment]
+    @State var account: Account?
+    let bankAccount: BankAccount?
     
     // Entrada de Dados
     @State private var name: String = ""
-    @State private var isCreditCard: Bool = false
+    @State var isCreditCard: Bool = false
     @State private var closeDay: Int = 1
+    let actionDelete: () -> Void
     
     // Booleans para visualização
     @State private var isShowDatePicker: Bool = false
+    @State private var edited: Bool = false
     
     //Alertas
     @State private var isShowDeleteAlert: Bool = false
@@ -25,8 +28,8 @@ struct AccountForm: View {
     @State private var isShowCantDeleteAlert: Bool = false
     
     // Dados Originais
-    private let originalName = ""
-    private let originalIsCreditCard = false
+    @State var originalName = ""
+    @State var originalIsCreditCard = false
     
     @State var formState: AccountFormState
     
@@ -42,7 +45,10 @@ struct AccountForm: View {
                         }
                         .disabled(self.formState == .read)
                         .foregroundStyle(formState == .read ? .gray : .black)
-
+                        .onChange(of: self.name) {
+                            self.edited = true
+                        }
+                        
                         if (!self.name.isEmpty && self.formState != .read) {
                             Button(action: {
                                 self.name = self.name.clearAllVariables
@@ -58,6 +64,9 @@ struct AccountForm: View {
                 Section {
                     Toggle(LocalizedStringKey.addAccountToggle.label, isOn: self.$isCreditCard)
                         .disabled(self.formState == .read)
+                        .onChange(of: self.isCreditCard) {
+                            self.edited = true
+                        }
                     
                     if isCreditCard {
                         Button(action: { self.isShowDatePicker = true }) {
@@ -75,81 +84,110 @@ struct AccountForm: View {
                             }
                         }
                         .disabled(self.formState == .read)
+                        .onChange(of: self.closeDay) {
+                            self.edited = true
+                        }
                     }
                     
                     if formState == .read {
+                        // MARK: EXCLUIR A CONTA
                         Button(LocalizedStringKey.deleteAccountButton.label, role: .destructive) {
-                            self.isShowDeleteAlert = true
+                            if self.payments.filter({ payment in payment.idAccount == self.account!.id }).isEmpty {
+                                self.isShowDeleteAlert.toggle()
+                            } else {
+                                self.isShowCantDeleteAlert.toggle()
+                            }
                         }
                     }
                 }
             }
+            .listStyle(.grouped)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button(self.formState == .create ? "Cancelar" : "Voltar") {
+                        if(self.formState == .create) {
+                            if self.edited {
+                                self.isShowDiscardNewAccountAlert.toggle()
+                            } else {
+                                self.dismiss()
+                            }
+                        } else if self.formState == .read {
+                            self.dismiss()
+                        } else {
+                            if self.edited {
+                                self.isShowDiscardChangesAlert.toggle()
+                            } else {
+                                self.name = self.originalName
+                                self.isCreditCard = self.originalIsCreditCard
+                                self.formState = .read
+                            }
+                        }
+                    }
+                }
+                
+                ToolbarItem(placement: .principal) {
+                    VStack {
+                        Text(self.formState == .create ? "Adicionar Conta" : self.formState == .read ? self.account!.name : "Editar Conta" )
+                    }
+                }
+                
+                ToolbarItem(placement: .confirmationAction) {
+                    Button(self.formState == .create ? "Adicionar" : self.formState == .read ? "Editar" : "Salvar") {
+                        self.confirmAction()
+                    }
+                    .disabled(self.name.isEmpty)
+                }
+            }
         }
+        .onAppear {
+            if let account =  self.account {
+                self.name = account.name
+                self.isCreditCard = account.isCreditCard
+                if account.isCreditCard {
+                    self.closeDay = account.closeDay!
+                }
+                self.originalName = account.name
+                self.originalIsCreditCard = account.isCreditCard
+            }
+        }
+        .onChange(of: self.formState, {
+            if self.formState == .update {
+                self.edited = false
+            }
+        })
+        .presentationDetents([.height(350)])
         .animation(.none, value: 1)
         .listStyle(.grouped)
-        .toolbar {
-            ToolbarItem(placement: .cancellationAction) {
-                Button(self.formState == .create ? LocalizedStringKey.cancel.button : LocalizedStringKey.back.button) {
-                    if self.formState == .create {
-                        self.dismiss()
-                    } else {
-                        self.formState = .read
-                    }
-                }
-            }
-            
-            ToolbarItem(placement: .principal) {
-                VStack {
-                    Text(
-                        self.formState == .create
-                        ? LocalizedStringKey.addAccountScreenTitle.label
-                        : self.formState == .read
-                        ? account?.name ?? ""
-                        : LocalizedStringKey.editAccountScreenTitle.label
-                    )
-                }
-            }
-            
-            ToolbarItem(placement: .confirmationAction) {
-                Button(
-                    self.formState == .create
-                    ? LocalizedStringKey.addAccountSaveButton.button
-                    : self.formState == .read
-                    ? LocalizedStringKey.edit.button
-                    : LocalizedStringKey.save.button
-                ) {
-                    if self.formState == .create {
-                        // TODO: ADD LOGIC FOR ADDING ACCOUNT
-                    } else {
-                        // TODO: ADD LOGIC FOR EDITING ACCOUNT
-                    }
-                }
-            }
-        }
         .sheet(isPresented: self.$isShowDatePicker, content: {
             NumberPicker(closeDay: self.$closeDay)
         })
         .alert(LocalizedStringKey.deleteAccountAlertTitle.message, isPresented: self.$isShowDeleteAlert, actions: {
             Button(LocalizedStringKey.deleteAccountButton.button, role: .destructive) {
-                // TODO: ADD METHOD TO DELETE ACCOUNT
+                self.deleteAccount()
+                self.actionDelete()
             }
             Button(LocalizedStringKey.cancel.button, role: .cancel) {}
         })
         .alert(LocalizedStringKey.discardNewAccountAlertTitle.message, isPresented: self.$isShowDiscardNewAccountAlert, actions: {
             Button(LocalizedStringKey.discardChangesButton.button, role: .destructive) {
-                // TODO: ADD METHOD TO DISCARD NEW ACCOUNT DATA
+                self.dismiss()
             }
             Button(LocalizedStringKey.continueEditingButton.button, role: .cancel) {}
         })
         .alert(LocalizedStringKey.discardChangesAlertTitle.message, isPresented: self.$isShowDiscardChangesAlert, actions: {
             Button(LocalizedStringKey.discardChangesButton.button, role: .destructive) {
-                // TODO: ADD METHOD TO DISCARD EDITED ACCOUNT DATA
+                self.name = self.originalName
+                self.isCreditCard = self.originalIsCreditCard
+                self.formState = .read
             }
             Button(LocalizedStringKey.continueEditingButton.button, role: .cancel) {}
         })
         .alert(LocalizedStringKey.cannotDeleteAccountAlertTitle.message, isPresented: self.$isShowCantDeleteAlert) {
             Button(LocalizedStringKey.back.button, role: .cancel) {}
-        } message: {
+                .foregroundStyle(.blue)
+                .background(.blue)
+                .tint(.blue)
+        } message:  {
             Text(LocalizedStringKey.cannotDeleteAccountAlertMessage.message)
         }
     }
@@ -158,12 +196,45 @@ struct AccountForm: View {
 // MARK: - VIEW MODEL
 extension AccountForm {
     
-    func editAccount() {
-        self.account?.name = self.name
-        self.account?.isCreditCard = self.isCreditCard
-        self.account?.closeDay = self.closeDay
+    func confirmAction() {
+        if(self.formState == .create) {
+            if self.isCreditCard {
+                self.modelContext.insert(Account(idBankAccount: self.bankAccount!.id, name: self.name, isCreditCard: true, closeDay: self.closeDay))
+            } else {
+                self.modelContext.insert(Account(idBankAccount: self.bankAccount!.id, name: self.name))
+            }
+            dismiss()
+        } else if self.formState == .read {
+            self.formState = .update
+        } else {
+            repeat {
+                self.account!.name = self.name
+                self.account!.isCreditCard = self.isCreditCard
+                if self.isCreditCard {
+                    self.account!.closeDay = self.closeDay
+                } else  {
+                    self.account!.closeDay = nil
+                }
+            } while self.save()
+            self.originalName = self.name
+            self.originalIsCreditCard = self.isCreditCard
+            self.formState = .read
+        }
     }
     
+    func deleteAccount() {
+        self.modelContext.delete(self.account!)
+    }
+    
+    func save() -> Bool {
+        do {
+            try modelContext.save()
+            return false
+        } catch {
+            print("Deu ruim")
+            return true
+        }
+    }
     
 }
 
@@ -175,7 +246,5 @@ enum AccountFormState {
 }
 
 #Preview {
-    NavigationStack {
-        AccountForm(formState: .create)
-    }
+    AccountForm(bankAccount: .init(idUser: UUID(), name: "Safade"), actionDelete: {}, formState: .create)
 }

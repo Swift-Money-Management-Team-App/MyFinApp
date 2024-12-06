@@ -36,9 +36,7 @@ struct MoneyManagement_AppApp: App {
                                 case .settings:
                                     SettingsView()
                                 case .account(account: let account):
-                                    Text("Account View")
-                                    // TODO: DESCOMENTAR O CODIGO PARA ADICIONAR A VIEW
-                                    //  AccountView()
+                                    AccountView(account: account)
                                 case .bankAccount(bankAccount: let bankAccount):
                                     BankAccountView(bankAccount: bankAccount)
                                 case .movement(account: let account, bankAccount: let bankAccount):

@@ -13,9 +13,9 @@ final class Account {
     var isCreditCard: Bool
     var closeDay: Int?
     
-    init(idUser: UUID, name: String, isCreditCard: Bool = false, closeDay: Int? = nil) {
+    init(idBankAccount: UUID, name: String, isCreditCard: Bool = false, closeDay: Int? = nil) {
         self.id = UUID()
-        self.idBankAccount = idUser
+        self.idBankAccount = idBankAccount
         self.name = name
         self.total = 0
         self.isCreditCard = isCreditCard

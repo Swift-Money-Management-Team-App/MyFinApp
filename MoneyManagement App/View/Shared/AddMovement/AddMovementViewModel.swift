@@ -33,7 +33,9 @@ extension AddMovementView {
         } else {
             self.movement?.expenseCategory = self.expenseCategory!.id
         }
-        self.movement!.transactionDescription = self.description
+        if !(self.description.isEmpty) {
+            self.movement!.transactionDescription = self.description
+        }
         modelContext.insert(self.movement!)
     }
     

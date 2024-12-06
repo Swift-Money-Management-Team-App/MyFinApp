@@ -7,7 +7,6 @@ extension EarningCategoryFormView {
             showCancelEditAlert = true
         } else {
             isEditing = false
-            dismiss()
         }
     }
     
@@ -49,14 +48,13 @@ extension ExpenseCategoryFormView {
             showCancelEditAlert = true
         } else {
             isEditing = false
-            dismiss()
         }
     }
     
     func resetChanges() {
         name = initialName
         emoji = initialEmoji
-        dismiss()
+        isEditing = false
     }
     
     func saveChanges() {
@@ -64,7 +62,7 @@ extension ExpenseCategoryFormView {
             expenseCategory!.name = name
             expenseCategory!.emoji = emoji
         } while self.save()
-        isEditing = false
+        dismiss()
     }
     
     func deleteMethod() {
@@ -103,14 +101,13 @@ extension MethodFormView {
             showCancelEditAlert = true
         } else {
             isEditing = false
-            dismiss()
         }
     }
     
     func resetChanges() {
         name = initialName
         emoji = initialEmoji
-        dismiss()
+        isEditing = false
     }
     
     func saveChanges() {
@@ -118,7 +115,7 @@ extension MethodFormView {
             method!.name = name
             method!.emoji = emoji
         } while self.save()
-        isEditing = false
+        dismiss()
     }
     
     func deleteMethod() {

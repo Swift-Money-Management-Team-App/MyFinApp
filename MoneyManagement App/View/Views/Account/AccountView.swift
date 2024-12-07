@@ -82,14 +82,14 @@ struct AccountView: View {
                         .frame(height: layout.size.height - 625)
                         .listStyle(.grouped)
                         
-                        List{
-                            // TODO: FAZER A QUERY PARA CALCULAR A DIFERENÇA ENTRE OS GASTOS E GANHOS DO MÊS ANTERIOR (DO DIA 1 ATE O ULTIMO DIA DO MES)
-                            LastMonthBalanceRow(value: 40.00)
-                        }
-                        .frame(height: 42)
-                        .scrollDisabled(true)
-                        .listStyle(.inset)
-                        .padding(.top, 42)
+//                        List{
+//                            // TODO: FAZER A QUERY PARA CALCULAR A DIFERENÇA ENTRE OS GASTOS E GANHOS DO MÊS ANTERIOR (DO DIA 1 ATE O ULTIMO DIA DO MES)
+//                            LastMonthBalanceRow(value: 40.00)
+//                        }
+//                        .frame(height: 42)
+//                        .scrollDisabled(true)
+//                        .listStyle(.inset)
+//                        .padding(.top, 42)
                     }
                 }
             }

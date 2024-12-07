@@ -8,6 +8,8 @@ struct HomeView: View {
     @Query var user: [User]
     @Query var bankAccounts: [BankAccount]
     @Query var accounts: [Account]
+    @Query var payments: [Payment]
+    @Query var movements: [Movement]
     // Entrada de Dados
     @State var personName: String = ""
     @State var bankAccountName: String = ""
@@ -31,14 +33,11 @@ struct HomeView: View {
                         .padding([.top, .leading])
                     
                     List {
-                        // TODO: FAZER A QUERY DO TOTAL DE TODAS AS CONTAS
                         ConditionCell(
                             cellName: LocalizedStringKey.homeCheckingAccount.label,
                             valueAllAccounts: $valueAllCurrentAccounts,
                             hiddenValues: $hiddenValues
                         )
-                        
-                        // TODO: FAZER A QUERY DO TOTAL DE TODOS CARTOES DE CREDITO
                         ConditionCell(
                             cellName: LocalizedStringKey.homeCreditCard.label,
                             valueAllAccounts: $valueAllCreditCards,
@@ -82,7 +81,12 @@ struct HomeView: View {
                                 text: LocalizedStringKey.homePaymentMethod.label
                             )
                         }
-                        OperationCard(type: .generalHistory, text: LocalizedStringKey.homeGeneralHistory.label)
+                        NavigationLink(value: NavigationScreen.allHistory) {
+                            OperationCard(
+                                type: .generalHistory,
+                                text: LocalizedStringKey.homeGeneralHistory.label
+                            )
+                        }
                     }
                     .padding(.horizontal)
                     
@@ -125,6 +129,7 @@ struct HomeView: View {
                 .foregroundStyle(.brightGold)
                 .frame(height: 175)
         }
+        .onAppear { self.totalValues() }
         .ignoresSafeArea()
         .navigationTitle(
             !self.isShowingScreenNameUser

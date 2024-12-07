@@ -18,7 +18,7 @@ struct BankAccountView: View {
     @State var closeDay: Int = 0
     
     // Visualization Data
-    let bankAccount: BankAccount
+    @State var bankAccount: BankAccount
     @State var isCreditCard: Bool = false
     
     // View States
@@ -39,7 +39,7 @@ struct BankAccountView: View {
                     List {
                         ConditionCell(
                             cellName: LocalizedStringKey.accounts.label,
-                            valueAllAccounts: .constant(300.50),
+                            valueAllAccounts: self.$bankAccount.total,
                             hiddenValues: .constant(false)
                         )
                     }

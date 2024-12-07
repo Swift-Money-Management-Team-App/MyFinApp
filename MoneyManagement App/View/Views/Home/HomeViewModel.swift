@@ -42,4 +42,25 @@ extension HomeView {
         }
     }
     
+    func totalValues() {
+        self.valueAllCreditCards = 0
+        self.valueAllCurrentAccounts = 0
+        for payment in self.payments {
+            if payment.competence != nil {
+                if movements.filter({ movement in movement.id == payment.idMovement }).first!.earningCategory != nil {
+                    self.valueAllCreditCards += payment.value
+                } else {
+                    self.valueAllCreditCards -= payment.value
+                }
+            } else {
+                if movements.filter({ movement in movement.id == payment.idMovement }).first!.earningCategory != nil {
+                    self.valueAllCurrentAccounts += payment.value
+                } else {
+                    self.valueAllCurrentAccounts -= payment.value
+                }
+            }
+        }
+        
+    }
+    
 }

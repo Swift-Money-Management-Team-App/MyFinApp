@@ -1,14 +1,16 @@
 import SwiftUI
+import SwiftData
 
 struct AllHistoryView: View {
     
+    @Query var bankAccounts: [BankAccount]
     @State private var segmentedPickerSelection: HistoryDateFilter = .lastMonth
-    
     @State private var filterPickerSelection: OrderByFilter = .AscendingAlphabetical
+    @State var total: Double = 0
     
     var body: some View {
-        NavigationView {
-            ZStack(alignment: .top) {
+        ZStack(alignment: .top) {
+            GeometryReader { layout in
                 ScrollView {
                     VStack(alignment: .leading) {
                         RoundedRectangle(cornerRadius: 20)
@@ -57,44 +59,40 @@ struct AllHistoryView: View {
                             .fontWeight(.semibold)
                             .padding([.top, .leading])
                         List {
-                            // TODO: COLOCAR OS VALORES VARIÁVEIS AQUI
-                            ValueRow(value: 500.50)
+                            ValueRow(value: self.total)
                         }
                         .frame(height: 42)
                         .scrollDisabled(true)
                         .listStyle(.inset)
                         
-                        Text(LocalizedStringKey.totalBalance.label)
+                        Text(LocalizedStringKey.homeFinancialInstitutions.label)
                             .foregroundStyle(.darkPink)
                             .fontWeight(.semibold)
                             .padding([.top, .leading])
                             .padding(.top, 20)
                         List {
-                            // TODO: COLOCAR O FOR EACH AQUI
-                            
-                            NavigationLink {
-                                // TODO: COLOCAR O DESTINO DA VIEW PRA PODER ABRIR A INSTITUIÇÃO FINANCEIRA
-                                Text("a")
-                            } label: {
-                                HStack {
-                                    // TODO: ADICIONAR OS NOMES DE ACORDO COM A LISTA
-                                    Text("Itaú")
-                                    Spacer()
-                                    // TODO: ADICIONAR O VALOR DE ACORDO COM A LISTA
-                                    Text("R$ 900,00")
+                            ForEach(self.bankAccounts) { bankAccount in
+                                NavigationLink(value: NavigationScreen.bankHistory(bankAccount: bankAccount)) {
+                                    HStack {
+                                        Text(bankAccount.name)
+                                        Spacer()
+                                        Text("R$ \(NumberFormatter().formatToCurrency.string(for: bankAccount.total)!)")
+                                    }
                                 }
                             }
                         }
-                        .scrollDisabled(true)
                         .listStyle(.inset)
-                        .frame(height: 300)
+                        .frame(height: layout.size.height - 550)
                     }
                 }
                 .background(Color.background)
             }
-            .ignoresSafeArea()
-            .toolbarBackground(.hidden)
         }
+        .onAppear {
+            self.totalBankAccounts()
+        }
+        .ignoresSafeArea()
+        .toolbarBackground(.hidden)
     }
 }
 

@@ -1,23 +1,28 @@
 import SwiftUI
+import SwiftData
 
 struct AccountHistoryView: View {
     
     private let bankName = "Itaú" // TODO: REMOVER DEPOIS QUE PASSAR OS DADOS
-    
+    let account: Account
+    @Query var payments: [Payment]
+    @Query var movements: [Movement]
+    @Query var expenseCategories: [ExpenseCategory]
+    @Query var earningCategories: [EarningCategory]
+    @State var movementsToRead: [Movement] = []
+    @State var total: Double = 0
     @State private var segmentedPickerSelection: HistoryDateFilter = .lastMonth
-    
     @State private var filterPickerSelection: OrderByFilter = .AscendingAlphabetical
     
     var body: some View {
-        NavigationView {
-            ZStack(alignment: .top) {
+        ZStack(alignment: .top) {
+            GeometryReader { layout in
                 ScrollView {
                     VStack (alignment: .leading) {
                         RoundedRectangle(cornerRadius: 20)
                             .foregroundStyle(.brightGold)
                             .overlay(alignment: .bottomLeading) {
-                                // TODO: ADICIONAR O NOME DO BANCO
-                                Text("Histórico - \(self.bankName)")
+                                Text("Histórico - \(self.account.name)")
                                     .font(.largeTitle)
                                     .bold()
                                     .padding()
@@ -44,7 +49,7 @@ struct AccountHistoryView: View {
                                 }
                             }
                         } label: {
-                            Button(action: {}) { 
+                            Button(action: {}) {
                                 Text("Filtros")
                                     .foregroundStyle(.white)
                             }
@@ -60,48 +65,51 @@ struct AccountHistoryView: View {
                             .fontWeight(.semibold)
                             .padding([.top, .leading])
                         List {
-                            // TODO: COLOCAR OS VALORES VARIÁVEIS AQUI
-                            ValueRow(value: 500.50)
+                            ValueRow(value: self.account.total)
                         }
                         .frame(height: 42)
                         .scrollDisabled(true)
                         .listStyle(.inset)
                         
-                        Text("Saldo Total")
+                        Text("Movimentações")
                             .foregroundStyle(.darkPink)
                             .fontWeight(.semibold)
                             .padding([.top, .leading])
                             .padding(.top, 20)
                         List {
-                            // TODO: COLOCAR O FOR EACH AQUI
-                            
-                            NavigationLink {
-                                // TODO: COLOCAR O DESTINO DA VIEW PRA PODER ABRIR A INSTITUIÇÃO FINANCEIRA
-                                Text("a")
-                            } label: {
-                                HStack {
-                                    // TODO: ADICIONAR OS NOMES DE ACORDO COM A LISTA
-                                    Text("Itaú")
-                                    Spacer()
-                                    // TODO: ADICIONAR O VALOR DE ACORDO COM A LISTA
-                                    Text("R$ 900,00")
-                                }
+                            ForEach(self.movementsToRead) { movement in
+                                let payments = self.payments.filter({ payment in payment.idMovement == movement.id })
+                                let total: Double = self.totalMovements(earned: movement.earningCategory != nil, payments: payments)
+                                let time: Date = self.oldTime(payments: payments)
+                                
+                                BankStatementRow(
+                                    description: movement.transactionDescription ?? "Sem descrição",
+                                    value: total,
+                                    icon: movement.expenseCategory != nil ? self.expenseCategories.filter({ category in category.id == movement.expenseCategory }).first!.emoji : self.earningCategories.filter({ category in category.id == movement.earningCategory }).first!.emoji,
+                                    day: movement.date.formatted(.dateTime.day()),
+                                    time: time.formatted(.dateTime
+                                        .hour(.twoDigits(amPM: .omitted))
+                                        .minute(.twoDigits)
+                                    )
+                                )
                             }
                         }
-                        .scrollDisabled(true)
                         .listStyle(.inset)
-                        .frame(height: 300)
+                        .frame(height: layout.size.height - 550)
                         
                     }
                 }
                 .background(Color.background)
             }
-            .ignoresSafeArea()
-            .toolbarBackground(.hidden)
         }
+        .onAppear {
+            self.allMovements()
+        }
+        .ignoresSafeArea()
+        .toolbarBackground(.hidden)
     }
 }
 
 #Preview {
-    AccountHistoryView()
+    AccountHistoryView(account: .init(idBankAccount: .init(), name: "Safade"))
 }

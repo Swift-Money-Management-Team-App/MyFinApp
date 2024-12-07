@@ -21,4 +21,7 @@ enum NavigationScreen: Hashable {
     case aboutUs
     case methods
     case categories
+    case allHistory
+    case bankHistory(bankAccount: BankAccount)
+    case accountHistory(account: Account)
 }

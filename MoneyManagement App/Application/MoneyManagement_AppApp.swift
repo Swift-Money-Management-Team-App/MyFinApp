@@ -51,6 +51,12 @@ struct MoneyManagement_AppApp: App {
                                     MethodCategoryView()
                                 case .categories:
                                     CategoriesView()
+                                case .allHistory:
+                                    AllHistoryView()
+                                case .bankHistory(bankAccount: let bankAccount):
+                                    BankHistoryView(bankAccount: bankAccount)
+                                case .accountHistory(account: let account):
+                                    AccountHistoryView(account: account)
                                 }
                             }
                             .sheet(isPresented: self.$firstLaunchApplication) {

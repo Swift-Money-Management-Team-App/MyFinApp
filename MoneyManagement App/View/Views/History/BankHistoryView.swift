@@ -1,22 +1,23 @@
 import SwiftUI
+import SwiftData
 
 struct BankHistoryView: View {
     
-    private let accountName = "BitCoin" // TODO: REMOVER DEPOIS QUE PASSAR OS DADOS
-    
+    let bankAccount: BankAccount
+    @Query var accounts: [Account]
+    @State var total: Double = 0
     @State private var segmentedPickerSelection: HistoryDateFilter = .lastMonth
-    
     @State private var filterPickerSelection: OrderByFilter = .AscendingAlphabetical
     
     var body: some View {
-        NavigationView {
-            ZStack(alignment: .top) {
+        ZStack(alignment: .top) {
+            GeometryReader { layout in
                 ScrollView {
                     VStack(alignment: .leading) {
                         RoundedRectangle(cornerRadius: 20)
                             .foregroundStyle(.brightGold)
                             .overlay(alignment: .bottomLeading) {
-                                Text("\(LocalizedStringKey.bankHistoryTitle.label) - \(self.accountName)")
+                                Text("\(LocalizedStringKey.bankHistoryTitle.label) - \(self.bankAccount.name)")
                                     .font(.largeTitle)
                                     .bold()
                                     .padding()
@@ -57,49 +58,42 @@ struct BankHistoryView: View {
                             .fontWeight(.semibold)
                             .padding([.top, .leading])
                         List {
-                            // TODO: COLOCAR OS VALORES VARIÁVEIS AQUI
-                            ValueRow(value: 500.50)
+                            ValueRow(value: self.total)
                         }
                         .frame(height: 42)
                         .scrollDisabled(true)
                         .listStyle(.inset)
                         
-                        Text(LocalizedStringKey.totalBalance.label)
+                        Text(LocalizedStringKey.accounts.label)
                             .foregroundStyle(.darkPink)
                             .fontWeight(.semibold)
                             .padding([.top, .leading])
                             .padding(.top, 20)
                         
                         List {
-                            // TODO: COLOCAR O FOR EACH AQUI
-                            
-                            NavigationLink {
-                                // TODO: COLOCAR O DESTINO DA VIEW PRA PODER ABRIR A INSTITUIÇÃO FINANCEIRA
-                                Text("a")
-                            } label: {
-                                BankStatementRow(
-                                    description: LocalizedStringKey.salaryAdvance.label,
-                                    value: 50.50,
-                                    icon: "dollarsign.square",
-                                    day: "22",
-                                    time: "09:41"
-                                )
+                            ForEach(self.accounts.filter { account in account.idBankAccount == self.bankAccount.id }) { account in
+                                NavigationLink(value: NavigationScreen.accountHistory(account: account)) {
+                                    Text(account.name)
+                                    Spacer()
+                                    Text("R$ \(NumberFormatter().formatToCurrency.string(for: account.total)!)")
+                                }
                             }
                         }
-                        .scrollDisabled(true)
                         .listStyle(.inset)
-                        .frame(height: 300)
-                        
+                        .frame(height: layout.size.height - 550)
                     }
                 }
                 .background(Color.background)
             }
-            .ignoresSafeArea()
-            .toolbarBackground(.hidden)
         }
+        .onAppear {
+            self.totalAccounts()
+        }
+        .ignoresSafeArea()
+        .toolbarBackground(.hidden)
     }
 }
 
 #Preview {
-    BankHistoryView()
+    BankHistoryView(bankAccount: .init(idUser: UUID(), name: "Safade"))
 }

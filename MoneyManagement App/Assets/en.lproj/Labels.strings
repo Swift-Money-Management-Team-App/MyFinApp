@@ -1,5 +1,5 @@
 // Onboarding
-onboardingWelcomeTitle = "Bem vindo ao\nPiggyBank!";
+onboardingWelcomeTitle = "Bem vindo ao\nMyFinApp!";
 onboardingRegisterTitle = "Registre suas finanças";
 onboardingRegisterDescription = "Controle todos os ganhos e gastos num só lugar.";
 onboardingManageTitle = "Gerencie suas finanças";
@@ -60,7 +60,7 @@ termsChangesTitle = "Changes to These Terms and Conditions";
 
 // Contact
 contactUsTitle = "Contact Us";
-contactUsDescription = "If you have any questions or suggestions about the Terms and Conditions, please do not hesitate to contact the Service Provider at contact@moneyapp.com.";
+contactUsDescription = "If you have any questions or suggestions about the Terms and Conditions, please do not hesitate to contact the Service Provider at contact@myfinapp.com.";
 
 // Others
 othersWelcomeScreenToggle = "Tela de boas vindas";

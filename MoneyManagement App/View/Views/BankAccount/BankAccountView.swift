@@ -53,8 +53,12 @@ struct BankAccountView: View {
                         .padding([.top, .leading])
                     
                     LazyVGrid(columns: [GridItem(), GridItem(), GridItem()], spacing: 20) {
-                        OperationCard(type: .addMovement, text: LocalizedStringKey.addTransaction.label)
-                        OperationCard(type: .generalHistory, text: LocalizedStringKey.bankAccountHistory.label)
+                        NavigationLink(value: NavigationScreen.movement(account: nil, bankAccount: nil)) {
+                            OperationCard(type: .addMovement, text: LocalizedStringKey.addTransaction.label)
+                        }
+                        NavigationLink(value: NavigationScreen.bankHistory(bankAccount: self.bankAccount)) {
+                            OperationCard(type: .generalHistory, text: LocalizedStringKey.bankAccountHistory.label)
+                        }
                     }
                     .padding(.horizontal)
                     

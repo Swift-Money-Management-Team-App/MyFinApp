@@ -49,10 +49,12 @@ struct AccountView: View {
                             .fontWeight(.semibold)
                             .padding([.top, .leading])
                         LazyVGrid(columns: [GridItem(), GridItem(), GridItem()], spacing: 20) {
-                            // TODO: NAVEGAR PARA A TELA DE ABRIR UM MOVIMENTO
-                            OperationCard(type: .addMovement, text: LocalizedStringKey.addTransaction.label)
-                            // TODO: NAVEGAR PARA O HISTÓRICO NO CONTEXTO DE CONTA
-                            OperationCard(type: .generalHistory, text: "Histórico")
+                            NavigationLink(value: NavigationScreen.movement(account: nil, bankAccount: nil)) {
+                                OperationCard(type: .addMovement, text: LocalizedStringKey.addTransaction.label)
+                            }
+                            NavigationLink(value: NavigationScreen.accountHistory(account: self.account)) {
+                                OperationCard(type: .generalHistory, text: "Histórico")
+                            }
                         }
                         .padding(.horizontal)
                         
@@ -82,14 +84,14 @@ struct AccountView: View {
                         .frame(height: layout.size.height - 625)
                         .listStyle(.grouped)
                         
-//                        List{
-//                            // TODO: FAZER A QUERY PARA CALCULAR A DIFERENÇA ENTRE OS GASTOS E GANHOS DO MÊS ANTERIOR (DO DIA 1 ATE O ULTIMO DIA DO MES)
-//                            LastMonthBalanceRow(value: 40.00)
-//                        }
-//                        .frame(height: 42)
-//                        .scrollDisabled(true)
-//                        .listStyle(.inset)
-//                        .padding(.top, 42)
+                        //                        List{
+                        //                            // TODO: FAZER A QUERY PARA CALCULAR A DIFERENÇA ENTRE OS GASTOS E GANHOS DO MÊS ANTERIOR (DO DIA 1 ATE O ULTIMO DIA DO MES)
+                        //                            LastMonthBalanceRow(value: 40.00)
+                        //                        }
+                        //                        .frame(height: 42)
+                        //                        .scrollDisabled(true)
+                        //                        .listStyle(.inset)
+                        //                        .padding(.top, 42)
                     }
                 }
             }

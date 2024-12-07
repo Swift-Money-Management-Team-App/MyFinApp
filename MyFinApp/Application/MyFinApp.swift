@@ -2,7 +2,7 @@ import SwiftUI
 import SwiftData
 
 @main
-struct MoneyManagement_AppApp: App {
+struct MyFinApp: App {
     
     @ObservedObject var navigation: Navigation = .navigation
     @State var firstLaunchApplication: Bool = Storage.share.firstLaunchApplication

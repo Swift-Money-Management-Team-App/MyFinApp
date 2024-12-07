@@ -91,7 +91,7 @@ struct AccountForm: View {
                     
                     if formState == .read {
                         // MARK: EXCLUIR A CONTA
-                        Button(LocalizedStringKey.deleteAccountButton.label, role: .destructive) {
+                        Button(LocalizedStringKey.deleteAccountButton.button, role: .destructive) {
                             if self.payments.filter({ payment in payment.idAccount == self.account!.id }).isEmpty {
                                 self.isShowDeleteAlert.toggle()
                             } else {

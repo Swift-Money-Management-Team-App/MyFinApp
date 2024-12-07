@@ -11,13 +11,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0D2DA0EF2CB8A3960008A56A /* MyFinApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyFinApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0D2DA0EF2CB8A3960008A56A /* MoneyManagement App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MoneyManagement App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		0D2DA0F12CB8A3960008A56A /* MyFinApp */ = {
+		0D2DA0F12CB8A3960008A56A /* MoneyManagement App */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = MyFinApp;
+			path = "MoneyManagement App";
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -37,7 +37,7 @@
 		0D2DA0E62CB8A3960008A56A = {
 			isa = PBXGroup;
 			children = (
-				0D2DA0F12CB8A3960008A56A /* MyFinApp */,
+				0D2DA0F12CB8A3960008A56A /* MoneyManagement App */,
 				0D2DA0F02CB8A3960008A56A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -45,7 +45,7 @@
 		0D2DA0F02CB8A3960008A56A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				0D2DA0EF2CB8A3960008A56A /* MyFinApp.app */,
+				0D2DA0EF2CB8A3960008A56A /* MoneyManagement App.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -53,9 +53,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		0D2DA0EE2CB8A3960008A56A /* MyFinApp */ = {
+		0D2DA0EE2CB8A3960008A56A /* MoneyManagement App */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 0D2DA1022CB8A3990008A56A /* Build configuration list for PBXNativeTarget "MyFinApp" */;
+			buildConfigurationList = 0D2DA1022CB8A3990008A56A /* Build configuration list for PBXNativeTarget "MoneyManagement App" */;
 			buildPhases = (
 				0D2DA0EB2CB8A3960008A56A /* Sources */,
 				0D2DA0EC2CB8A3960008A56A /* Frameworks */,
@@ -66,14 +66,14 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				0D2DA0F12CB8A3960008A56A /* MyFinApp */,
+				0D2DA0F12CB8A3960008A56A /* MoneyManagement App */,
 			);
-			name = MyFinApp;
+			name = "MoneyManagement App";
 			packageProductDependencies = (
 				6B067FFB2CCF627300186B4B /* Lottie */,
 			);
 			productName = "MoneyManagement App";
-			productReference = 0D2DA0EF2CB8A3960008A56A /* MyFinApp.app */;
+			productReference = 0D2DA0EF2CB8A3960008A56A /* MoneyManagement App.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -91,7 +91,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 0D2DA0EA2CB8A3960008A56A /* Build configuration list for PBXProject "MyFinApp" */;
+			buildConfigurationList = 0D2DA0EA2CB8A3960008A56A /* Build configuration list for PBXProject "MoneyManagement App" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -108,7 +108,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				0D2DA0EE2CB8A3960008A56A /* MyFinApp */,
+				0D2DA0EE2CB8A3960008A56A /* MoneyManagement App */,
 			);
 		};
 /* End PBXProject section */
@@ -261,21 +261,21 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"MyFinApp/Assets/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"MoneyManagement App/Assets/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = MyFinApp;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = io.ucb.MyFinApp;
+				PRODUCT_BUNDLE_IDENTIFIER = "io.moneymanagementapp.MoneyManagement-App";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -292,21 +292,21 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"MyFinApp/Assets/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"MoneyManagement App/Assets/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = MyFinApp;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = io.ucb.MyFinApp;
+				PRODUCT_BUNDLE_IDENTIFIER = "io.moneymanagementapp.MoneyManagement-App";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -318,7 +318,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		0D2DA0EA2CB8A3960008A56A /* Build configuration list for PBXProject "MyFinApp" */ = {
+		0D2DA0EA2CB8A3960008A56A /* Build configuration list for PBXProject "MoneyManagement App" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0D2DA1002CB8A3990008A56A /* Debug */,
@@ -327,7 +327,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		0D2DA1022CB8A3990008A56A /* Build configuration list for PBXNativeTarget "MyFinApp" */ = {
+		0D2DA1022CB8A3990008A56A /* Build configuration list for PBXNativeTarget "MoneyManagement App" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0D2DA1032CB8A3990008A56A /* Debug */,
